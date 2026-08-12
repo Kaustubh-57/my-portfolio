@@ -89,12 +89,12 @@ export default function SelectedWorks() {
 
   return (
     // Spacing tightened to match the new editorial rhythm
-    <section ref={containerRef} className="relative w-full bg-[#F7F6F0] px-10 md:px-12 pt-10 pb-24">
+    <section ref={containerRef} className="relative w-full bg-[#Ffffff] px-10 md:px-12 pt-10 pb-24">
       
       {/* Section Header */}
       <div className="w-full max-w-[1440px] mx-auto mb-8">
         <h2 className="font-dm-sans text-2xl md:text-2xl text-[#141613] tracking-[-0.03em] font-medium">
-          View Selected Works
+          View Selected Works.
         </h2>
       </div>
 

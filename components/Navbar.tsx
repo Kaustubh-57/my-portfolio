@@ -20,7 +20,7 @@ export default function Navbar() {
   const tl = useRef<gsap.core.Timeline | null>(null);
 
   const centerLinks = ['Home', 'Works', 'Archive', 'About'];
-  const overlayLinks = ['Home', 'Projects', 'Contact'];
+  const overlayLinks = ['Home', 'Projects', 'About me'];
 
   // 1. Initial Load & Scroll Progress Animations
   useGSAP(() => {
@@ -181,7 +181,7 @@ export default function Navbar() {
               key={link}
               ref={(el) => { menuLinksRef.current[i] = el; }}
               href={`#${link.toLowerCase()}`}
-              className="font-dm-sans text-6xl md:text-[8vw] leading-[1.1] tracking-tight text-[#141613] font-medium hover:text-[#C1001F] transition-colors duration-400"
+              className="font-momo text-6xl md:text-[6vw] leading-[1.1] tracking-tight text-[#141613] font-medium hover:text-[#C1001F] transition-colors duration-400"
               data-cursor="hover"
               onClick={() => setIsOpen(false)}
             >
