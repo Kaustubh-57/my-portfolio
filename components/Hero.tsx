@@ -2,7 +2,10 @@
 
 import React, { useRef } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -61,6 +64,19 @@ export default function Hero() {
       yoyo: true,
       ease: 'sine.inOut',
     });
+
+    // 5. Soft Snap for the very top of the page
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: 'top top',
+      end: '+=150', // A soft threshold zone at the top
+      snap: {
+        snapTo: [0, 1], // Pulls up to absolute top (0), or pushes down into free scroll (1)
+        duration: { min: 0.4, max: 0.6 },
+        delay: 0.1,
+        ease: 'power3.inOut'
+      }
+    });
   }, { scope: containerRef });
 
   const addToRefs = (el: HTMLHeadingElement | HTMLDivElement | null) => {
@@ -69,7 +85,6 @@ export default function Hero() {
     }
   };
 
-  // Removed h-screen constraint so it scrolls naturally
   return (
     <section ref={containerRef} className="relative w-full flex flex-col bg-white overflow-hidden">
       
@@ -129,7 +144,7 @@ export default function Hero() {
       {/* --- BOTTOM SECTION (Increased to massive 70vh) --- */}
       <div 
         ref={bottomSectionRef}
-        className="relative w-full h-[40vh] flex-none bg-[#141613] will-change-transform"
+        className="relative w-full h-[70vh] flex-none bg-[#141613] will-change-transform"
       >
         <div className="absolute inset-0 bg-[#141613]/50 z-[5] pointer-events-none" />
 
