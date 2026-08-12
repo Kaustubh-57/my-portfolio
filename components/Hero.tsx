@@ -144,7 +144,7 @@ export default function Hero() {
       {/* --- BOTTOM SECTION (Increased to massive 70vh) --- */}
       <div 
         ref={bottomSectionRef}
-        className="relative w-full h-[70vh] flex-none bg-[#141613] will-change-transform"
+        className="relative w-full h-[35vh] flex-none bg-[#141613] will-change-transform"
       >
         <div className="absolute inset-0 bg-[#141613]/50 z-[5] pointer-events-none" />
 
