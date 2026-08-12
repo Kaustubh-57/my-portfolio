@@ -69,11 +69,11 @@ export default function Hero() {
     }
   };
 
+  // Removed h-screen constraint so it scrolls naturally
   return (
-    <section ref={containerRef} className="relative w-full h-screen flex flex-col bg-white overflow-hidden">
+    <section ref={containerRef} className="relative w-full flex flex-col bg-white overflow-hidden">
       
-      {/* --- TOP SECTION (70vh) --- */}
-      {/* Using items-end and pb-6 to guarantee the 'g' has clearance from the bottom edge */}
+      {/* --- TOP SECTION (Maintained at original 70vh) --- */}
       <div className="relative w-full h-[70vh] flex-none flex flex-col justify-center px-8 md:px-12 border-b border-gray-100 pb-6">
         
         {/* Layer 1: Vertical Grid */}
@@ -114,7 +114,6 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Subtitle bottom-aligned precisely with the word 'Designer' */}
           <div 
             ref={addToRefs}
             className="hidden lg:block pb-1" 
@@ -127,10 +126,10 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* --- BOTTOM SECTION (30vh) --- */}
+      {/* --- BOTTOM SECTION (Increased to massive 70vh) --- */}
       <div 
         ref={bottomSectionRef}
-        className="relative w-full h-[30vh] flex-none bg-[#141613] will-change-transform"
+        className="relative w-full h-[40vh] flex-none bg-[#141613] will-change-transform"
       >
         <div className="absolute inset-0 bg-[#141613]/50 z-[5] pointer-events-none" />
 
@@ -144,10 +143,10 @@ export default function Hero() {
           <source src="/trees.mp4" type="video/mp4" />
         </video>
 
-        <div className="relative z-10 w-full max-w-[1440px] h-full mx-auto px-8 md:px-12 py-8 flex justify-between items-end">
+        <div className="relative z-10 w-full max-w-[1440px] h-full mx-auto px-8 md:px-12 py-12 flex justify-between items-end">
           
           <div className="max-w-[460px] text-white">
-            <p className="font-dm-sans text-sm md:text-[15px] leading-relaxed tracking-[-0.05em] font-light text-white/90">
+            <p className="font-dm-sans text-base md:text-lg leading-relaxed tracking-[-0.03em] font-light text-white/90">
               I’m interested in the everyday interactions,
               ......we stop questioning the awkward flow,
               unnecessary step or confusing interface
@@ -158,23 +157,23 @@ export default function Hero() {
             </p>
           </div>
 
-          <div className="flex flex-col items-end text-white gap-6">
+          <div className="flex flex-col items-end text-white gap-8">
             <div 
               className="group cursor-pointer flex flex-col items-end"
               data-cursor="hover" 
             >
               <div className="flex items-center gap-3">
-                <span className="w-10 h-[1px] bg-white transition-transform duration-300 origin-right group-hover:scale-x-125" />
-                <span className="font-dm-sans text-base md:text-lg tracking-[-0.05em]">
+                <span className="w-12 h-[1px] bg-white transition-transform duration-300 origin-right group-hover:scale-x-125" />
+                <span className="font-dm-sans text-lg md:text-xl tracking-[-0.05em]">
                   About me
                 </span>
               </div>
-              <p className="font-dm-sans text-xs text-white/60 tracking-[-0.05em] mt-1 group-hover:text-white transition-colors duration-300">
+              <p className="font-dm-sans text-sm text-white/60 tracking-[-0.05em] mt-2 group-hover:text-white transition-colors duration-300">
                 What do I care about?
               </p>
             </div>
 
-            <div ref={scrollIndicatorRef} className="font-dm-sans text-xs text-white/80 tracking-[-0.05em] mt-4">
+            <div ref={scrollIndicatorRef} className="font-dm-sans text-sm text-white/80 tracking-[-0.05em] mt-8">
               Scroll!
             </div>
           </div>

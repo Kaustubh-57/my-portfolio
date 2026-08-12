@@ -7,7 +7,6 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Clean, animated NavItem without Magnetic logic
 const NavItem = ({ text }: { text: string }) => {
   const textRef = useRef<HTMLSpanElement>(null);
 
@@ -54,7 +53,6 @@ export default function Navbar() {
   const navLinks = ['Work', 'About', 'Experiments', 'Resume', 'Contact'];
 
   useGSAP(() => {
-    // 1. Navbar Entry Animation (Plays immediately on load)
     const tl = gsap.timeline();
     tl.fromTo(
       logoRef.current,
@@ -68,7 +66,6 @@ export default function Navbar() {
       '-=0.6'
     );
 
-    // 2. Red Scroll Progress Line
     gsap.to(progressRef.current, {
       scaleX: 1,
       ease: 'none',
@@ -80,14 +77,22 @@ export default function Navbar() {
       },
     });
 
-    // 3. Frosted Glass Header Effect on Scroll
+    // FIXED: Using onEnter/onLeaveBack to avoid DOMTokenList whitespace errors
+    const glassClasses = ['bg-white/75', 'backdrop-blur-md', 'border-b', 'border-gray-200/50', 'shadow-sm'];
+    
     ScrollTrigger.create({
       start: 'top -50',
       end: 99999,
-      toggleClass: {
-        targets: headerRef.current,
-        className: 'bg-white/75 backdrop-blur-md border-b border-gray-200/50 shadow-sm',
+      onEnter: () => {
+        if (headerRef.current) {
+          headerRef.current.classList.add(...glassClasses);
+        }
       },
+      onLeaveBack: () => {
+        if (headerRef.current) {
+          headerRef.current.classList.remove(...glassClasses);
+        }
+      }
     });
   });
 
