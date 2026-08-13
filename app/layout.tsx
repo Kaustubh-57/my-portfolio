@@ -18,7 +18,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Kaustubh Korde | Product Experience Designer',
+  title: 'doeskaus® Portfolio of Kaustubh Korde',
   description: 'I design digital products that work beautifully.',
 };
 
