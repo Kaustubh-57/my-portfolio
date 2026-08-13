@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { DM_Sans } from 'next/font/google';
-import { GoogleAnalytics } from '@next/third-parties/google'; // 1. Import the Analytics component
+import { GoogleAnalytics } from '@next/third-parties/google'; 
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import CustomCursor from '@/components/CustomCursor';
 import Navbar from '@/components/Navbar';
 import './globals.css';
@@ -21,6 +22,28 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: 'Kaustubh Korde | Product Experience Designer',
   description: 'I design digital products that work beautifully.',
+  openGraph: {
+    title: 'Kaustubh Korde | Portfolio',
+    description: 'I design digital products that work beautifully.',
+    url: 'https://doeskaus.vercel.app', 
+    siteName: 'Kaustubh Korde',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Kaustubh Korde Portfolio',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Kaustubh Korde | Portfolio',
+    description: 'I design digital products that work beautifully.',
+    images: ['/opengraph-image.png'],
+  },
 };
 
 export default function RootLayout({
@@ -34,8 +57,12 @@ export default function RootLayout({
         <CustomCursor /> 
         <Navbar />       
         {children}
+        
+        {/* Vercel Performance Tracking */}
+        <SpeedInsights />
       </body>
-      {/* 2. Add the component and paste your specific Measurement ID here */}
+      
+      {/* Google Analytics Tracking */}
       <GoogleAnalytics gaId="G-Z4X5CMLDHG" /> 
     </html>
   );
