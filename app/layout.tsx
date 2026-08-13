@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Analytics } from "@vercel/analytics/next"
 import localFont from 'next/font/local';
 import { DM_Sans } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google'; 
