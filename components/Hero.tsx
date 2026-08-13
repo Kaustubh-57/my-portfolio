@@ -1,13 +1,17 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Hero() {
+interface HeroProps {
+  hasEntered?: boolean;
+}
+
+export default function Hero({ hasEntered = true }: HeroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const verticalGridRef = useRef<HTMLDivElement>(null);
   const horizontalGridRef = useRef<HTMLDivElement>(null);
@@ -15,11 +19,32 @@ export default function Hero() {
   
   const textRefs = useRef<(HTMLHeadingElement | HTMLDivElement | null)[]>([]);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+  
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio('/trees.mp3');
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0; 
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   useGSAP(() => {
-    const tl = gsap.timeline({ delay: 0.4 });
+    gsap.set(bottomSectionRef.current, { yPercent: 100 });
+    gsap.set(textRefs.current, { y: 40, opacity: 0 });
+  }, { scope: containerRef }); 
 
-    // 1. Grid Preloader
+  useGSAP(() => {
+    if (!hasEntered) return;
+
+    const tl = gsap.timeline({ delay: 0.2 });
+
     tl.to(verticalGridRef.current, {
       scaleY: 1,
       duration: 1.2,
@@ -31,32 +56,20 @@ export default function Hero() {
       ease: 'expo.inOut',
     }, '-=0.8');
 
-    // 2. Bottom Block Slides Up 
-    tl.fromTo(
-      bottomSectionRef.current,
-      { yPercent: 100 },
-      { yPercent: 0, duration: 1.2, ease: 'expo.out' },
-      '-=0.6'
-    );
+    tl.to(bottomSectionRef.current, { 
+      yPercent: 0, 
+      duration: 1.2, 
+      ease: 'expo.out' 
+    }, '-=0.6');
 
-    // 3. Clean Fade for Typography
-    tl.fromTo(
-      textRefs.current,
-      { 
-        y: 40, 
-        opacity: 0,
-      },
-      { 
-        y: 0, 
-        opacity: 1, 
-        duration: 1.5, 
-        stagger: 0.15,
-        ease: 'power2.out',
-      },
-      '-=0.7' 
-    );
+    tl.to(textRefs.current, { 
+      y: 0, 
+      opacity: 1, 
+      duration: 1.5, 
+      stagger: 0.15, 
+      ease: 'power2.out' 
+    }, '-=0.7');
 
-    // 4. Scroll Indicator Loop
     gsap.to(scrollIndicatorRef.current, {
       y: 4,
       duration: 1.5,
@@ -65,19 +78,81 @@ export default function Hero() {
       ease: 'sine.inOut',
     });
 
-    // 5. Soft Snap for the very top of the page
     ScrollTrigger.create({
       trigger: containerRef.current,
       start: 'top top',
-      end: '+=150', // A soft threshold zone at the top
+      end: '+=150',
       snap: {
-        snapTo: [0, 1], // Pulls up to absolute top (0), or pushes down into free scroll (1)
+        snapTo: [0, 1],
         duration: { min: 0.4, max: 0.6 },
         delay: 0.1,
         ease: 'power3.inOut'
       }
     });
-  }, { scope: containerRef });
+
+    const mm = gsap.matchMedia();
+    mm.add("(max-width: 767px)", () => {
+      ScrollTrigger.create({
+        trigger: bottomSectionRef.current,
+        start: 'top 60%', 
+        end: 'bottom 40%', 
+        onEnter: () => {
+          audioRef.current?.play().catch(() => {});
+          gsap.to(audioRef.current, { volume: 0.3, duration: 1, ease: 'power2.out' });
+        },
+        onLeave: () => {
+          gsap.to(audioRef.current, { 
+            volume: 0, 
+            duration: 1, 
+            ease: 'power2.out',
+            onComplete: () => audioRef.current?.pause() 
+          });
+        },
+        onEnterBack: () => {
+          audioRef.current?.play().catch(() => {});
+          gsap.to(audioRef.current, { volume: 0.3, duration: 1, ease: 'power2.out' });
+        },
+        onLeaveBack: () => {
+          gsap.to(audioRef.current, { 
+            volume: 0, 
+            duration: 1, 
+            ease: 'power2.out',
+            onComplete: () => audioRef.current?.pause() 
+          });
+        }
+      });
+    });
+
+    return () => mm.revert();
+  }, { dependencies: [hasEntered], scope: containerRef });
+
+  const handleMouseEnter = () => {
+    if (!audioRef.current || window.innerWidth < 768) return; 
+    
+    // Kill any ongoing volume tweens to prevent stuttering/glitching on rapid hover
+    gsap.killTweensOf(audioRef.current);
+
+    audioRef.current.play().catch(() => {});
+    gsap.to(audioRef.current, { volume: 0.3, duration: 0.8, ease: 'power2.inOut' });
+  };
+
+  const handleMouseLeave = () => {
+    if (!audioRef.current || window.innerWidth < 768) return;
+
+    // Kill any ongoing volume tweens
+    gsap.killTweensOf(audioRef.current);
+
+    gsap.to(audioRef.current, { 
+      volume: 0, 
+      duration: 0.6, 
+      ease: 'power2.inOut',
+      onComplete: () => {
+        if (audioRef.current && audioRef.current.volume === 0) {
+          audioRef.current.pause();
+        }
+      }
+    });
+  };
 
   const addToRefs = (el: HTMLHeadingElement | HTMLDivElement | null) => {
     if (el && !textRefs.current.includes(el)) {
@@ -88,10 +163,8 @@ export default function Hero() {
   return (
     <section ref={containerRef} className="relative w-full flex flex-col bg-white overflow-hidden">
       
-      {/* --- TOP SECTION (Maintained at original 70vh) --- */}
       <div className="relative w-full h-[70vh] flex-none flex flex-col justify-center px-8 md:px-12 border-b border-gray-100 pb-6">
         
-        {/* Layer 1: Vertical Grid */}
         <div 
           ref={verticalGridRef}
           className="absolute inset-0 w-full h-full pointer-events-none origin-top scale-y-0"
@@ -102,7 +175,6 @@ export default function Hero() {
           }}
         />
 
-        {/* Layer 2: Horizontal Grid */}
         <div 
           ref={horizontalGridRef}
           className="absolute inset-0 w-full h-full pointer-events-none origin-left scale-x-0"
@@ -113,10 +185,7 @@ export default function Hero() {
           }}
         />
 
-        {/* Typography Container */}
         <div className="relative z-10 w-full max-w-[1440px] mx-auto flex items-end justify-between mt-13">
-          
-          {/* Main Title Block */}
           <div className="flex flex-col gap-3 w-fit" data-cursor="hover">
             {['Product', 'Experience', 'Designer'].map((word, i) => (
               <h1
@@ -129,11 +198,7 @@ export default function Hero() {
             ))}
           </div>
 
-          <div 
-            ref={addToRefs}
-            className="hidden lg:block pb-1" 
-            data-cursor="hover"
-          >
+          <div ref={addToRefs} className="hidden lg:block pb-1" data-cursor="hover">
             <p className="font-dm-sans text-[#C1001F] text-xl tracking-[-0.05em] font-normal">
               I design digital products that work beautifully
             </p>
@@ -141,10 +206,11 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* --- BOTTOM SECTION (Increased to massive 70vh) --- */}
       <div 
         ref={bottomSectionRef}
-        className="relative w-full h-[35vh] flex-none bg-[#141613] will-change-transform"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="relative w-full h-[35vh] flex-none bg-[#141613] will-change-transform cursor-crosshair"
       >
         <div className="absolute inset-0 bg-[#141613]/50 z-[5] pointer-events-none" />
 
@@ -158,7 +224,7 @@ export default function Hero() {
           <source src="/trees.mp4" type="video/mp4" />
         </video>
 
-        <div className="relative z-10 w-full max-w-[1440px] h-full mx-auto px-8 md:px-12 py-12 flex justify-between items-end">
+        <div className="relative z-10 w-full max-w-[1440px] h-full mx-auto px-8 md:px-12 py-12 flex justify-between items-end pointer-events-none">
           
           <div className="max-w-[460px] text-white">
             <p className="font-dm-sans text-base md:text-lg leading-relaxed tracking-[-0.03em] font-light text-white/90">
@@ -172,11 +238,8 @@ export default function Hero() {
             </p>
           </div>
 
-          <div className="flex flex-col items-end text-white gap-8">
-            <div 
-              className="group cursor-pointer flex flex-col items-end"
-              data-cursor="hover" 
-            >
+          <div className="flex flex-col items-end text-white gap-8 pointer-events-auto">
+            <div className="group cursor-pointer flex flex-col items-end" data-cursor="hover">
               <div className="flex items-center gap-3">
                 <span className="w-12 h-[1px] bg-white transition-transform duration-300 origin-right group-hover:scale-x-125" />
                 <span className="font-dm-sans text-lg md:text-xl tracking-[-0.05em]">

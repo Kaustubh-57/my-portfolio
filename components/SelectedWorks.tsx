@@ -60,8 +60,6 @@ export default function SelectedWorks() {
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useGSAP(() => {
-    // We separate the first card (which is already visible) 
-    // from the rest of the cards (which need to slide up)
     const cardsToAnimate = cardsRef.current.slice(1);
 
     if (cardsToAnimate.length === 0) return;
@@ -70,24 +68,28 @@ export default function SelectedWorks() {
       scrollTrigger: {
         trigger: containerRef.current,
         start: 'top top',
-        // Scroll distance: 100vh per extra card. This controls how "long" you have to scroll to finish the deck.
-        end: `+=${cardsToAnimate.length * 100}%`, 
+        // Increased scroll distance to accommodate the hold duration at the end
+        end: `+=${(cardsToAnimate.length + 1) * 120}%`, 
         pin: true, 
-        scrub: 1, // Adds a 1-second physics smoothing delay to the animation
+        scrub: 1, 
       }
     });
 
-    // Stagger the remaining cards up from below the screen
-    cardsToAnimate.forEach((card, index) => {
+    // Stagger the remaining cards up
+    cardsToAnimate.forEach((card) => {
       tl.fromTo(card,
-        { y: '120%' }, // Start off-screen
+        { y: '120%' }, 
         { 
-          y: '0%',     // Slide into place perfectly covering the last card
+          y: '0%',     
           ease: 'none', 
           duration: 1 
         } 
       );
     });
+
+    // Adds an extra scroll "hold" so Project 3 stays sticky and static on screen before unpinning
+    tl.to({}, { duration: 0.3 });
+
   }, { scope: containerRef });
 
   const addToRefs = (el: HTMLDivElement | null) => {
@@ -97,7 +99,7 @@ export default function SelectedWorks() {
   };
 
   return (
-    <section ref={containerRef} className="relative w-full h-screen bg-[#Ffffff] flex flex-col justify-center px-10 md:px-12 pt-6">
+    <section ref={containerRef} className="relative w-full h-screen bg-[#ffffff] flex flex-col justify-center px-10 md:px-12 pt-6">
       
       {/* Section Header */}
       <div className="w-full max-w-[1440px] mx-auto mb-6 flex-shrink-0">
@@ -117,7 +119,6 @@ export default function SelectedWorks() {
             style={{ 
               zIndex: index + 1,
               backgroundColor: project.bgColor,
-              // The first card renders exactly at 0, the others render off-screen waiting for GSAP
               transform: index === 0 ? 'translateY(0)' : 'translateY(120%)'
             }}
           >
