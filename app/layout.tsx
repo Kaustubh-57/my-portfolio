@@ -6,6 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
 import CustomCursor from '@/components/CustomCursor';
 import Navbar from '@/components/Navbar';
+import 'lenis/dist/lenis.css'; // 2. Import required Lenis layout CSS
 import './globals.css';
 
 const momoTrust = localFont({
