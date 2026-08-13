@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { Analytics } from "@vercel/analytics/next"
 import localFont from 'next/font/local';
 import { DM_Sans } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google'; 
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from '@vercel/analytics/react';
 import CustomCursor from '@/components/CustomCursor';
 import Navbar from '@/components/Navbar';
 import './globals.css';
@@ -61,6 +61,9 @@ export default function RootLayout({
         
         {/* Vercel Performance Tracking */}
         <SpeedInsights />
+        
+        {/* Vercel Web Analytics */}
+        <Analytics />
       </body>
       
       {/* Google Analytics Tracking */}
