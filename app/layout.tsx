@@ -21,18 +21,20 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Kaustubh Korde | Product Experience Designer',
+  // Required so Next.js can generate absolute URLs for preview images
+  metadataBase: new URL('https://doeskaus.vercel.app'),
+  title: 'doeskaus® Portfolio of Kaustubh Korde',
   description: 'I design digital products that work beautifully.',
   openGraph: {
-    title: 'Kaustubh Korde | Portfolio',
+    title: 'doeskaus® Portfolio of Kaustubh Korde',
     description: 'I design digital products that work beautifully.',
     url: 'https://doeskaus.vercel.app', 
     siteName: 'Kaustubh Korde',
     images: [
       {
         url: '/opengraph-image.png',
-        width: 1200,
-        height: 630,
+        width: 800,
+        height: 800,
         alt: 'Kaustubh Korde Portfolio',
       },
     ],
@@ -40,8 +42,8 @@ export const metadata: Metadata = {
     type: 'website',
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Kaustubh Korde | Portfolio',
+    card: 'summary',
+    title: 'doeskaus® Portfolio of Kaustubh Korde',
     description: 'I design digital products that work beautifully.',
     images: ['/opengraph-image.png'],
   },
