@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -8,8 +8,6 @@ interface EnterScreenProps {
   onEnter: () => void;
 }
 
-// All images: The last item is ALWAYS the final image. 
-// Everything before it is automatically treated as a cycling image, no matter how many you add.
 const ALL_PRELOADER_IMAGES = [
   '/preloader/1.png',
   '/preloader/2.png',
@@ -17,12 +15,12 @@ const ALL_PRELOADER_IMAGES = [
   '/preloader/4.png',
   '/preloader/5.png',
   '/preloader/6.png',
-  '/preloader/7.png', // Newly added image
-  '/preloader/final.jpg', // Lands here smoothly at 100%
+  '/preloader/7.png',
+  '/preloader/final.jpg',
 ];
 
 const FINAL_IMAGE_INDEX = ALL_PRELOADER_IMAGES.length - 1;
-const CYCLING_COUNT = FINAL_IMAGE_INDEX; // Dynamic count of cycling images
+const CYCLING_COUNT = FINAL_IMAGE_INDEX;
 
 export default function EnterScreen({ onEnter }: EnterScreenProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -34,10 +32,17 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
   const [currentImage, setCurrentImage] = useState(0);
   const [isReady, setIsReady] = useState(false);
 
+  // Prevent browser from auto-restoring previous scroll positions on refresh
+  useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   useGSAP(() => {
     const tl = gsap.timeline();
 
-    // 1. Initial Reveal (Horizontal line clip-path)
     tl.fromTo(
       imageContainerRef.current,
       { clipPath: 'inset(100% 0% 0% 0%)' },
@@ -45,7 +50,6 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
       0 
     );
 
-    // 2. 3-Second Loading Counter with dynamic, perfectly distributed image mapping
     const counter = { val: 0 };
     tl.to(counter, {
       val: 100,
@@ -58,7 +62,6 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
         if (val === 100) {
           setCurrentImage(FINAL_IMAGE_INDEX);
         } else {
-          // Dynamically map 0-99 across all cycling images evenly
           const imgIndex = Math.min(
             Math.floor((val / 100) * CYCLING_COUNT),
             CYCLING_COUNT - 1
@@ -68,8 +71,6 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
       },
       onComplete: () => {
         setIsReady(true);
-        
-        // Fade in the "Click to enter" CTA
         gsap.fromTo(ctaRef.current,
           { opacity: 0, y: 10 },
           { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
@@ -81,11 +82,13 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
   const handleEnterClick = () => {
     if (!isReady) return;
 
+    // Force window to absolute top instantly on click
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
     const tl = gsap.timeline({
       onComplete: onEnter,
     });
 
-    // 3. Seamless Exit Animation
     tl.to(contentBlockRef.current, { 
       scale: 0.95, 
       opacity: 0, 
@@ -107,11 +110,7 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
       }`}
       onClick={handleEnterClick}
     >
-      
-      {/* Main Center Composition */}
       <div ref={contentBlockRef} className="flex flex-col w-44 md:w-[220px]">
-        
-        {/* Top Header Row */}
         <div className="flex justify-between items-end mb-2.5 font-dm-sans text-[#141613]">
           <span className="text-[11px] md:text-xs font-medium tracking-wide uppercase">
             doesKaus
@@ -121,7 +120,6 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
           </span>
         </div>
 
-        {/* Image Container */}
         <div 
           ref={imageContainerRef}
           className="relative w-full aspect-square overflow-hidden bg-[#F7F6F0]"
@@ -145,14 +143,12 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
         </div>
       </div>
 
-      {/* Bottom CTA */}
       <div 
         ref={ctaRef}
         className="absolute bottom-12 font-dm-sans text-[10px] md:text-xs text-[#141613]/60 tracking-[0.1em] uppercase opacity-0 pointer-events-none"
       >
         Click to enter
       </div>
-
     </div>
   );
 }
