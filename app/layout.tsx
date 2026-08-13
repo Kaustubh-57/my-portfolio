@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { DM_Sans } from 'next/font/google';
-import CustomCursor from '@/components/CustomCursor'; // Import the cursor
-import Navbar from '@/components/Navbar'; // Import the Navbar
+import { GoogleAnalytics } from '@next/third-parties/google'; // 1. Import the Analytics component
+import CustomCursor from '@/components/CustomCursor';
+import Navbar from '@/components/Navbar';
 import './globals.css';
 
 const momoTrust = localFont({
@@ -18,7 +19,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'doeskaus® Portfolio of Kaustubh Korde',
+  title: 'Kaustubh Korde | Product Experience Designer',
   description: 'I design digital products that work beautifully.',
 };
 
@@ -30,10 +31,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${momoTrust.variable} ${dmSans.variable}`}>
       <body className="antialiased bg-white text-black">
-        <CustomCursor /> {/* Mount globally */}
-        <Navbar />       {/* Mount globally */}
+        <CustomCursor /> 
+        <Navbar />       
         {children}
       </body>
+      {/* 2. Add the component and paste your specific Measurement ID here */}
+      <GoogleAnalytics gaId="G-Z4X5CMLDHG" /> 
     </html>
   );
 }
