@@ -2,10 +2,34 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { usePathname } from 'next/navigation';
 
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [pillText, setPillText] = useState('');
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
+    cursor.classList.remove('is-pill');
+    setPillText('');
+
+    gsap.to(cursor, {
+      width: '12px',
+      height: '12px',
+      padding: '0px',
+      scale: 1,
+      backgroundColor: '#141613',
+      borderColor: 'transparent',
+      borderWidth: '0px',
+      borderRadius: '9999px',
+      boxShadow: 'none',
+      duration: 0.25,
+      ease: 'power2.out',
+    });
+  }, [pathname]);
 
   useEffect(() => {
     const cursor = cursorRef.current;
@@ -15,7 +39,6 @@ export default function CustomCursor() {
     const moveY = gsap.quickTo(cursor, 'y', { duration: 0.15, ease: 'power3.out' });
 
     const onMouseMove = (e: MouseEvent) => {
-      // Adjusted tracking offset so the wide pill stays centered on the mouse
       if (cursor.classList.contains('is-pill')) {
         moveX(e.clientX - 75); 
         moveY(e.clientY - 20);
@@ -70,6 +93,13 @@ export default function CustomCursor() {
 
     const onMouseOut = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest('[data-cursor]');
+      
+      // --- THE FIX IS HERE ---
+      // If we are moving to another element that is STILL INSIDE the same target container, 
+      // ignore the event and don't shrink the cursor.
+      if (target && e.relatedTarget instanceof Node && target.contains(e.relatedTarget)) {
+        return; 
+      }
       
       if (target) {
         cursor.classList.remove('is-pill');

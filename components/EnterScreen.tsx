@@ -31,16 +31,25 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
   const [progress, setProgress] = useState(0);
   const [currentImage, setCurrentImage] = useState(0);
   const [isReady, setIsReady] = useState(false);
+  const [shouldRender, setShouldRender] = useState(true);
 
-  // Prevent browser from auto-restoring previous scroll positions on refresh
+  // Check memory on mount: Skip if already seen
   useEffect(() => {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
-    window.scrollTo(0, 0);
-  }, []);
+    
+    if (sessionStorage.getItem('hasSeenPreloader') === 'true') {
+      setShouldRender(false);
+      onEnter();
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [onEnter]);
 
   useGSAP(() => {
+    if (!shouldRender) return;
+
     const tl = gsap.timeline();
 
     tl.fromTo(
@@ -77,12 +86,13 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
         );
       }
     }, 0);
-  }, { scope: overlayRef });
+  }, { scope: overlayRef, dependencies: [shouldRender] });
 
   const handleEnterClick = () => {
     if (!isReady) return;
 
-    // Force window to absolute top instantly on click
+    // Save to memory so it doesn't play again when they hit 'Go back'
+    sessionStorage.setItem('hasSeenPreloader', 'true');
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     const tl = gsap.timeline({
@@ -101,6 +111,8 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
       ease: 'power2.inOut',
     }, '-=0.2');
   };
+
+  if (!shouldRender) return null;
 
   return (
     <div 
