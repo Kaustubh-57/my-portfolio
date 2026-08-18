@@ -229,7 +229,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
           <div className="max-w-[460px] text-white">
             <p className="font-dm-sans text-base md:text-lg leading-relaxed tracking-[-0.03em] font-light text-white/90">
               I’m interested in the everyday interactions,
-              ......we stop questioning the awkward flow,
+          where we stop questioning the awkward flow,
               unnecessary step or confusing interface
               that has simply become normal. I like
               understanding why it happens and turning

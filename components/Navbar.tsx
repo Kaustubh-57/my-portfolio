@@ -194,13 +194,13 @@ export default function Navbar() {
           className="absolute bottom-6 left-8 right-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-0 font-dm-sans text-[#141613]"
         >
           <div className="flex flex-col">
-            <span className="text-sm opacity-80">+1 (000) 000-0000</span>
+            <span className="text-sm opacity-80">...</span>
             <a 
-              href="mailto:placeholder@email.com" 
-              className="text-xl md:text-2xl font-medium underline mt-1 decoration-1 underline-offset-4 hover:text-[#C1001F] transition-colors"
+              href="mailto:kaustubh.workspace@gmail.com" 
+              className="text-xl md:text-1xl font-small underline mt-1 decoration-1 underline-offset-4 hover:text-[#C1001F] transition-colors"
               data-cursor="hover"
             >
-              placeholder@email.com
+              kaustubh.workspace@gmail.com
             </a>
           </div>
 
@@ -210,7 +210,7 @@ export default function Navbar() {
           </div>
 
           <div className="text-sm font-medium opacity-80">
-            © 2026 Kaustubh Korde
+            © 2026 Kaustubh Korde Portfolio
           </div>
         </div>
       </div>

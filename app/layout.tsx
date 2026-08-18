@@ -6,7 +6,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
 import CustomCursor from '@/components/CustomCursor';
 import Navbar from '@/components/Navbar';
-import 'lenis/dist/lenis.css'; // 2. Import required Lenis layout CSS
 import './globals.css';
 
 const momoTrust = localFont({
@@ -22,7 +21,6 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  // Required so Next.js can generate absolute URLs for preview images
   metadataBase: new URL('https://doeskaus.vercel.app'),
   title: 'doeskaus® Portfolio of Kaustubh Korde',
   description: 'I design digital products that work beautifully.',
@@ -62,14 +60,9 @@ export default function RootLayout({
         <Navbar />       
         {children}
         
-        {/* Vercel Performance Tracking */}
         <SpeedInsights />
-        
-        {/* Vercel Web Analytics */}
         <Analytics />
       </body>
-      
-      {/* Google Analytics Tracking */}
       <GoogleAnalytics gaId="G-Z4X5CMLDHG" /> 
     </html>
   );

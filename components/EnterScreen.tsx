@@ -33,11 +33,17 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
   const [isReady, setIsReady] = useState(false);
   const [shouldRender, setShouldRender] = useState(true);
 
-  // Check memory on mount: Skip if already seen
+ // Check memory on mount and cache images
   useEffect(() => {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
+    
+    // Silently force the browser to download all images into memory
+    ALL_PRELOADER_IMAGES.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
     
     if (sessionStorage.getItem('hasSeenPreloader') === 'true') {
       setShouldRender(false);

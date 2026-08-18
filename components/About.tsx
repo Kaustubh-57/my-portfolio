@@ -98,7 +98,7 @@ export default function About() {
         <div ref={footerRef} className="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-16">
           
           {/* Left Column: Contact Details */}
-          <div className="flex flex-col gap-10 font-dm-sans">
+          <div className="flex flex-col gap-5 font-dm-sans">
             <div>
               <span className="block text-[11px] md:text-xs uppercase tracking-[0.05em] text-white/40 mb-1.5">Email</span>
               <a 
@@ -111,13 +111,13 @@ export default function About() {
             </div>
 
             <div>
-              <span className="block text-[11px] md:text-xs uppercase tracking-[0.05em] text-white/40 mb-1.5">Phone</span>
+              <span className="block text-[11px] md:text-xs uppercase tracking-[0.05em] text-white/40 mb-1.5">Alternate Email</span>
               <a 
-                href="tel:+917249872188" 
+                href="mailto:kaustubh.korde25@nmims.in" 
                 className="text-base md:text-lg text-white underline decoration-white/30 underline-offset-4 hover:text-[#C1001F] hover:decoration-[#C1001F] transition-colors"
                 data-cursor="hover"
               >
-                +91 7249872188
+                kaustubh.korde25@nmims.in
               </a>
             </div>
 
@@ -141,19 +141,19 @@ export default function About() {
                 www.behance.net/kaustubhko0d27
               </a>
               <a 
-                href="mailto:kaustubh.korde25@nmims.in" 
+                href="https://www.instagram.com/does.kaus?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
                 className="text-sm md:text-base text-white/80 hover:text-white transition-colors underline decoration-white/20 underline-offset-4 w-fit"
                 data-cursor="hover"
               >
-                kaustubh.korde25@nmims.in
+                @does.kaus
               </a>
             </div>
           </div>
 
           {/* Right Column: Warm Regards & Signature */}
           <div className="flex flex-col items-start md:items-end w-full md:w-auto">
-            <p className="font-dm-sans text-lg md:text-xl text-white/90 mb-4">
-              Warm Regards,
+            <p className="font-dm-sans text-lg md:text-xl text-white/90 mb-0">
+              By Kaustubh Korde     
             </p>
             <div className="w-48 md:w-64">
               <img 

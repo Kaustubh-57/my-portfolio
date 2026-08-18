@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { useRouter } from 'next/navigation';
 
-export default function BubbleSharePage() {
+export default function DeciconPage() {
   const pageRef = useRef<HTMLDivElement>(null);
   const blueCardRef = useRef<HTMLDivElement>(null);
   const overlapGraphicRef = useRef<HTMLDivElement>(null);
@@ -75,16 +75,16 @@ export default function BubbleSharePage() {
 
         <div 
           ref={blueCardRef}
-          className="relative w-full bg-[#3D2FA9] rounded-t-[24px] md:rounded-t-[32px] pt-12 md:pt-20 px-6 md:px-12 lg:px-16 flex flex-col opacity-0 overflow-hidden"
+          className="relative w-full bg-[#171918] rounded-t-[24px] md:rounded-t-[32px] pt-12 md:pt-20 px-6 md:px-12 lg:px-16 flex flex-col opacity-0 overflow-hidden"
         >
           
           <div className="relative flex flex-col md:flex-row justify-between items-start w-full mb-4 md:mb-6">
             <div className="max-w-2xl">
               <h1 className="font-momo text-4xl md:text-5xl lg:text-[48px] text-white whitespace-pre-line leading-[1.08] tracking-[-0.02em]">
-                Making File Sending{'\n'}feel Natural
+                Decicon : A quieter way to{'\n'}experience the everyday.
               </h1>
               <p className="font-dm-sans text-sm md:text-[15px] text-white opacity-80 mt-6 max-w-[500px] leading-relaxed">
-                I’m interested in the everyday interactions, ......we stop questioning the awkward flow, unnecessary step or confusing interface that has simply become normal. I like understanding why it happens and turning it into a product experience that feels obvious in hindsight.
+                A connected physical-digital system designed to rethink how people experience and respond to everyday noise.
               </p>
             </div>
             
@@ -98,21 +98,17 @@ export default function BubbleSharePage() {
             className="w-full relative z-10 opacity-0"
           >
             <img 
-              src="/projects/bubble-share/hero-graphic.png" 
-              alt="BubbleShare Graphic" 
+              src="/projects/decicon/mockup.png" 
+              alt="Decicon Graphic" 
               className="w-full h-auto rounded-t-[16px] md:rounded-t-[24px] rounded-b-[16px] md:rounded-b-[0px] shadow-2xl block"
               onError={(e) => {
                 (e.target as HTMLImageElement).style.display = 'none';
-                e.currentTarget.parentElement!.innerHTML = '<span class="text-black font-dm-sans text-lg flex items-center justify-center w-full h-48 bg-gray-100 rounded-[24px]">BubbleShare Graphic</span>';
+                e.currentTarget.parentElement!.innerHTML = '<span class="text-black font-dm-sans text-lg flex items-center justify-center w-full h-48 bg-gray-100 rounded-[24px]">Decicon Graphic</span>';
               }}
             />
           </div>
         </div>
 
-        {/* 
-          CONTEXT SECTION
-          UPDATED: Removed mt-12 md:mt-16 so the border-t touches the blue card perfectly.
-        */}
         <div 
           ref={contextSectionRef}
           className="w-full border-t border-[#141613]/15 pt-16 md:pt-20 px-2 md:px-8 lg:px-12 grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 opacity-0"
@@ -131,7 +127,7 @@ export default function BubbleSharePage() {
             <div>
               <h3 className="font-dm-sans text-base md:text-[17px] text-[#141613] font-medium mb-1.5 md:mb-2">The Team</h3>
               <p className="font-dm-sans text-sm text-[#141613]/70 leading-relaxed">
-                Aaron Carvalho, Sai Ghate,<br/>Kaustubh Korde, Rohit Chattre
+                Kaustubh Korde
               </p>
             </div>
           </div>
@@ -147,8 +143,8 @@ export default function BubbleSharePage() {
             <div>
               <h2 className="font-dm-sans text-2xl md:text-[28px] font-bold text-[#141613] tracking-tight mb-4 md:mb-5">My role:</h2>
               <ul className="list-disc pl-5 font-dm-sans text-sm md:text-base text-[#141613]/80 leading-relaxed max-w-2xl space-y-3 marker:text-[#141613]/60">
-                <li>I’m interested in the everyday interactions, ......we stop questioning the awkward flow, unnecessary step or confusing interface that has simply become normal. I like understanding why</li>
-                <li>I’m interested in the everyday interactions, ......we stop questioning the awkward flow, unnecessary step or confusing interface that has simply become normal. I like understanding why</li>
+                <li>I’m interested in the everyday interactions, ......we stop questioning the awkward flow.</li>
+                <li>I like understanding why it happens and turning it into a product experience.</li>
               </ul>
             </div>
           </div>

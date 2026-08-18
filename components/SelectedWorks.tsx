@@ -11,51 +11,39 @@ gsap.registerPlugin(ScrollTrigger);
 const projects = [
   {
     id: '01',
-    slug: 'bubble-share', 
-    title: 'Making File Sending\nfeel Natural',
-    descriptionTop: 'I’m interested in the everyday interactions, ......we stop questioning the awkward flow, unnecessary step or confusing interface that has simply become normal. I like understanding why it happens and turning it into a product experience that feels obvious in hindsight.',
-    descriptionBottom: 'I’m interested in the everyday interactions, ......we stop questioning the awkward flow, unnecessary step or confusing interface that has simply become normal. I like understanding why it happens and turning it into a product experience that feels obvious in hindsight.',
-    badgeTitle: 'BubbleShare',
-    badgeSub: 'Share Anything, Anywhere.',
-    bgColor: '#3D2FA9',
-    textColor: 'text-white',
-    mockups: [
-      '/projects/bubble-share/mockup-1.png', 
-      '/projects/bubble-share/mockup-2.png', 
-      '/projects/bubble-share/mockup-3.png'
-    ]
+    slug: 'decicon', 
+    badge: 'CONNECTED PRODUCT • SYSTEM DESIGN • UX/UI',
+    title: 'Decicon : A quieter way to\nexperience the everyday.',
+    description: 'A connected physical-digital system designed to rethink how people experience and respond to everyday noise.',
+    role: 'Concept | Physical Product | UI ideation',
+    image: '/projects/decicon/mockup.png',
+    bgColor: '#171918',
+    accentColor: '#C7E86B',
+    textColor: '#FFFFFF'
   },
   {
     id: '02',
-    slug: 'brand',
-    title: 'Branding that drives\nconversion & funding.',
-    descriptionTop: 'We clarify positioning, define a distinctive tone of voice, and build a visual system that works across acquisition and product.',
-    descriptionBottom: 'Each sprint ships a robust logo, pragmatic brand guidelines, and a social kit tailored for scale.',
-    badgeTitle: 'Brand Strategy',
-    badgeSub: 'Identity & Growth.',
-    bgColor: '#FF7722',
-    textColor: 'text-white',
-    mockups: [
-      '/projects/brand/mockup-1.png', 
-      '/projects/brand/mockup-2.png', 
-      '/projects/brand/mockup-3.png'
-    ]
+    slug: 'chromebuds',
+    badge: 'PRODUCT DESIGN • INDUSTRIAL DESIGN • UX',
+    title: 'Chromebuds: Rethinking\nwhy people are leaving\nTWS behind.',
+    description: 'A product redesign exploring comfort, convenience and everyday usability in TWS.',
+    role: 'Concept | Physical Product | UI ideation',
+    image: '/projects/chromebuds/mockup.png', 
+    bgColor: '#F1F0EC', 
+    accentColor: '#176BCC', 
+    textColor: '#151515'
   },
   {
     id: '03',
-    slug: 'infection',
-    title: 'Infection Protocol:\nBehavioral Systems',
-    descriptionTop: 'Designing sustainable developmental frameworks through gamification. Analyzing user choices and failure states.',
-    descriptionBottom: 'Building a system that intrinsically motivates users toward long-term engagement and environmental impact.',
-    badgeTitle: 'System Design',
-    badgeSub: 'Behavioral Architecture.',
-    bgColor: '#FF3C34',
-    textColor: 'text-white',
-    mockups: [
-      '/projects/infection/mockup-1.png', 
-      '/projects/infection/mockup-2.png', 
-      '/projects/infection/mockup-3.png'
-    ]
+    slug: 'bubbleshare',
+    badge: 'DIGITAL PRODUCT • INTERACTION • UX/UI',
+    title: 'Bubbleshare: Making file\n sending feel natural',
+    description: 'A file-sharing experience that turns an invisible digital process into something tangible and intuitive.',
+    role: 'Concept  | UI ideation | Prototyping',
+    image: '/projects/bubbleshare/mockup.png',
+    bgColor: '#4438B5', 
+    accentColor: '#fffc34',
+    textColor: '#FFFFFF'
   }
 ];
 
@@ -93,13 +81,11 @@ export default function SelectedWorks() {
 
     tl.to({}, { duration: 0.8 }); 
 
-    // Handle seamless return routing (snap to position instantly, then fade in contents)
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const returnTo = params.get('returnTo');
 
       if (returnTo) {
-        // Fade out inner contents instantly, keeping the white background visible
         gsap.set('.works-content', { opacity: 0 });
 
         setTimeout(() => {
@@ -111,11 +97,9 @@ export default function SelectedWorks() {
             else if (returnTo === '02') progress = 1 / 2.8; 
             else if (returnTo === '03') progress = 2 / 2.8; 
 
-            // Snap scroll instantly
             const targetScroll = st.start + (st.end - st.start) * progress;
             window.scrollTo({ top: targetScroll, behavior: 'instant' });
 
-            // Smoothly fade the content back in
             gsap.to('.works-content', { opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.1 });
           }
         }, 50);
@@ -127,7 +111,6 @@ export default function SelectedWorks() {
     if (isTransitioning) return;
     setIsTransitioning(true);
 
-    // Fade out ONLY the inner content, keeping the white background solid
     gsap.to('.works-content', {
       opacity: 0,
       duration: 0.4,
@@ -147,7 +130,6 @@ export default function SelectedWorks() {
   return (
     <section ref={containerRef} id="works" className="relative w-full h-screen bg-[#ffffff] flex flex-col justify-center px-10 md:px-12 pt-6">
       
-      {/* Wrapper to fade contents without losing the white background */}
       <div className="works-content w-full h-full flex flex-col justify-center">
         
         <div className="w-full max-w-[1440px] mx-auto mb-6 flex-shrink-0">
@@ -166,59 +148,113 @@ export default function SelectedWorks() {
               className="absolute top-0 left-0 w-full h-full cursor-none will-change-transform rounded-[0px] shadow-[0_0_40px_rgba(0,0,0,0.15)]"
               style={{ 
                 zIndex: index + 1,
-                backgroundColor: project.bgColor,
-                transform: index === 0 ? 'translateY(0)' : 'translateY(120%)'
+                transform: index === 0 ? 'translateY(0)' : 'translateY(120%)',
+                backgroundColor: project.bgColor 
               }}
             >
-              <div className="block w-full h-full flex flex-col p-8 md:p-12">
+              <div className="w-full h-full flex flex-col pt-10 pl-10 md:pt-12 md:pl-12">
                 
-                <div className="relative flex justify-between items-start w-full">
-                  <div className="max-w-2xl">
-                    <h3 className={`font-momo text-4xl md:text-5xl lg:text-[48px] ${project.textColor} whitespace-pre-line leading-[1.08] tracking-[-0.02em]`}>
-                      {project.title}
-                    </h3>
-                    <p className={`font-dm-sans text-sm md:text-[15px] ${project.textColor} opacity-80 mt-6 max-w-[500px] leading-relaxed`}>
-                      {project.descriptionTop}
-                    </p>
+                {/* Header Row */}
+                <div className="flex justify-between items-start w-full pr-10 md:pr-12 mb-6">
+                  {/* Badge */}
+                  <div 
+                    className="inline-flex items-center px-7 py-4 md:px-8 md:py-3.5 rounded-full border font-dm-sans text-xs tracking-wider uppercase"
+                    style={{ 
+                      color: project.accentColor, 
+                      borderColor: `${project.accentColor}4D`
+                    }}
+                  >
+                    {project.badge}
                   </div>
-                  
-                  <div className={`font-momo text-3xl md:text-4xl ${project.textColor} opacity-60`}>
+                  {/* Number */}
+                  <div 
+                    className="font-momo text-2xl md:text-3xl font-light"
+                    style={{ color: project.accentColor }}
+                  >
                     ({project.id})
                   </div>
                 </div>
 
-                <div className="relative w-full flex-grow flex items-center">
-                  <div className="w-full h-px bg-white/20 relative">
-            
-                  </div>
-                </div>
-
-                <div className="relative flex flex-col md:flex-row justify-between items-end w-full gap-10">
-                  <div className="max-w-sm hidden md:block pb-2">
-                    <p className={`font-dm-sans text-sm md:text-[15px] ${project.textColor} opacity-80 leading-relaxed`}>
-                      {project.descriptionBottom}
-                    </p>
-                  </div>
-
-                  <div className="flex items-end gap-4 w-full md:w-auto h-[30vh]">
-                    {project.mockups.map((src, i) => (
-                      <div 
-                        key={i} 
-                        className="w-1/3 md:w-56 bg-black/10 rounded-2xl overflow-hidden backdrop-blur-sm relative shadow-xl h-full"
+                <div className="flex-grow flex flex-col md:flex-row w-full justify-between items-end pb-0 min-h-0">
+                  
+                  {/* Left Column - Text Content */}
+                  <div className="w-full md:w-[50%] flex flex-col justify-between h-full pb-8 md:pb-10 pr-8 md:pr-12 min-h-0">
+                    <div>
+                      {/* Main Title */}
+                      <h3 
+                        className="font-momo text-4xl md:text-5xl lg:text-[42px] whitespace-pre-line leading-[1.08] tracking-[-0.02em]"
+                        style={{ color: project.textColor }}
                       >
-                        <img 
-                          src={src} 
-                          alt={`Mockup ${i + 1}`} 
-                          className="w-full h-full object-cover object-top"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none';
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                        {project.title}
+                      </h3>
+                      {/* Description */}
+                      <p 
+                        className="font-dm-sans text-[15px] md:text-base mt-6 max-w-[480px] leading-relaxed"
+                        style={{ color: project.textColor, opacity: 0.8 }}
+                      >
+                        {project.description}
+                      </p>
+                    </div>
 
+                    <div className="w-full max-w-[480px]">
+                      {/* Divider Line */}
+                      <div 
+                        className="w-full h-px mb-6"
+                        style={{ backgroundColor: project.textColor, opacity: 0.2 }}
+                      ></div>
+                      
+                      {/* Role Section */}
+                      <div className="flex flex-col gap-1 mb-8">
+                        <span 
+                          className="font-dm-sans text-[15px]"
+                          style={{ color: project.textColor, opacity: 0.6 }}
+                        >
+                          My role:
+                        </span>
+                        <span 
+                          className="font-dm-sans text-[15px] md:text-base"
+                          style={{ color: project.textColor }}
+                        >
+                          {project.role}
+                        </span>
+                      </div>
+
+                      {/* View Case Study Link */}
+                      <div 
+                        className="flex items-center gap-4 font-dm-sans text-[15px] md:text-base"
+                        style={{ color: project.accentColor }}
+                      >
+                        <span>View Case Study</span>
+                        {/* Custom Long Thin Arrow */}
+                        <svg 
+                          className="w-12 h-3" 
+                          viewBox="0 0 40 16" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="1.2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                        >
+                          <line x1="0" y1="8" x2="38" y2="8"></line>
+                          <polyline points="32 2 38 8 32 14"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column - Image Container */}
+                  <div className="w-full md:w-[48%] h-[40vh] md:h-full relative rounded-tl-[40px] overflow-hidden bg-black/5 shadow-2xl mt-8 md:mt-0">
+                    <img 
+                      src={project.image} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover object-left-top"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                  </div>
+
+                </div>
               </div>
             </div>
           ))}
