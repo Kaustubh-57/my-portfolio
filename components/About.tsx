@@ -129,7 +129,7 @@ export default function About() {
                 className="text-sm md:text-base text-white/80 hover:text-white transition-colors underline decoration-white/20 underline-offset-4 w-fit"
                 data-cursor="hover"
               >
-                www.linkedin.com/in/kaustubh-korde
+                Linkedin
               </a>
               <a 
                 href="https://www.behance.net/kaustubhko0d27" 
@@ -138,24 +138,25 @@ export default function About() {
                 className="text-sm md:text-base text-white/80 hover:text-white transition-colors underline decoration-white/20 underline-offset-4 w-fit"
                 data-cursor="hover"
               >
-                www.behance.net/kaustubhko0d27
+                Behance
               </a>
               <a 
                 href="https://www.instagram.com/does.kaus?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" 
                 className="text-sm md:text-base text-white/80 hover:text-white transition-colors underline decoration-white/20 underline-offset-4 w-fit"
                 data-cursor="hover"
               >
-                @does.kaus
+                Instagram
               </a>
             </div>
           </div>
 
-          {/* Right Column: Warm Regards & Signature */}
-          <div className="flex flex-col items-start md:items-end w-full md:w-auto">
-            <p className="font-dm-sans text-lg md:text-xl text-white/90 mb-0">
-              By Kaustubh Korde     
+          {/* Right Column: Warm Regards & Signature (UPDATED) */}
+          <div className="flex flex-col items-center w-full md:w-auto text-center mt-30 md:mt-0">
+            <p className="font-dm-sans text-base md:text-lg text-white tracking-wide z-10 relative">
+              Designed & built by,
             </p>
-            <div className="w-48 md:w-64">
+
+            <div className="w-44 md:w-52 -my-4 relative z-0 opacity-80 hover:opacity-100 transition-opacity duration-300">
               <img 
                 src="/signature.png" 
                 alt="Kaustubh Signature" 
@@ -164,7 +165,15 @@ export default function About() {
                   (e.target as HTMLElement).style.display = 'none';
                 }}
               />
+            </div>
 
+            <div className="flex flex-col items-center gap-0.5 z-10 relative">
+              <p className="font-dm-sans text-base md:text-lg text-white tracking-wide">
+                Kaustubh Korde
+              </p>
+              <p className="font-dm-sans text-sm md:text-base text-white/60 tracking-wide">
+                (19 Aug 2026)
+              </p>
             </div>
           </div>
 
