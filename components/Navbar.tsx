@@ -11,15 +11,28 @@ export default function Navbar() {
   const headerRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
-  const logoRef = useRef<HTMLDivElement>(null);
+  const logoRef = useRef<HTMLAnchorElement>(null);
   const menuLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const footerRef = useRef<HTMLDivElement>(null);
   
   const [isOpen, setIsOpen] = useState(false);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
-  const centerLinks = ['Home', 'Works', 'Archive', 'About'];
-  const overlayLinks = ['Home', 'Projects', 'About me'];
+  // UPDATED: Swapped About/Resume order and added isExternal flag
+  const centerLinks = [
+    { name: 'Home', href: '/' },
+    { name: 'Works', href: '/#works' },
+    { name: 'About', href: '/#contact' },
+    { name: 'Resume', href: '/resume.pdf', isExternal: true } // Replace with Drive link if needed
+  ];
+  
+  // UPDATED: Added Resume to the mobile menu as well
+  const overlayLinks = [
+    { name: 'Home', href: '/' },
+    { name: 'Projects', href: '/#works' },
+    { name: 'About me', href: '/#contact' },
+    { name: 'Resume', href: '/resume.pdf', isExternal: true } // Replace with Drive link if needed
+  ];
 
   useGSAP(() => {
     const initTl = gsap.timeline();
@@ -47,17 +60,13 @@ export default function Navbar() {
       },
     });
 
-    // --- NEW: Smart Auto-Hiding Navbar Logic ---
     ScrollTrigger.create({
       start: 'top -50',
       end: 99999,
       onUpdate: (self) => {
-        // self.direction: 1 means scrolling down, -1 means scrolling up
         if (self.direction === 1) {
-          // User is scrolling down -> Hide Navbar
           gsap.to(headerRef.current, { yPercent: -100, duration: 0.4, ease: 'power2.out' });
         } else {
-          // User is scrolling up -> Show Navbar
           gsap.to(headerRef.current, { yPercent: 0, duration: 0.4, ease: 'power2.out' });
         }
       },
@@ -71,7 +80,6 @@ export default function Navbar() {
         if (headerRef.current) {
           headerRef.current.classList.remove('bg-white', 'shadow-sm');
           headerRef.current.classList.add('bg-transparent');
-          // Force reveal if user snaps back to the absolute top
           gsap.to(headerRef.current, { yPercent: 0, duration: 0.4, ease: 'power2.out' });
         }
       }
@@ -119,19 +127,19 @@ export default function Navbar() {
         className="fixed top-0 left-0 w-full h-[2px] bg-[#C1001F] z-[100] origin-left scale-x-0"
       />
 
-      {/* UPDATED: Changed transition-all to transition-colors transition-shadow to avoid fighting GSAP */}
       <header 
         ref={headerRef}
         className="fixed top-0 left-0 w-full z-[90] bg-transparent transition-colors transition-shadow duration-300 ease-in-out flex justify-between items-center px-8 md:px-12 py-4"
       >
-        <div 
+        <a 
+          href="/"
           ref={logoRef}
           className="font-dm-sans text-sm font-medium text-[#141613] tracking-[-0.02em] cursor-pointer opacity-0 relative z-[100]"
           data-cursor="hover"
           onClick={() => setIsOpen(false)}
         >
           Kaustubh Korde
-        </div>
+        </a>
 
         <nav 
           className={`hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-10 transition-opacity duration-500 ease-in-out ${
@@ -139,15 +147,19 @@ export default function Navbar() {
           }`}
         >
           {centerLinks.map((link, i) => (
-            <div 
+            <a 
               key={i} 
+              href={link.href}
+              // UPDATED: Dynamically assign target="_blank" if it is an external link
+              target={link.isExternal ? "_blank" : "_self"}
+              rel={link.isExternal ? "noopener noreferrer" : undefined}
               className="relative cursor-pointer group nav-item opacity-0"
               data-cursor="hover"
             >
               <span className="font-dm-sans text-[15px] tracking-[-0.02em] text-[#141613] font-medium block group-hover:text-[#C1001F] group-hover:-translate-y-0.5 transition-all duration-300">
-                {link}
+                {link.name}
               </span>
-            </div>
+            </a>
           ))}
         </nav>
 
@@ -177,14 +189,20 @@ export default function Navbar() {
         <nav className="flex flex-col items-center gap-4 md:gap-2">
           {overlayLinks.map((link, i) => (
             <a
-              key={link}
+              key={link.name}
               ref={(el) => { menuLinksRef.current[i] = el; }}
-              href={`#${link.toLowerCase()}`}
+              href={link.href}
+              // UPDATED: Dynamically assign target="_blank" if it is an external link
+              target={link.isExternal ? "_blank" : "_self"}
+              rel={link.isExternal ? "noopener noreferrer" : undefined}
               className="font-momo text-6xl md:text-[6vw] leading-[1.1] tracking-tight text-[#141613] font-medium hover:text-[#C1001F] transition-colors duration-400"
               data-cursor="hover"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                // Only close the mobile menu if they are staying on the site
+                if (!link.isExternal) setIsOpen(false);
+              }}
             >
-              {link}
+              {link.name}
             </a>
           ))}
         </nav>
