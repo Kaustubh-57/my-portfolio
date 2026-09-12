@@ -4,10 +4,11 @@ import { DM_Sans } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google'; 
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/react';
-import Script from 'next/script'; // <-- 1. Import Next.js Script
+import Script from 'next/script'; 
 
 import CustomCursor from '@/components/CustomCursor';
 import Navbar from '@/components/Navbar';
+import StatusToast from '@/components/StatusToast'; // Added StatusToast import
 import './globals.css';
 
 const momoTrust = localFont({
@@ -62,10 +63,12 @@ export default function RootLayout({
         <Navbar />       
         {children}
         
+        {/* --- Added the live deployment toast here --- */}
+        <StatusToast />
+        
         <SpeedInsights />
         <Analytics />
         
-        {/* --- 2. Microsoft Clarity Script --- */}
         <Script id="microsoft-clarity" strategy="afterInteractive">
           {`
             (function(c,l,a,r,i,t,y){
@@ -77,7 +80,6 @@ export default function RootLayout({
         </Script>
       </body>
       
-      {/* Google Analytics Tracking */}
       <GoogleAnalytics gaId="G-Z4X5CMLDHG" /> 
     </html>
   );

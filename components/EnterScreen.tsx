@@ -87,7 +87,7 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
     const counter = { val: 0 };
     tl.to(counter, {
       val: 100,
-      duration: 3,
+      duration: 5,
       ease: 'power2.out',
       onUpdate: () => {
         const val = Math.round(counter.val);
