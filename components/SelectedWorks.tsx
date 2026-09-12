@@ -8,11 +8,24 @@ import { useRouter } from 'next/navigation';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// --- UPDATED: Reordered the array and updated the IDs to match the new sequence ---
 const projects = [
   {
     id: '01',
+    slug: 'bubbleshare',
+    badge: 'Interaction Design • UX/UI Design',
+    title: 'Bubbleshare: Making file\n sending feel natural',
+    description: 'A file-sharing experience that turns an invisible digital process into something tangible and intuitive.',
+    role: 'Concept  | UI ideation | Prototyping',
+    image: '/projects/bubbleshare/mockup.png',
+    bgColor: '#4438B5', 
+    accentColor: '#fffc34',
+    textColor: '#FFFFFF'
+  },
+  {
+    id: '02',
     slug: 'decicon', 
-    badge: 'CONNECTED PRODUCT • SYSTEM DESIGN • UX/UI',
+    badge: 'SYSTEM DESIGN • UX/UI Design',
     title: 'Decicon : A quieter way to experience the everyday.',
     description: 'A connected physical-digital system designed to rethink how people experience and respond to everyday noise.',
     role: 'Concept | Physical Product | UI ideation',
@@ -22,9 +35,9 @@ const projects = [
     textColor: '#FFFFFF'
   },
   {
-    id: '02',
+    id: '03',
     slug: 'chromebuds',
-    badge: 'PRODUCT DESIGN • INDUSTRIAL DESIGN • UX',
+    badge: 'INDUSTRIAL DESIGN • UX Design',
     title: 'Chromebuds: Rethinking\nwhy people are leaving\nTWS behind.',
     description: 'A product redesign exploring comfort, convenience and everyday usability in TWS.',
     role: 'Concept | Physical Product | UI ideation',
@@ -32,18 +45,6 @@ const projects = [
     bgColor: '#F1F0EC', 
     accentColor: '#176BCC', 
     textColor: '#151515'
-  },
-  {
-    id: '03',
-    slug: 'bubbleshare',
-    badge: 'DIGITAL PRODUCT • INTERACTION • UX/UI',
-    title: 'Bubbleshare: Making file\n sending feel natural',
-    description: 'A file-sharing experience that turns an invisible digital process into something tangible and intuitive.',
-    role: 'Concept  | UI ideation | Prototyping',
-    image: '/projects/bubbleshare/mockup.png',
-    bgColor: '#4438B5', 
-    accentColor: '#fffc34',
-    textColor: '#FFFFFF'
   }
 ];
 
