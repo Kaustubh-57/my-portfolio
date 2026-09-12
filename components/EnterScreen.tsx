@@ -19,6 +19,13 @@ const ALL_PRELOADER_IMAGES = [
   '/preloader/final.jpg',
 ];
 
+const PRELOADER_TEXTS = [
+  'Look Around',
+  'Stay Curious',
+  'Make Something',
+  'Make It Better',
+];
+
 const FINAL_IMAGE_INDEX = ALL_PRELOADER_IMAGES.length - 1;
 const CYCLING_COUNT = FINAL_IMAGE_INDEX;
 
@@ -27,19 +34,20 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
   const contentBlockRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const animatedTextRef = useRef<HTMLDivElement>(null); // --- NEW REF for the text block ---
   
   const [progress, setProgress] = useState(0);
   const [currentImage, setCurrentImage] = useState(0);
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [shouldRender, setShouldRender] = useState(true);
 
- // Check memory on mount and cache images
+  // Check memory on mount and cache images
   useEffect(() => {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
     
-    // Silently force the browser to download all images into memory
     ALL_PRELOADER_IMAGES.forEach((src) => {
       const img = new Image();
       img.src = src;
@@ -52,6 +60,17 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
       window.scrollTo(0, 0);
     }
   }, [onEnter]);
+
+  // --- UPDATED: Timer now waits until isReady is true to start cycling ---
+  useEffect(() => {
+    if (!shouldRender || !isReady) return;
+
+    const timer = setInterval(() => {
+      setCurrentTextIndex((prev) => prev + 1);
+    }, 2000); 
+    
+    return () => clearInterval(timer);
+  }, [shouldRender, isReady]);
 
   useGSAP(() => {
     if (!shouldRender) return;
@@ -86,9 +105,17 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
       },
       onComplete: () => {
         setIsReady(true);
+        
+        // Static entrance for CTA
         gsap.fromTo(ctaRef.current,
-          { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+        );
+
+        // --- NEW: Static entrance for the animated text block ---
+        gsap.fromTo(animatedTextRef.current,
+          { opacity: 0, x: -10 },
+          { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', delay: 0.2 }
         );
       }
     }, 0);
@@ -97,7 +124,6 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
   const handleEnterClick = () => {
     if (!isReady) return;
 
-    // Save to memory so it doesn't play again when they hit 'Go back'
     sessionStorage.setItem('hasSeenPreloader', 'true');
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
@@ -120,6 +146,9 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
 
   if (!shouldRender) return null;
 
+  const activeTextIndex = currentTextIndex % PRELOADER_TEXTS.length;
+  const prevTextIndex = (currentTextIndex - 1 + PRELOADER_TEXTS.length) % PRELOADER_TEXTS.length;
+
   return (
     <div 
       ref={overlayRef}
@@ -128,10 +157,11 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
       }`}
       onClick={handleEnterClick}
     >
-      <div ref={contentBlockRef} className="flex flex-col w-44 md:w-[220px]">
+      <div ref={contentBlockRef} className="relative flex flex-col w-44 md:w-[220px]">
+        
         <div className="flex justify-between items-end mb-2.5 font-dm-sans text-[#141613]">
           <span className="text-[11px] md:text-xs font-medium tracking-wide uppercase">
-            doesKaus
+            DOESKAUS
           </span>
           <span className="text-[11px] md:text-xs font-medium">
             {progress}
@@ -159,11 +189,43 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
             />
           ))}
         </div>
+
+        {/* --- UPDATED: Added ref, initial opacity-0, and increased text/container sizes --- */}
+        <div 
+          ref={animatedTextRef}
+          className="absolute top-[55%] -translate-y-1/2 left-[calc(100%+80px)] md:left-[calc(100%+160px)] font-dm-sans text-[#383838] opacity-0"
+        >
+          {/* Increased container dimensions to accommodate larger text */}
+          <div className="relative h-[20px] md:h-[24px] w-[180px] md:w-[200px] overflow-hidden">
+            {PRELOADER_TEXTS.map((text, index) => {
+              const isAnimating = index === activeTextIndex || index === prevTextIndex;
+              
+              return (
+                <span
+                  key={index}
+                  // Increased text size to text-sm md:text-base
+                  className={`absolute left-0 bottom-0 text-sm md:text-base font-medium tracking-wide will-change-transform ${
+                    isAnimating ? 'transition-all duration-700 ease-out' : 'transition-none'
+                  } ${
+                    index === activeTextIndex
+                      ? 'translate-y-0 opacity-100'
+                      : index === prevTextIndex
+                      ? '-translate-y-full opacity-0'
+                      : 'translate-y-full opacity-0'
+                  }`}
+                >
+                  {text}
+                </span>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
 
       <div 
         ref={ctaRef}
-        className="absolute bottom-12 font-dm-sans text-[10px] md:text-xs text-[#141613]/60 tracking-[0.1em] uppercase opacity-0 pointer-events-none"
+        className="absolute bottom-24 font-dm-sans text-[11px] md:text-xs font-medium text-[#4A4A4A] tracking-[0.1em] uppercase opacity-0 pointer-events-none"
       >
         Click to enter
       </div>

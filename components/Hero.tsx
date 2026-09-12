@@ -16,6 +16,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
   const verticalGridRef = useRef<HTMLDivElement>(null);
   const horizontalGridRef = useRef<HTMLDivElement>(null);
   const bottomSectionRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   const textRefs = useRef<(HTMLHeadingElement | HTMLDivElement | null)[]>([]);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
@@ -90,6 +91,20 @@ export default function Hero({ hasEntered = true }: HeroProps) {
       }
     });
 
+    // --- UPDATED: Stronger Parallax Effect ---
+    // The video starts at -35% top. We move it down by 20% of its massive height.
+    // Mathematically, it will reach -1% top when you finish scrolling, meaning no black gaps!
+    gsap.to(videoRef.current, {
+      yPercent: 20, 
+      ease: 'none',
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      }
+    });
+
     const mm = gsap.matchMedia();
     mm.add("(max-width: 767px)", () => {
       ScrollTrigger.create({
@@ -129,7 +144,6 @@ export default function Hero({ hasEntered = true }: HeroProps) {
   const handleMouseEnter = () => {
     if (!audioRef.current || window.innerWidth < 768) return; 
     
-    // Kill any ongoing volume tweens to prevent stuttering/glitching on rapid hover
     gsap.killTweensOf(audioRef.current);
 
     audioRef.current.play().catch(() => {});
@@ -139,7 +153,6 @@ export default function Hero({ hasEntered = true }: HeroProps) {
   const handleMouseLeave = () => {
     if (!audioRef.current || window.innerWidth < 768) return;
 
-    // Kill any ongoing volume tweens
     gsap.killTweensOf(audioRef.current);
 
     gsap.to(audioRef.current, { 
@@ -210,32 +223,34 @@ export default function Hero({ hasEntered = true }: HeroProps) {
         ref={bottomSectionRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="relative w-full h-[35vh] flex-none bg-[#141613] will-change-transform cursor-crosshair"
+        className="relative w-full h-[35vh] flex-none bg-[#141613] will-change-transform cursor-crosshair overflow-hidden"
       >
         <div className="absolute inset-0 bg-[#141613]/50 z-[5] pointer-events-none" />
 
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          // --- UPDATED: Massive height buffer and heavy negative top positioning ---
+          className="absolute left-0 w-full h-[170%] -top-[35%] object-cover object-center"
         >
           <source src="/trees.mp4" type="video/mp4" />
         </video>
 
-        <div className="relative z-10 w-full max-w-[1440px] h-full mx-auto px-8 md:px-12 py-12 flex justify-between items-end pointer-events-none">
+        <div className="relative z-10 w-full max-w-[1440px] h-full mx-auto px-8 md:px-12 py-16 flex justify-between items-end pointer-events-none">
           
-          <div className="max-w-[460px] text-white">
+          <div className="max-w-[600px] text-white">
             <p className="font-dm-sans text-base md:text-lg leading-relaxed tracking-[-0.03em] font-light text-white/90">
-              I’m interested in the everyday interactions,
-          where we stop questioning the awkward flow,
-              unnecessary step or confusing interface
-              that has simply become normal. I like
-              understanding why it happens and turning
-              it into a product experience that feels
-              obvious in hindsight.
+             Hello, I'm Kaustubh Korde.
             </p>
+            <p className="font-dm-sans text-base md:text-lg leading-relaxed tracking-[-0.03em] font-light text-white/90">
+              I’m interested in the everyday interactions, where we stop questioning the awkward flow,
+              unnecessary step or confusing interface that has simply become normal. I like
+              understanding why it happens and turning it into a product experience that feels
+              natural.
+              </p>
           </div>
 
           <div className="flex flex-col items-end text-white gap-8 pointer-events-auto">

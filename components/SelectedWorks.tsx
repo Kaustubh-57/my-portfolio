@@ -13,7 +13,7 @@ const projects = [
     id: '01',
     slug: 'decicon', 
     badge: 'CONNECTED PRODUCT • SYSTEM DESIGN • UX/UI',
-    title: 'Decicon : A quieter way to\nexperience the everyday.',
+    title: 'Decicon : A quieter way to experience the everyday.',
     description: 'A connected physical-digital system designed to rethink how people experience and respond to everyday noise.',
     role: 'Concept | Physical Product | UI ideation',
     image: '/projects/decicon/mockup.png',

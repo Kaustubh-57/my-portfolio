@@ -24,10 +24,10 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://doeskaus.vercel.app'),
-  title: 'doeskaus® Portfolio of Kaustubh Korde',
+  title: 'doeskaus® Kaustubh Korde',
   description: 'I design digital products that work beautifully.',
   openGraph: {
-    title: 'doeskaus® Portfolio of Kaustubh Korde',
+    title: 'doeskaus® Kaustubh Korde',
     description: 'I design digital products that work beautifully.',
     url: 'https://doeskaus.vercel.app', 
     siteName: 'Kaustubh Korde',

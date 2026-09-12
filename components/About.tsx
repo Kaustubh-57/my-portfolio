@@ -151,7 +151,7 @@ export default function About() {
           </div>
 
           {/* Right Column: Warm Regards & Signature (UPDATED) */}
-          <div className="flex flex-col items-center w-full md:w-auto text-center mt-30 md:mt-0">
+          <div className="flex flex-col items-center w-full md:w-auto text-center mt-12 md:mt-0">
             <p className="font-dm-sans text-base md:text-lg text-white tracking-wide z-10 relative">
               Designed & built by,
             </p>
