@@ -272,17 +272,49 @@ export default function ShoppinCaseStudy() {
         <div className="w-full lg:w-[81%] px-6 lg:px-12 xl:px-16 pt-[120px] pb-32 overflow-hidden">
           
           {/* =========================================
-              SECTION 1: OVERVIEW 
+              SECTION 1: OVERVIEW (UPDATED HEADER)
           ========================================= */}
-          <section id="overview" className="w-full">
-            <h1 className="overview-anim font-momo text-[36px] lg:text-[36px] xl:text-[44px] font-bold leading-[1.1] text-[#262626] tracking-[-0.02em] max-w-[800px] mb-6 opacity-0">
-              Shoppin: Finding your way through Mumbai's street markets.
-            </h1>
-            <p className="overview-anim font-dm-sans text-[16px] lg:text-[18px] leading-[1.5] text-[#262626]/85 tracking-[-0.05em] max-w-[700px] mb-10 opacity-0">
-              A digital companion for exploring Mumbai's street markets. It helps people discover shops, navigate crowded lanes, find what they're looking for and keep track of places
-            </p>
+          <div className="-mt-[120px] -mx-6 lg:-mx-12 xl:-mx-16 pt-[120px] pb-0 bg-[#FFFAF1] border-b border-[#262626]/10 flex flex-col">
+            <section id="overview" className="w-full max-w-[1400px] mx-auto flex flex-col flex-1">
+              
+              {/* Text Area */}
+              <div className="px-6 lg:px-12 xl:px-16 w-full flex flex-col">
+                {/* UPDATED: Thinner capsule, thicker border, standard dark gray color, centered alignment */}
+                <div className="overview-anim flex justify-between items-center w-full pr-0 mb-10 opacity-0 mt-6 lg:mt-0">
+                  <div 
+                    className="inline-flex items-center px-6 md:px-7 py-1.5 md:py-2 rounded-full border-[1.5px] border-[#262626]/30 font-dm-sans text-xs tracking-wider uppercase text-[#262626]/80"
+                  >
+                    CONNECTED PRODUCT • SYSTEM DESIGN • UX/UI
+                  </div>
+                  <div className="font-momo text-2xl md:text-3xl font-light text-[#262626]/60">
+                    (01)
+                  </div>
+                </div>
 
-            <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_2.5fr] gap-12 lg:gap-16 pt-2">
+                <h1 className="overview-anim font-momo text-[36px] lg:text-[40px] xl:text-[48px] font-bold leading-[1.1] text-[#262626] tracking-[-0.02em] max-w-[850px] mb-6 opacity-0">
+                  Shoppin: Finding your way through Mumbai's street markets.
+                </h1>
+                <p className="overview-anim font-dm-sans text-[16px] lg:text-[18px] leading-[1.5] text-[#262626]/80 tracking-[-0.05em] max-w-[700px] mb-12 lg:mb-16 opacity-0">
+                  A digital companion for exploring Mumbai's street markets. It helps people discover shops, navigate crowded lanes, find what they're looking for and keep track of places
+                </p>
+              </div>
+
+              {/* Image Area */}
+              <div className="overview-anim w-full opacity-0 mt-auto flex items-end px-3 lg:px-5">
+                <img 
+                  src="/projects/shoppin/hero image.png" 
+                  alt="Shoppin interface showcase" 
+                  className="w-full h-auto object-cover rounded-t-[16px] md:rounded-t-[20px] rounded-b-none block align-bottom"
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                />
+              </div>
+            </section>
+          </div>
+
+          {/* Project Details Grid (White Background) */}
+          <div className="w-full pt-16 lg:pt-20">
+            <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_2.5fr] gap-12 lg:gap-16">
+              
               <div className="flex flex-col gap-8 mt-1">
                 <div className="overview-anim opacity-0">
                   <h3 className="font-dm-sans text-[15px] lg:text-[16px] text-[#262626] tracking-[-0.05em] mb-1.5 font-bold">Timeframe</h3>
@@ -297,22 +329,22 @@ export default function ShoppinCaseStudy() {
                   <ul className="font-dm-sans text-[14px] lg:text-[15px] text-[#262626]/60 tracking-[-0.05em] leading-relaxed">
                     <li>Kaustubh Korde</li>
                     <li>Aaron Carvalho</li>
-                    <li>Deshna Deora</li>
-                    <li>Fariya Hasan</li>
+                    <li>Sai Ghate</li>
+                    <li>Rohit Chhatre</li>
                   </ul>
                 </div>
               </div>
 
               <div className="flex flex-col gap-10">
                 <div className="overview-anim opacity-0">
-                  <h2 className="font-momo text-[24px] lg:text-[28px] font-bold text-[#262626] tracking-[-0.02em] mb-3">Context:</h2>
+                  <h2 className="font-momo text-[24px] lg:text-[28px] font-bold text-[#262626] tracking-[-0.02em] mb-3">Context</h2>
                   <div className="flex flex-col gap-4 font-dm-sans text-[15px] lg:text-[16px] text-[#262626]/80 tracking-[-0.05em] leading-[1.4]">
                     <p>I started noticing how differently people navigate street markets compared to regular streets. At Hill Road, people weren't always relying on shop names or addresses. They used cafés, familiar shops and other landmarks to remember where things were.</p>
                     <p>That made me look at the problem differently. Instead of trying to turn street shopping into another online marketplace, I wanted to explore how a digital product could help people navigate the market that already exists.</p>
                   </div>
                 </div>
                 <div className="overview-anim opacity-0">
-                  <h2 className="font-momo text-[24px] lg:text-[28px] font-bold text-[#262626] tracking-[-0.02em] mb-3">My role:</h2>
+                  <h2 className="font-momo text-[24px] lg:text-[28px] font-bold text-[#262626] tracking-[-0.02em] mb-3">My role</h2>
                   <ul className="list-disc pl-5 flex flex-col gap-1.5 font-dm-sans text-[15px] lg:text-[16px] text-[#262626]/80 tracking-[-0.05em] leading-[1.4]">
                     <li>Contributed to the initial concept and product direction.</li>
                     <li>Worked on UX/UI ideation with Aaron.</li>
@@ -323,17 +355,9 @@ export default function ShoppinCaseStudy() {
                   </ul>
                 </div>
               </div>
-            </div>
 
-            <div className="overview-anim w-full mt-16 lg:mt-24 opacity-0">
-              <img 
-                src="/projects/shoppin/hero image.png" 
-                alt="Shoppin interface showcase" 
-                className="w-full h-auto object-cover rounded-[20px]"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-              />
             </div>
-          </section>
+          </div>
 
           <hr className="overview-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
 
@@ -499,18 +523,16 @@ export default function ShoppinCaseStudy() {
           <hr className="direction-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
 
           {/* =========================================
-              SECTION 5: DESIGNING SHOPPIN (WIDER & CLEAN SHADOWS)
+              SECTION 5: DESIGNING SHOPPIN
           ========================================= */}
           <section id="designing" className="w-full">
-            <h2 className="designing-anim font-momo text-[26px] lg:text-[32px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] mb-4 lg:mb-6 opacity-0">
+            <h2 className="designing-anim font-momo text-[26px] lg:text-[32px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] mb-8 lg:mb-12 opacity-0">
               Four things make up the Shoppin experience.
             </h2>
 
-            {/* Expanded section width and aligned left tabs */}
             <div className="-ml-6 lg:-ml-12 w-[calc(100%+3rem)] lg:w-[calc(100%+6rem)]">
               <div className="designing-anim flex items-stretch w-full opacity-0">
                 
-                {/* Narrow Left Column Tabs */}
                 <div className="flex flex-col w-[130px] lg:w-[150px] shrink-0 pt-16 lg:pt-4 relative z-10">
                   {(Object.keys(DESIGN_TAB_DATA) as Array<keyof typeof DESIGN_TAB_DATA>).map((tab) => {
                     const isActive = activeDesignTab === tab;
@@ -531,7 +553,6 @@ export default function ShoppinCaseStudy() {
                   })}
                 </div>
 
-                {/* Wide Cream Content Box with Added Drop Shadow for Screen Assets */}
                 <div className="flex-1 bg-[#FDF9F1] rounded-[0px] p-4 lg:p-8 min-h-[580px] relative overflow-hidden flex flex-col justify-between">
                   <div ref={designContentRef} className="w-full flex flex-col h-full justify-between">
                     
@@ -539,7 +560,6 @@ export default function ShoppinCaseStudy() {
                       {DESIGN_TAB_DATA[activeDesignTab].title}
                     </p>
 
-                    {/* Larger Screens Row with Custom Clean CSS Drop Shadow */}
                     <div className="flex flex-wrap lg:flex-nowrap justify-center items-end mt-4 mb-10 gap-0">
                       {DESIGN_TAB_DATA[activeDesignTab].screens.map((screen, idx) => (
                         <div key={idx} className="flex flex-col items-center">
@@ -560,11 +580,11 @@ export default function ShoppinCaseStudy() {
                 </div>
               </div>
               
-                    {DESIGN_TAB_DATA[activeDesignTab].footer && (
-                      <p className="font-dm-sans text-[13px] lg:text-[14px] font-bold text-[#262626] tracking-[-0.05em] text-center mt-auto pt-6 border-t border-[#262626]/5">
-                        {DESIGN_TAB_DATA[activeDesignTab].footer}
-                      </p>
-                    )}
+              {DESIGN_TAB_DATA[activeDesignTab].footer && (
+                <p className="font-dm-sans text-[13px] lg:text-[14px] font-bold text-[#262626] tracking-[-0.05em] text-center mt-auto pt-6 border-t border-[#262626]/5">
+                  {DESIGN_TAB_DATA[activeDesignTab].footer}
+                </p>
+              )}
             </div>
           </section>
 
