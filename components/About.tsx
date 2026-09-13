@@ -7,7 +7,11 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function About() {
+interface AboutProps {
+  hideIntro?: boolean;
+}
+
+export default function About({ hideIntro = false }: AboutProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const graphicRef = useRef<HTMLImageElement>(null);
@@ -22,17 +26,19 @@ export default function About() {
       }
     });
 
-    tl.fromTo(
-      contentRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
-    );
+    if (!hideIntro && contentRef.current) {
+      tl.fromTo(
+        contentRef.current,
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
+      );
+    }
 
     tl.fromTo(
       graphicRef.current,
       { scale: 0.9, opacity: 0 },
       { scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(1.7)' },
-      '-=0.5'
+      hideIntro ? 0 : '-=0.5' 
     );
 
     tl.fromTo(
@@ -41,15 +47,16 @@ export default function About() {
       { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
       '-=0.6'
     );
-  }, { scope: containerRef });
+  }, { scope: containerRef, dependencies: [hideIntro] });
 
   return (
     <section 
       ref={containerRef} 
       id="contact"
-      className="relative w-full bg-[#ffffff] flex flex-col z-30 overflow-hidden"
+      // --- FIX: Removed overflow-hidden so the red graphic can safely bleed into the section above it ---
+      className="relative w-full bg-[#ffffff] flex flex-col z-30"
     >
-      {/* Background Grid Layer (Spans the white section) */}
+      {/* Background Grid Layer */}
       <div 
         className="absolute inset-0 w-full h-full pointer-events-none opacity-60 z-0"
         style={{
@@ -61,30 +68,31 @@ export default function About() {
         }}
       />
 
-      {/* --- TOP WHITE SECTION --- */}
-      <div ref={contentRef} className="relative z-10 w-full max-w-[1440px] mx-auto px-8 md:px-12 pt-16 md:pt-24 pb-12">
-        <h2 className="font-momo text-4xl md:text-6xl lg:text-[64px] text-[#141613] leading-[1.1] tracking-[-0.03em] max-w-5xl">
-          Because good design isn’t just about visuals.{' '}
-          <span className="text-[#141613]/50">
-            It’s about listening, understanding, clarity, and helping teams move forward.
-          </span>
-        </h2>
+      {/* --- TOP WHITE SECTION (Conditionally Rendered) --- */}
+      {!hideIntro && (
+        <div ref={contentRef} className="relative z-10 w-full max-w-[1440px] mx-auto px-8 md:px-12 pt-16 md:pt-24 pb-12">
+          <h2 className="font-momo text-4xl md:text-5xl lg:text-[56px] text-[#141613] leading-[1.1] tracking-[-0.03em] max-w-5xl">
+            Because good design isn’t just about visuals.{' '}
+            <span className="text-[#141613]/50">
+              It’s about listening, understanding, clarity, and helping teams move forward.
+            </span>
+          </h2>
 
-        {/* Subtext */}
-        <div className="mt-8 max-w-2xl" data-cursor="hover">
-          <p className="font-dm-sans text-sm md:text-base text-[#141613]/80 leading-relaxed tracking-[-0.02em]">
-            I’m a designer who enjoys figuring things out
-          </p>
-          <p className="font-dm-sans text-sm md:text-base text-[#141613]/80 leading-relaxed tracking-[-0.02em]">
-            whether that’s a product problem, a new tool, a technical constraint or an unfamiliar domain.
-          </p>
+          <div className="mt-8 max-w-2xl" data-cursor="hover">
+            <p className="font-dm-sans text-sm md:text-base text-[#141613]/80 leading-relaxed tracking-[-0.02em]">
+              I’m a designer who enjoys figuring things out
+            </p>
+            <p className="font-dm-sans text-sm md:text-base text-[#141613]/80 leading-relaxed tracking-[-0.02em]">
+              whether that’s a product problem, a new tool, a technical constraint or an unfamiliar domain.
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* --- BOTTOM BLACK SECTION (Dome Curve) --- */}
-      <div className="relative w-full bg-[#141613] rounded-t-[60px] md:rounded-t-[100px] pt-32 md:pt-40 pb-20 px-8 md:px-12 z-20 mt-20 md:mt-32 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+      <div className={`relative w-full bg-[#141613] rounded-t-[60px] md:rounded-t-[100px] pt-32 md:pt-40 pb-20 px-8 md:px-12 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] ${hideIntro ? 'mt-12 md:mt-16' : 'mt-20 md:mt-32'}`}>
         
-        {/* Red Mechanical Graphic - Increased Size and Centered on the Dome Edge */}
+        {/* Red Mechanical Graphic */}
         <div className="absolute left-1/2 -translate-x-1/2 -top-24 md:-top-36 z-30 w-[300px] md:w-[260px] pointer-events-none flex justify-center">
           <img 
             ref={graphicRef}
@@ -150,13 +158,13 @@ export default function About() {
             </div>
           </div>
 
-          {/* Right Column: Warm Regards & Signature (UPDATED) */}
+          {/* Right Column: Warm Regards & Signature */}
           <div className="flex flex-col items-center w-full md:w-auto text-center mt-12 md:mt-0">
             <p className="font-dm-sans text-base md:text-lg text-white tracking-wide z-10 relative">
-              Designed & built by,
+              Designed & Built by,
             </p>
 
-            <div className="w-44 md:w-52 -my-4 relative z-0 opacity-80 hover:opacity-100 transition-opacity duration-300">
+            <div className="w-44 md:w-65 -my-4 relative z-0 opacity-80 hover:opacity-100 transition-opacity duration-300">
               <img 
                 src="/signature.png" 
                 alt="Kaustubh Signature" 
@@ -167,14 +175,6 @@ export default function About() {
               />
             </div>
 
-            <div className="flex flex-col items-center gap-0.5 z-10 relative">
-              <p className="font-dm-sans text-base md:text-lg text-white tracking-wide">
-                Kaustubh Korde
-              </p>
-              <p className="font-dm-sans text-sm md:text-base text-white/60 tracking-wide">
-                (19 Aug 2026)
-              </p>
-            </div>
           </div>
 
         </div>
