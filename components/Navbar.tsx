@@ -37,35 +37,15 @@ export default function Navbar() {
   useGSAP(() => {
     const initTl = gsap.timeline({ paused: true });
     
+    // Initial drop down animation
     initTl.fromTo(
       headerRef.current,
       { yPercent: -100 },
       { 
         yPercent: 0, 
         duration: isHome ? 1.5 : 0.8, 
-        ease: isHome ? 'power2.out' : 'power3.out',
-        onComplete: () => {
-          ScrollTrigger.create({
-            start: 'top top',
-            onUpdate: (self) => {
-              if (self.direction === 1 && self.scroll() > 100) {
-                gsap.to(headerRef.current, { 
-                  yPercent: -100, 
-                  duration: 0.4, 
-                  ease: 'power2.out', 
-                  overwrite: 'auto' 
-                });
-              } else if (self.direction === -1 || self.scroll() <= 100) {
-                gsap.to(headerRef.current, { 
-                  yPercent: 0, 
-                  duration: 0.4, 
-                  ease: 'power2.out', 
-                  overwrite: 'auto' 
-                });
-              }
-            }
-          });
-        }
+        ease: isHome ? 'power2.out' : 'power3.out'
+        // ScrollTrigger auto-hide logic has been completely removed from here
       }
     );
     
@@ -256,7 +236,6 @@ export default function Navbar() {
           </div>
 
           <div className="w-full md:w-auto md:absolute md:left-1/2 md:-translate-x-1/2 flex justify-center text-sm font-medium opacity-80 z-10">
-            {/* --- UPDATED: Button is now a flex container with the SVG icon inside --- */}
             <button 
               onClick={() => {
                 sessionStorage.removeItem('hasSeenPreloader');
