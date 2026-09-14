@@ -8,9 +8,22 @@ import { useRouter, usePathname } from 'next/navigation';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// --- UPDATED: Reordered so Shoppin is 1st and Bubbleshare is 2nd ---
 const allProjects = [
   {
     id: '01',
+    slug: 'shoppin',
+    badge: 'UX/UI Design • UX RESEARCH',
+    title: 'Shoppin: Making street shopping easier to explore.',
+    description: 'A digital experience designed to help people discover, locate and save street-market stalls without taking away the spontaneity of shopping offline.',
+    role: 'UX Research · Product Design · UI/UX · Usability Testing',
+    image: '/projects/shoppin/mockup.png', 
+    bgColor: '#FFFAF1', 
+    accentColor: '#672424', 
+    textColor: '#151515' 
+  },
+  {
+    id: '02',
     slug: 'bubbleshare',
     badge: 'INTERACTION Design • UX/UI Design',
     title: 'Bubbleshare: Making file\n sending feel natural',
@@ -22,25 +35,13 @@ const allProjects = [
     textColor: '#FFFFFF'
   },
   {
-    id: '02',
-    slug: 'shoppin',
-    badge: 'UX/UI Design • UX RESEARCH',
-    title: 'Shoppin: Making street shopping easier to explore.',
-    description: 'A digital experience designed to help people discover, locate and save street-market stalls without taking away the spontaneity of shopping offline.',
-    role: 'UX Research · Product Design · UI/UX · Usability Testing',
-    image: '/projects/shoppin/mockup.png', // IMPORTANT: Add this image to your public folder!
-    bgColor: '#FFFAF1', 
-    accentColor: '#672424', 
-    textColor: '#151515' 
-  },
-  {
     id: '03',
-    slug: 'decicon', // Matches your folder exactly
+    slug: 'decicon', 
     badge: 'SYSTEM DESIGN • UX/UI Design',
-    title: 'NoiseShield : A quieter way to experience the everyday.', // Displayed as NoiseShield
+    title: 'NoiseShield : A quieter way to experience the everyday.', 
     description: 'A connected physical-digital system designed to rethink how people experience and respond to everyday noise.',
     role: 'Concept | Physical Product | UI ideation',
-    image: '/projects/decicon/mockup.png', // Matches your folder exactly
+    image: '/projects/decicon/mockup.png', 
     bgColor: '#171918',
     accentColor: '#C7E86B',
     textColor: '#FFFFFF'
@@ -71,7 +72,7 @@ export default function SelectedWorks() {
   // Filters projects based on the page
   const projects = useMemo(() => {
     return isHome 
-      ? allProjects.filter(p => ['bubbleshare', 'shoppin', 'decicon'].includes(p.slug))
+      ? allProjects.filter(p => ['shoppin', 'bubbleshare', 'decicon'].includes(p.slug))
       : allProjects; 
   }, [isHome]);
 
