@@ -43,7 +43,7 @@ export default function StatusToast() {
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#C7E86B]"></span>
           </span>
           <span className="text-[11px] font-semibold tracking-[0.1em] uppercase text-white/70">
-            Live Deployment
+            OPEN TO OPPORTUNITIES
           </span>
         </div>
         <button 
@@ -58,7 +58,10 @@ export default function StatusToast() {
       </div>
       
       <p className="text-[14px] leading-relaxed text-white/90 font-light mt-1">
-        Welcome! I am currently pushing the final updates to this portfolio tonight. Most case studies are fully accessible, but the final polished experience will be ready by tomorrow.
+        Currently looking for product design opportunities.
+I enjoy working across research, interaction, visual design and prototyping  </p>
+
+<p>Currently exploring: Product Design · UX/UI · Design Internships
       </p>
       
       <a 
@@ -67,7 +70,7 @@ export default function StatusToast() {
         rel="noopener noreferrer"
         className="text-[13px] text-[#C7E86B] hover:text-white transition-colors underline decoration-white/30 underline-offset-4 mt-2 w-fit font-medium"
       >
-        View PDF Resume meanwhile
+        View my PDF Resume 
       </a>
     </div>
   );
