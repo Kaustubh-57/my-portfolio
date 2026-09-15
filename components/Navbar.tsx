@@ -17,6 +17,7 @@ export default function Navbar() {
   const footerRef = useRef<HTMLDivElement>(null);
   
   const [isOpen, setIsOpen] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const tl = useRef<gsap.core.Timeline | null>(null);
 
   const pathname = usePathname();
@@ -34,10 +35,51 @@ export default function Navbar() {
     { name: 'Resume', href: '/resume.pdf', isExternal: true }
   ];
 
+  // Global Audio Initialization & Sync
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (!(window as any).__bgMusic) {
+        const audio = new Audio('/background-music.mp3');
+        audio.loop = true;
+        audio.volume = 0.5;
+        (window as any).__bgMusic = audio;
+      }
+
+      const globalAudio = (window as any).__bgMusic;
+
+      const updateState = () => setIsMusicPlaying(!globalAudio.paused);
+      
+      globalAudio.addEventListener('play', updateState);
+      globalAudio.addEventListener('pause', updateState);
+      
+      updateState();
+
+      return () => {
+        globalAudio.removeEventListener('play', updateState);
+        globalAudio.removeEventListener('pause', updateState);
+      };
+    }
+  }, []);
+
+  const toggleMusic = () => {
+    const globalAudio = (window as any).__bgMusic;
+    if (!globalAudio) return;
+
+    if (isMusicPlaying) {
+      gsap.to(globalAudio, { 
+        volume: 0, 
+        duration: 0.5, 
+        onComplete: () => globalAudio.pause() 
+      });
+    } else {
+      globalAudio.play().catch(() => {});
+      gsap.to(globalAudio, { volume: 0.5, duration: 0.5 });
+    }
+  };
+
   useGSAP(() => {
     const initTl = gsap.timeline({ paused: true });
     
-    // Initial drop down animation
     initTl.fromTo(
       headerRef.current,
       { yPercent: -100 },
@@ -45,7 +87,6 @@ export default function Navbar() {
         yPercent: 0, 
         duration: isHome ? 1.5 : 0.8, 
         ease: isHome ? 'power2.out' : 'power3.out'
-        // ScrollTrigger auto-hide logic has been completely removed from here
       }
     );
     
@@ -118,6 +159,21 @@ export default function Navbar() {
         className="fixed top-0 left-0 w-full h-[2px] bg-[#C1001F] z-[100] origin-left scale-x-0"
       />
 
+      {/* --- GLOBAL FLOATING MUSIC BUTTON --- */}
+      {/* Positioned fixed on the screen, just below where the right side of the navbar sits */}
+      <button 
+        onClick={toggleMusic}
+        className="fixed top-24 right-8 md:top-20 md:right-10 z-[85] w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 transition-transform duration-300 outline-none nav-item opacity-0"
+        data-cursor="hover"
+        aria-label="Toggle background music"
+      >
+        <img 
+          src={isMusicPlaying ? '/sound-on.png' : '/sound-mute.png'} 
+          alt={isMusicPlaying ? 'Sound on' : 'Sound muted'} 
+          className="w-6 h-6 object-contain"
+        />
+      </button>
+
       <header 
         ref={headerRef}
         className="fixed top-0 left-0 w-full z-[90] transition-colors transition-shadow duration-300 ease-in-out flex justify-between items-center px-8 md:px-12 py-2.5 md:py-3.5 bg-white shadow-sm"
@@ -140,7 +196,7 @@ export default function Navbar() {
           </span>
         </a>
 
-        <div className="flex items-center gap-8 md:gap-10">
+        <div className="flex items-center gap-6 md:gap-10">
           <nav 
             className={`hidden md:flex items-center gap-8 transition-all duration-500 ease-in-out ${
               isOpen ? 'opacity-0 translate-x-8 pointer-events-none' : 'opacity-100 translate-x-0'
@@ -170,25 +226,29 @@ export default function Navbar() {
             })}
           </nav>
 
-          <button 
-            onClick={() => setIsOpen(!isOpen)}
-            className="relative w-8 h-8 flex flex-col items-center justify-center gap-[5px] z-[100] cursor-pointer nav-item opacity-0 outline-none"
-            data-cursor="hover"
-          >
-            <span 
-              className={`block w-[22px] h-[1.6px] bg-[#141613] transition-transform duration-500 ease-in-out origin-center ${
-                isOpen ? 'translate-y-[3.25px] rotate-45' : ''
-              }`} 
-            />
-            <span 
-              className={`block w-[22px] h-[1.6px] bg-[#141613] transition-transform duration-500 ease-in-out origin-center ${
-                isOpen ? '-translate-y-[3.25px] -rotate-45' : ''
-              }`} 
-            />
-          </button>
+          <div className="flex items-center gap-3 z-[100]">
+            {/* Hamburger */}
+            <button 
+              onClick={() => setIsOpen(!isOpen)}
+              className="relative w-8 h-8 flex flex-col items-center justify-center gap-[5px] cursor-pointer nav-item opacity-0 outline-none"
+              data-cursor="hover"
+            >
+              <span 
+                className={`block w-[22px] h-[1.6px] bg-[#141613] transition-transform duration-500 ease-in-out origin-center ${
+                  isOpen ? 'translate-y-[3.25px] rotate-45' : ''
+                }`} 
+              />
+              <span 
+                className={`block w-[22px] h-[1.6px] bg-[#141613] transition-transform duration-500 ease-in-out origin-center ${
+                  isOpen ? '-translate-y-[3.25px] -rotate-45' : ''
+                }`} 
+              />
+            </button>
+          </div>
         </div>
       </header>
 
+      {/* --- OVERLAY MENU --- */}
       <div 
         className={`fixed inset-0 z-[75] bg-black/10 transition-opacity duration-500 ${
           isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'

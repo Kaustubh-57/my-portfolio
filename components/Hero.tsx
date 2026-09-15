@@ -18,10 +18,11 @@ export default function Hero({ hasEntered = true }: HeroProps) {
   const bottomSectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   
-  const textRefs = useRef<(HTMLHeadingElement | HTMLDivElement | null)[]>([]);
+  const textRefs = useRef<(HTMLHeadingElement | HTMLDivElement | HTMLParagraphElement | null)[]>([]);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const wasMusicPlaying = useRef(false);
 
   useEffect(() => {
     audioRef.current = new Audio('/trees.mp3');
@@ -67,7 +68,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
       y: 0, 
       opacity: 1, 
       duration: 1.5, 
-      stagger: 0.15, 
+      stagger: 0.1, 
       ease: 'power2.out' 
     }, '-=0.7');
 
@@ -91,9 +92,6 @@ export default function Hero({ hasEntered = true }: HeroProps) {
       }
     });
 
-    // --- UPDATED: Stronger Parallax Effect ---
-    // The video starts at -35% top. We move it down by 20% of its massive height.
-    // Mathematically, it will reach -1% top when you finish scrolling, meaning no black gaps!
     gsap.to(videoRef.current, {
       yPercent: 20, 
       ease: 'none',
@@ -114,6 +112,13 @@ export default function Hero({ hasEntered = true }: HeroProps) {
         onEnter: () => {
           audioRef.current?.play().catch(() => {});
           gsap.to(audioRef.current, { volume: 0.3, duration: 1, ease: 'power2.out' });
+
+          const globalAudio = (window as any).__bgMusic;
+          if (globalAudio && !globalAudio.paused) {
+            wasMusicPlaying.current = true;
+            gsap.killTweensOf(globalAudio);
+            gsap.to(globalAudio, { volume: 0, duration: 1, ease: 'power2.out', onComplete: () => globalAudio.pause() });
+          }
         },
         onLeave: () => {
           gsap.to(audioRef.current, { 
@@ -122,10 +127,25 @@ export default function Hero({ hasEntered = true }: HeroProps) {
             ease: 'power2.out',
             onComplete: () => audioRef.current?.pause() 
           });
+
+          const globalAudio = (window as any).__bgMusic;
+          if (globalAudio && wasMusicPlaying.current) {
+            globalAudio.play().catch(() => {});
+            wasMusicPlaying.current = false;
+            gsap.killTweensOf(globalAudio);
+            gsap.to(globalAudio, { volume: 0.5, duration: 1, ease: 'power2.out' });
+          }
         },
         onEnterBack: () => {
           audioRef.current?.play().catch(() => {});
           gsap.to(audioRef.current, { volume: 0.3, duration: 1, ease: 'power2.out' });
+
+          const globalAudio = (window as any).__bgMusic;
+          if (globalAudio && !globalAudio.paused) {
+            wasMusicPlaying.current = true;
+            gsap.killTweensOf(globalAudio);
+            gsap.to(globalAudio, { volume: 0, duration: 1, ease: 'power2.out', onComplete: () => globalAudio.pause() });
+          }
         },
         onLeaveBack: () => {
           gsap.to(audioRef.current, { 
@@ -134,6 +154,14 @@ export default function Hero({ hasEntered = true }: HeroProps) {
             ease: 'power2.out',
             onComplete: () => audioRef.current?.pause() 
           });
+
+          const globalAudio = (window as any).__bgMusic;
+          if (globalAudio && wasMusicPlaying.current) {
+            globalAudio.play().catch(() => {});
+            wasMusicPlaying.current = false;
+            gsap.killTweensOf(globalAudio);
+            gsap.to(globalAudio, { volume: 0.5, duration: 1, ease: 'power2.out' });
+          }
         }
       });
     });
@@ -142,55 +170,78 @@ export default function Hero({ hasEntered = true }: HeroProps) {
   }, { dependencies: [hasEntered], scope: containerRef });
 
   const handleMouseEnter = () => {
-    if (!audioRef.current || window.innerWidth < 768) return; 
+    if (window.innerWidth < 768) return; 
     
-    gsap.killTweensOf(audioRef.current);
+    if (audioRef.current) {
+      gsap.killTweensOf(audioRef.current);
+      audioRef.current.play().catch(() => {});
+      gsap.to(audioRef.current, { volume: 0.3, duration: 0.8, ease: 'power2.inOut' });
+    }
 
-    audioRef.current.play().catch(() => {});
-    gsap.to(audioRef.current, { volume: 0.3, duration: 0.8, ease: 'power2.inOut' });
+    const globalAudio = (window as any).__bgMusic;
+    if (globalAudio && !globalAudio.paused) {
+      wasMusicPlaying.current = true;
+      gsap.killTweensOf(globalAudio);
+      gsap.to(globalAudio, { 
+        volume: 0, 
+        duration: 0.8, 
+        ease: 'power2.inOut', 
+        onComplete: () => globalAudio.pause() 
+      });
+    }
   };
 
   const handleMouseLeave = () => {
-    if (!audioRef.current || window.innerWidth < 768) return;
-
-    gsap.killTweensOf(audioRef.current);
-
-    gsap.to(audioRef.current, { 
-      volume: 0, 
-      duration: 0.6, 
-      ease: 'power2.inOut',
-      onComplete: () => {
-        if (audioRef.current && audioRef.current.volume === 0) {
-          audioRef.current.pause();
+    if (window.innerWidth < 768) return;
+    
+    if (audioRef.current) {
+      gsap.killTweensOf(audioRef.current);
+      gsap.to(audioRef.current, { 
+        volume: 0, 
+        duration: 0.6, 
+        ease: 'power2.inOut',
+        onComplete: () => {
+          if (audioRef.current && audioRef.current.volume === 0) {
+            audioRef.current.pause();
+          }
         }
-      }
-    });
+      });
+    }
+
+    const globalAudio = (window as any).__bgMusic;
+    if (globalAudio && wasMusicPlaying.current) {
+      globalAudio.play().catch(() => {});
+      wasMusicPlaying.current = false;
+      gsap.killTweensOf(globalAudio);
+      gsap.to(globalAudio, { volume: 0.5, duration: 0.8, ease: 'power2.inOut' });
+    }
   };
 
-  const addToRefs = (el: HTMLHeadingElement | HTMLDivElement | null) => {
+  const addToRefs = (el: HTMLHeadingElement | HTMLDivElement | HTMLParagraphElement | null) => {
     if (el && !textRefs.current.includes(el)) {
       textRefs.current.push(el);
     }
   };
 
   return (
-    <section ref={containerRef} className="relative w-full flex flex-col bg-white overflow-hidden">
+    <section ref={containerRef} className="relative w-full flex flex-col bg-[#FAFAFA] overflow-hidden" style={{ fontFamily: "'Stack Sans Headline', sans-serif" }}>
       
-      <div className="relative w-full h-[70vh] flex-none flex flex-col justify-center px-8 md:px-12 border-b border-gray-100 pb-6">
+      {/* --- TOP SECTION (60% Height) --- */}
+      <div className="relative w-full h-[60vh] flex-none flex flex-col justify-center px-8 md:px-12 lg:px-24 border-b border-gray-100">
         
+        {/* Background Grids */}
         <div 
           ref={verticalGridRef}
-          className="absolute inset-0 w-full h-full pointer-events-none origin-top scale-y-0"
+          className="absolute inset-0 w-full h-full pointer-events-none origin-top scale-y-0 opacity-40"
           style={{
             backgroundImage: `linear-gradient(to right, #E5E7EB 1px, transparent 1px)`,
             backgroundSize: '90px 100%',
             backgroundPosition: '0 0',
           }}
         />
-
         <div 
           ref={horizontalGridRef}
-          className="absolute inset-0 w-full h-full pointer-events-none origin-left scale-x-0"
+          className="absolute inset-0 w-full h-full pointer-events-none origin-left scale-x-0 opacity-40"
           style={{
             backgroundImage: `linear-gradient(to bottom, #E5E7EB 1px, transparent 1px)`,
             backgroundSize: '100% 90px',
@@ -198,34 +249,66 @@ export default function Hero({ hasEntered = true }: HeroProps) {
           }}
         />
 
-        <div className="relative z-10 w-full max-w-[1440px] mx-auto flex items-end justify-between mt-13">
-          <div className="flex flex-col gap-3 w-fit" data-cursor="hover">
-            {['Product', 'Experience', 'Designer'].map((word, i) => (
-              <h1
-                key={i}
-                ref={addToRefs}
-                className="text-[9vw] lg:text-[105px] font-momo text-[#C1001F] tracking-[-0.03em] font-normal leading-none m-0 p-0"
-              >
-                {word}
-              </h1>
-            ))}
-          </div>
-
-          <div ref={addToRefs} className="hidden lg:block pb-1" data-cursor="hover">
-            <p className="font-dm-sans text-[#C1001F] text-xl tracking-[-0.05em] font-normal">
-              I design digital products that work beautifully
+        <div className="relative z-10 w-full max-w-[850px] mx-auto grid grid-cols-1 md:grid-cols-[45%_auto] justify-between gap-y-12 lg:gap-y-16 mt-16 md:mt-24">
+          
+          {/* Row 1, Col 1: Identity */}
+          <div className="flex flex-col">
+            <h1
+              ref={addToRefs}
+              className="text-[28px] md:text-[32px] lg:text-[26px] text-[#C1001F] tracking-normal font-semibold leading-[1.1] m-0 p-0"
+            >
+              Hello, I am Kaustubh Korde
+            </h1>
+            <p 
+              ref={addToRefs} 
+              className="font-dm-sans text-[#141613]/50 text-[11px] md:text-[14px] tracking-[-0.05em] uppercase font-medium mt-0.5"
+            >
+              Product Designer
             </p>
           </div>
+
+          {/* Row 1, Col 2: Philosophy */}
+          <div className="flex flex-col">
+            <h2 
+              ref={addToRefs} 
+              className="text-[28px] md:text-[32px] lg:text-[26px] text-[#141613] leading-[1.1] tracking-normal font-semibold"
+            >
+              I design digital products that<br className="hidden md:block" /> work beautifully
+            </h2>
+            <h2 
+              ref={addToRefs} 
+              className="text-[28px] md:text-[32px] lg:text-[26px] text-[#141613] leading-[1.1] tracking-normal font-semibold mt-0.5 whitespace-nowrap"
+            >
+              Accessible, clear & intentional
+            </h2>
+          </div>
+
+          {/* Row 2, Col 1: Location */}
+          <div ref={addToRefs} className="hidden md:block">
+            <p className="font-dm-sans text-[#141613]/40 text-[11px] md:text-[14px] tracking-[-0.05em] uppercase font-medium">
+              Based in Mumbai
+            </p>
+          </div>
+
+          {/* Row 2, Col 2: Previous */}
+          <div ref={addToRefs}>
+            <p className="font-dm-sans text-[#141613]/40 text-[11px] md:text-[14px] tracking-[-0.05em] uppercase font-medium">
+              Previously at <a href="https://www.linkedin.com/company/realty-sharks/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-[#141613] transition-colors">Realty Sharks</a>
+            </p>
+          </div>
+
         </div>
       </div>
 
+      {/* --- BOTTOM SECTION (40% Height) --- */}
       <div 
         ref={bottomSectionRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="relative w-full h-[35vh] flex-none bg-[#141613] will-change-transform cursor-crosshair overflow-hidden"
+        className="relative w-full h-[40vh] flex-none bg-[#141613] will-change-transform cursor-crosshair overflow-hidden"
       >
-        <div className="absolute inset-0 bg-[#141613]/50 z-[5] pointer-events-none" />
+        {/* CHANGED OPACITY: bg-[#141613]/50 reduced to bg-[#141613]/25 for a brighter video */}
+        <div className="absolute inset-0 bg-[#141613]/25 z-[5] pointer-events-none" />
 
         <video
           ref={videoRef}
@@ -233,26 +316,13 @@ export default function Hero({ hasEntered = true }: HeroProps) {
           loop
           muted
           playsInline
-          // --- UPDATED: Massive height buffer and heavy negative top positioning ---
           className="absolute left-0 w-full h-[170%] -top-[35%] object-cover object-center"
         >
           <source src="/trees.mp4" type="video/mp4" />
         </video>
 
-        <div className="relative z-10 w-full max-w-[1440px] h-full mx-auto px-8 md:px-12 py-16 flex justify-between items-end pointer-events-none">
+        <div className="relative z-10 w-full max-w-[1440px] h-full mx-auto px-8 md:px-12 py-16 flex justify-end items-end pointer-events-none">
           
-          <div className="max-w-[600px] text-white">
-            <p className="font-dm-sans text-base md:text-lg leading-relaxed tracking-[-0.03em] font-light text-white/90">
-             Hello, I'm Kaustubh Korde.
-            </p>
-            <p className="font-dm-sans text-base md:text-lg leading-relaxed tracking-[-0.03em] font-light text-white/90">
-              I’m interested in the everyday interactions, where we stop questioning the awkward flow,
-              unnecessary step or confusing interface that has simply become normal. I like
-              understanding why it happens and turning it into a product experience that feels
-              natural.
-              </p>
-          </div>
-
           <div className="flex flex-col items-end text-white gap-8 pointer-events-auto">
             <div className="group cursor-pointer flex flex-col items-end" data-cursor="hover">
               <div className="flex items-center gap-3">
