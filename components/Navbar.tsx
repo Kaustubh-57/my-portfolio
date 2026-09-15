@@ -13,6 +13,7 @@ export default function Navbar() {
   const progressRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
+  const soundBtnRef = useRef<HTMLButtonElement>(null); // New ref for the sound button
   const menuLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const footerRef = useRef<HTMLDivElement>(null);
   
@@ -80,6 +81,7 @@ export default function Navbar() {
   useGSAP(() => {
     const initTl = gsap.timeline({ paused: true });
     
+    // Navbar drop down
     initTl.fromTo(
       headerRef.current,
       { yPercent: -100 },
@@ -90,10 +92,19 @@ export default function Navbar() {
       }
     );
     
+    // Navbar links fade in
     initTl.to(
       [logoRef.current, ...gsap.utils.toArray('.nav-item')],
       { opacity: 1, duration: 0.6, stagger: 0.05, ease: 'power3.out' },
       '<0.15' 
+    );
+
+    // --- NEW: Sound Button Pop-in Animation ---
+    initTl.fromTo(
+      soundBtnRef.current,
+      { scale: 0, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.5)' },
+      '<0.2' // Triggers slightly after the text links start fading in
     );
 
     gsap.to(progressRef.current, {
@@ -160,17 +171,18 @@ export default function Navbar() {
       />
 
       {/* --- GLOBAL FLOATING MUSIC BUTTON --- */}
-      {/* Positioned fixed on the screen, just below where the right side of the navbar sits */}
       <button 
+        ref={soundBtnRef}
         onClick={toggleMusic}
-        className="fixed top-24 right-8 md:top-20 md:right-10 z-[85] w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 transition-transform duration-300 outline-none nav-item opacity-0"
+        // Removed 'nav-item' so it isn't grabbed by the generic stagger array. Kept 'opacity-0' to prevent flash before JS loads.
+        className="fixed top-24 right-8 md:top-20 md:right-10 z-[85] w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 transition-transform duration-300 outline-none opacity-0"
         data-cursor="hover"
         aria-label="Toggle background music"
       >
         <img 
           src={isMusicPlaying ? '/sound-on.png' : '/sound-mute.png'} 
           alt={isMusicPlaying ? 'Sound on' : 'Sound muted'} 
-          className="w-6 h-6 object-contain"
+          className="w-5 h-5 object-contain"
         />
       </button>
 
@@ -190,7 +202,7 @@ export default function Navbar() {
           </span>
           <span className="hidden md:flex items-center gap-3 md:gap-4">
             <span className="w-[1px] h-3.5 bg-[#141613]/20"></span>
-            <span className="font-dm-sans text-[10px] md:text-[11px] font-semibold text-[#141613]/50 tracking-[0.15em] uppercase mt-[1px]">
+            <span className="font-dm-sans text-[10px] md:text-[11px] font-semibold text-[#141613]/50 tracking-[0.05em] uppercase mt-[1px]">
               Product Design
             </span>
           </span>

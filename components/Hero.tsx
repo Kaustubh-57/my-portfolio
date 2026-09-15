@@ -261,7 +261,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
             </h1>
             <p 
               ref={addToRefs} 
-              className="font-dm-sans text-[#141613]/50 text-[11px] md:text-[14px] tracking-[-0.05em] uppercase font-medium mt-0.5"
+              className="font-dm-sans text-[#141613]/50 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium mt-0.5"
             >
               Product Designer
             </p>
@@ -285,14 +285,14 @@ export default function Hero({ hasEntered = true }: HeroProps) {
 
           {/* Row 2, Col 1: Location */}
           <div ref={addToRefs} className="hidden md:block">
-            <p className="font-dm-sans text-[#141613]/40 text-[11px] md:text-[14px] tracking-[-0.05em] uppercase font-medium">
+            <p className="font-dm-sans text-[#141613]/40 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium">
               Based in Mumbai
             </p>
           </div>
 
           {/* Row 2, Col 2: Previous */}
           <div ref={addToRefs}>
-            <p className="font-dm-sans text-[#141613]/40 text-[11px] md:text-[14px] tracking-[-0.05em] uppercase font-medium">
+            <p className="font-dm-sans text-[#141613]/40 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium">
               Previously at <a href="https://www.linkedin.com/company/realty-sharks/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-[#141613] transition-colors">Realty Sharks</a>
             </p>
           </div>
@@ -308,7 +308,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
         className="relative w-full h-[40vh] flex-none bg-[#141613] will-change-transform cursor-crosshair overflow-hidden"
       >
         {/* CHANGED OPACITY: bg-[#141613]/50 reduced to bg-[#141613]/25 for a brighter video */}
-        <div className="absolute inset-0 bg-[#141613]/25 z-[5] pointer-events-none" />
+        <div className="absolute inset-0 bg-[#141613]/35 z-[5] pointer-events-none" />
 
         <video
           ref={videoRef}
