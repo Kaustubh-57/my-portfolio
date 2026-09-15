@@ -172,22 +172,12 @@ export default function SelectedWorks() {
                 }}
               >
                 <div className="w-full h-full flex flex-col pt-10 pl-10 md:pt-12 md:pl-12 pointer-events-none">
-                  <div className="flex justify-between items-start w-full pr-10 md:pr-12 mb-6">
-                    <div 
-                      className="inline-flex items-center px-7 py-4 md:px-8 md:py-3.5 rounded-full border font-dm-sans text-xs tracking-wider uppercase"
-                      style={{ color: project.accentColor, borderColor: `${project.accentColor}4D` }}
-                    >
-                      {project.badge}
-                    </div>
-                    <div className="font-momo text-2xl md:text-3xl font-light" style={{ color: project.accentColor }}>
-                      ({displayId})
-                    </div>
-                  </div>
+                  
 
                   <div className="flex-grow flex flex-col md:flex-row w-full justify-between items-end pb-0 min-h-0">
-                    <div className="w-full md:w-[50%] flex flex-col justify-between h-full pb-8 md:pb-10 pr-8 md:pr-12 min-h-0">
+                    <div className="w-full md:w-[60%] flex flex-col justify-between h-full pb-8 md:pb-10 pr-8 md:pr-12 min-h-0">
                       <div>
-                        <h3 className="font-momo text-4xl md:text-5xl lg:text-[42px] whitespace-pre-line leading-[1.08] tracking-[-0.02em]" style={{ color: project.textColor }}>
+                        <h3 className="font-momo text-4xl md:text-5xl lg:text-[40px] whitespace-pre-line leading-[1.08] tracking-[-0.02em]" style={{ color: project.textColor }}>
                           {project.title}
                         </h3>
                         <p className="font-dm-sans text-[15px] md:text-base mt-6 max-w-[480px] leading-relaxed" style={{ color: project.textColor, opacity: 0.8 }}>
@@ -213,7 +203,7 @@ export default function SelectedWorks() {
                       </div>
                     </div>
 
-                    <div className="w-full md:w-[48%] h-[40vh] md:h-full relative rounded-tl-[40px] overflow-hidden bg-black/5 shadow-2xl mt-8 md:mt-0">
+                    <div className="w-full md:w-[48%] h-[40vh] md:h-full relative rounded-tl-[10px] overflow-hidden bg-black/5 shadow-2xl mt-8 md:mt-0">
                       <img 
                         src={project.image} 
                         alt={project.title} 

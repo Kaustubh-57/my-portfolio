@@ -143,7 +143,7 @@ export default function DeciconCaseStudy() {
                 </div>
 
                 <h1 className="overview-anim font-momo text-[36px] lg:text-[40px] xl:text-[48px] font-bold leading-[1.1] text-white tracking-[-0.02em] max-w-[850px] mb-6 opacity-0">
-                  NoiseShield: A quieter way to experience the everyday.
+                  Decicon: A quieter way to experience the everyday.
                 </h1>
                 <p className="overview-anim font-dm-sans text-[16px] lg:text-[18px] leading-[1.5] text-white/80 tracking-[-0.05em] max-w-[700px] mb-12 lg:mb-16 opacity-0">
                   A connected physical-digital system designed to rethink how people experience and respond to everyday noise.
