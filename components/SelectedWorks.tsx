@@ -8,7 +8,6 @@ import { useRouter, usePathname } from 'next/navigation';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// --- UPDATED: Reordered so Shoppin is 1st and Bubbleshare is 2nd ---
 const allProjects = [
   {
     id: '01',
@@ -36,6 +35,18 @@ const allProjects = [
   },
   {
     id: '03',
+    slug: 'lilavati',
+    badge: 'UX/UI REDESIGN • USABILITY TESTING',
+    title: 'Lilavati Hospital:\nWebsite Redesign',
+    description: 'A comprehensive redesign of the digital experience to streamline appointment bookings, health checkups, and user journeys.',
+    role: 'UX Research | UI/UX | Usability Testing',
+    image: '/projects/lilavati/mockup.png', 
+    bgColor: '#F4F7FA', 
+    accentColor: '#00509E', 
+    textColor: '#151515'
+  },
+  {
+    id: '04',
     slug: 'decicon', 
     badge: 'SYSTEM DESIGN • UX/UI Design',
     title: 'Decicon : A quieter way to experience the everyday.', 
@@ -47,7 +58,7 @@ const allProjects = [
     textColor: '#FFFFFF'
   },
   {
-    id: '04',
+    id: '05',
     slug: 'chromebuds',
     badge: 'INDUSTRIAL DESIGN • UX Design',
     title: 'Chromebuds: Rethinking\nwhy people are leaving\nTWS behind.',
@@ -69,10 +80,10 @@ export default function SelectedWorks() {
 
   const isHome = pathname === '/';
 
-  // Filters projects based on the page
+  // --- UPDATED: Added 'decicon' to the array so it shows on the homepage ---
   const projects = useMemo(() => {
     return isHome 
-      ? allProjects.filter(p => ['shoppin', 'bubbleshare', 'decicon'].includes(p.slug))
+      ? allProjects.filter(p => ['shoppin', 'bubbleshare', 'lilavati', 'decicon'].includes(p.slug))
       : allProjects; 
   }, [isHome]);
 
@@ -172,7 +183,9 @@ export default function SelectedWorks() {
                 }}
               >
                 <div className="w-full h-full flex flex-col pt-10 pl-10 md:pt-12 md:pl-12 pointer-events-none">
-                  
+                  <div className="flex justify-between items-start w-full pr-10 md:pr-12 mb-6">
+                   
+                  </div>
 
                   <div className="flex-grow flex flex-col md:flex-row w-full justify-between items-end pb-0 min-h-0">
                     <div className="w-full md:w-[60%] flex flex-col justify-between h-full pb-8 md:pb-10 pr-8 md:pr-12 min-h-0">

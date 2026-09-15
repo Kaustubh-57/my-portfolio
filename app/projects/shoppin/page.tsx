@@ -283,27 +283,22 @@ export default function ShoppinCaseStudy() {
               {/* Left Column: Interactive Prototype (Raw Figma Embed) */}
               <div className="overview-anim flex flex-col items-center w-full lg:w-auto opacity-0 order-2 lg:order-1 pt-4 lg:pt-0 shrink-0">
                 <div className="relative w-[320px] sm:w-[380px] h-[650px] sm:h-[750px]">
-                  
-                  {/* --- NEW: Loading Spinner Overlay --- */}
-                  {isIframeLoading && (
-                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#FFFAF1] rounded-[40px]">
-                      <div className="w-8 h-8 border-[2.5px] border-[#262626]/10 border-t-[#262626] rounded-full animate-spin mb-4" />
-                      <p className="font-dm-sans text-[13px] text-[#262626]/50 tracking-[-0.02em]">
-                        Loading prototype...
-                      </p>
-                    </div>
-                  )}
-
+                  {/* Clean Figma Iframe (Overlay spinner removed from here) */}
                   {/* Clean Figma Iframe */}
                   <iframe
                     src="https://embed.figma.com/proto/mS11cJ2vtJJcVtnLc1w27l/SHOPPIN?node-id=1986-7021&scaling=scale-down&content-scaling=fixed&starting-point-node-id=2836%3A24193&hide-ui=1&embed-host=share"
                     title="Shoppin Interactive Prototype"
                     className="w-full h-full border-0 relative z-0"
                     allowFullScreen
-                    onLoad={() => setIsIframeLoading(false)} 
+                    onLoad={() => {
+                      // The iframe wrapper has loaded (white screen), 
+                      // now wait 4.5 seconds for Figma's internal canvas to render the phone
+                      setTimeout(() => {
+                        setIsIframeLoading(false);
+                      }, 10000);
+                    }} 
                   />
                 </div>
-                
               </div>
 
               {/* Right Column: Text & Details */}
@@ -318,21 +313,30 @@ export default function ShoppinCaseStudy() {
                 </div>
 
                 <h1 className="font-momo text-[32px] lg:text-[36px] xl:text-[42px] font-bold leading-[1.1] text-[#262626] tracking-[-0.02em] max-w-[650px] mb-5">
-                  Shoppin: <h2>Finding your way through Mumbai's street markets.</h2> 
+                  Shoppin: Finding your way through Mumbai's street markets.
                 </h1>
                 <p className="font-dm-sans text-[15px] lg:text-[16px] leading-[1.5] text-[#262626]/80 tracking-[-0.05em] max-w-[550px]">
                   A digital companion for exploring Mumbai's street markets. It helps people discover shops, navigate crowded lanes, find what they're looking for and keep track of places.
                 </p>
 
-                {/* Note directly beneath the prototype */}
-                <div className="mt-4 flex items-center gap-2">
-                  <svg className="w-4 h-4 text-[#262626]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
-                  <p className="font-dm-sans text-[13px] text-[#262626]/60 tracking-[-0.02em]">
-                    Interact with the final version of the prototype here
-                    <p className="font-dm-sans text-[13px] text-[#262626]/60 tracking-[-0.02em]">
-                    Prototype takes 5 sec to load
-                  </p>
-                  </p>
+                {/* --- UPDATED: Note directly beneath the prototype with inline spinner --- */}
+                <div className="mt-6 flex flex-col gap-3">
+                  <div className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-[#262626]/50 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                    <p className="font-dm-sans text-[13px] text-[#262626]/60 tracking-[-0.02em] leading-relaxed">
+                      Interact with the final version of the prototype here.<br/>
+                    </p>
+                  </div>
+
+                  {/* Loading Spinner now sits below the text */}
+                  {isIframeLoading && (
+                    <div className="flex items-center gap-3 pl-6">
+                      <div className="w-4 h-4 border-[2px] border-[#262626]/10 border-t-[#262626] rounded-full animate-spin" />
+                      <p className="font-dm-sans text-[13px] text-[#262626]/50 tracking-[-0.02em]">
+                        Loading prototype...
+                      </p>
+                    </div>
+                  )}
                 </div>
               
               </div>
