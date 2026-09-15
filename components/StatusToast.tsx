@@ -1,21 +1,58 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { usePathname } from 'next/navigation';
 
 export default function StatusToast() {
   const toastRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Only set to visible if we are on the Home page AND it hasn't been closed this session
+    if (pathname === '/' && sessionStorage.getItem('toastClosed') !== 'true') {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  }, [pathname]);
 
   useGSAP(() => {
-    // Waits 3.5 seconds to let the Preloader and Hero animations finish first
-    gsap.fromTo(
-      toastRef.current,
-      { y: 100, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', delay: 3.5 }
-    );
-  }, { scope: toastRef });
+    if (!isVisible) return;
+
+    let timeoutId: NodeJS.Timeout;
+    let intervalId: NodeJS.Timeout;
+
+    // Set initial hidden state immediately
+    gsap.set(toastRef.current, { y: 100, opacity: 0 });
+
+    const playAnimation = () => {
+      gsap.to(toastRef.current, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' });
+    };
+
+    const hasSeenPreloader = typeof window !== 'undefined' && sessionStorage.getItem('hasSeenPreloader') === 'true';
+
+    if (hasSeenPreloader) {
+      // If the preloader is already done (e.g. reloading the page), just wait 5 seconds
+      timeoutId = setTimeout(playAnimation, 7000);
+    } else {
+      // If the preloader is still running, wait for it to finish FIRST, then start the 5-second timer
+      intervalId = setInterval(() => {
+        if (sessionStorage.getItem('hasSeenPreloader') === 'true') {
+          clearInterval(intervalId);
+          timeoutId = setTimeout(playAnimation, 7000);
+        }
+      }, 100);
+    }
+
+    // Cleanup function to prevent double-firing if the component remounts quickly
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
+  }, { scope: toastRef, dependencies: [isVisible] });
 
   const handleClose = () => {
     gsap.to(toastRef.current, {
@@ -23,7 +60,11 @@ export default function StatusToast() {
       opacity: 0,
       duration: 0.3,
       ease: 'power2.in',
-      onComplete: () => setIsVisible(false)
+      onComplete: () => {
+        setIsVisible(false);
+        // Save to session storage so it doesn't come back until they fully restart the site
+        sessionStorage.setItem('toastClosed', 'true');
+      }
     });
   };
 
@@ -59,9 +100,11 @@ export default function StatusToast() {
       
       <p className="text-[14px] leading-relaxed text-white/90 font-light mt-1">
         Currently looking for product design opportunities.
-I enjoy working across research, interaction, visual design and prototyping  </p>
+        I enjoy working across research, interaction, visual design and prototyping
+      </p>
 
-<p>Currently exploring: Product Design · UX/UI · Design Internships
+      <p className="text-[14px] leading-relaxed text-white/90 font-light">
+        Currently exploring: Product Design · UX/UI · Design Internships
       </p>
       
       <a 
