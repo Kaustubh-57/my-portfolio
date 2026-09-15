@@ -202,7 +202,7 @@ export default function Navbar() {
           </span>
           <span className="hidden md:flex items-center gap-3 md:gap-4">
             <span className="w-[1px] h-3.5 bg-[#141613]/20"></span>
-            <span className="font-dm-sans text-[10px] md:text-[11px] font-semibold text-[#141613]/50 tracking-[0.05em] uppercase mt-[1px]">
+            <span className="font-dm-sans text-[10px] md:text-[11px] font-semibold text-[#141613]/50 tracking-[0.02em] uppercase mt-[1px]">
               Product Design
             </span>
           </span>

@@ -21,8 +21,12 @@ export default function Hero({ hasEntered = true }: HeroProps) {
   const textRefs = useRef<(HTMLHeadingElement | HTMLDivElement | HTMLParagraphElement | null)[]>([]);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
   
+  // Audio Refs
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wasMusicPlaying = useRef(false);
+
+  // New Ref for the Polaroid Photo
+  const photoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     audioRef.current = new Audio('/trees.mp3');
@@ -223,6 +227,29 @@ export default function Hero({ hasEntered = true }: HeroProps) {
     }
   };
 
+  // --- NEW: Hover Handlers for the Portrait ---
+  const handlePortraitEnter = () => {
+    if (window.innerWidth < 768 || !photoRef.current) return;
+    gsap.killTweensOf(photoRef.current);
+    gsap.fromTo(photoRef.current, 
+      { opacity: 0, scale: 0.8, rotation: -10, x: 20 },
+      { opacity: 1, scale: 1, rotation: -4, x: 0, duration: 0.5, ease: 'back.out(1.5)' }
+    );
+  };
+
+  const handlePortraitLeave = () => {
+    if (window.innerWidth < 768 || !photoRef.current) return;
+    gsap.killTweensOf(photoRef.current);
+    gsap.to(photoRef.current, {
+      opacity: 0,
+      scale: 0.8,
+      rotation: -10,
+      x: 20,
+      duration: 0.4,
+      ease: 'power2.in'
+    });
+  };
+
   return (
     <section ref={containerRef} className="relative w-full flex flex-col bg-[#FAFAFA] overflow-hidden" style={{ fontFamily: "'Stack Sans Headline', sans-serif" }}>
       
@@ -252,10 +279,28 @@ export default function Hero({ hasEntered = true }: HeroProps) {
         <div className="relative z-10 w-full max-w-[850px] mx-auto grid grid-cols-1 md:grid-cols-[45%_auto] justify-between gap-y-12 lg:gap-y-16 mt-16 md:mt-24">
           
           {/* Row 1, Col 1: Identity */}
-          <div className="flex flex-col">
+          <div 
+            className="flex flex-col relative w-fit"
+            onMouseEnter={handlePortraitEnter}
+            onMouseLeave={handlePortraitLeave}
+          >
+            {/* Polaroid Photo Container */}
+            <div 
+              ref={photoRef}
+              className="absolute top-1/2 -translate-y-1/2 right-[calc(100%+32px)] w-[160px] p-2.5 pb-8 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)] pointer-events-none opacity-0 z-50 origin-bottom-right"
+            >
+              <img 
+                src="/profile.jpg" 
+                alt="Kaustubh Korde" 
+                className="w-full h-auto object-cover" 
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              />
+            </div>
+
             <h1
               ref={addToRefs}
               className="text-[28px] md:text-[32px] lg:text-[26px] text-[#C1001F] tracking-normal font-semibold leading-[1.1] m-0 p-0"
+              data-cursor="hover"
             >
               Hello, I am Kaustubh Korde
             </h1>
@@ -307,7 +352,6 @@ export default function Hero({ hasEntered = true }: HeroProps) {
         onMouseLeave={handleMouseLeave}
         className="relative w-full h-[40vh] flex-none bg-[#141613] will-change-transform cursor-crosshair overflow-hidden"
       >
-        {/* CHANGED OPACITY: bg-[#141613]/50 reduced to bg-[#141613]/25 for a brighter video */}
         <div className="absolute inset-0 bg-[#141613]/35 z-[5] pointer-events-none" />
 
         <video
@@ -327,16 +371,16 @@ export default function Hero({ hasEntered = true }: HeroProps) {
             <div className="group cursor-pointer flex flex-col items-end" data-cursor="hover">
               <div className="flex items-center gap-3">
                 <span className="w-12 h-[1px] bg-white transition-transform duration-300 origin-right group-hover:scale-x-125" />
-                <span className="font-dm-sans text-lg md:text-xl tracking-[-0.05em]">
+                <span className="font-dm-sans text-lg md:text-xl tracking-[-0.05em] drop-shadow-md">
                   About me
                 </span>
               </div>
-              <p className="font-dm-sans text-sm text-white/60 tracking-[-0.05em] mt-2 group-hover:text-white transition-colors duration-300">
+              <p className="font-dm-sans text-sm text-white/80 tracking-[-0.05em] mt-2 group-hover:text-white transition-colors duration-300 drop-shadow-md">
                 What do I care about?
               </p>
             </div>
 
-            <div ref={scrollIndicatorRef} className="font-dm-sans text-sm text-white/80 tracking-[-0.05em] mt-8">
+            <div ref={scrollIndicatorRef} className="font-dm-sans text-sm text-white/90 tracking-[-0.05em] mt-8 drop-shadow-md">
               Scroll!
             </div>
           </div>
