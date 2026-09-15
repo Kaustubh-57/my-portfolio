@@ -38,7 +38,7 @@ const allProjects = [
     id: '03',
     slug: 'decicon', 
     badge: 'SYSTEM DESIGN • UX/UI Design',
-    title: 'NoiseShield : A quieter way to experience the everyday.', 
+    title: 'Decicon : A quieter way to experience the everyday.', 
     description: 'A connected physical-digital system designed to rethink how people experience and respond to everyday noise.',
     role: 'Concept | Physical Product | UI ideation',
     image: '/projects/decicon/mockup.png', 
