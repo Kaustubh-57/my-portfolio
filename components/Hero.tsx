@@ -261,7 +261,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
           ref={verticalGridRef}
           className="absolute inset-0 w-full h-full pointer-events-none origin-top scale-y-0 opacity-40"
           style={{
-            backgroundImage: `linear-gradient(to right, #E5E7EB 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(to right, #cccccd 1px, transparent 1px)`,
             backgroundSize: '90px 100%',
             backgroundPosition: '0 0',
           }}
@@ -270,7 +270,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
           ref={horizontalGridRef}
           className="absolute inset-0 w-full h-full pointer-events-none origin-left scale-x-0 opacity-40"
           style={{
-            backgroundImage: `linear-gradient(to bottom, #E5E7EB 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(to bottom, #cccccd 1px, transparent 1px)`,
             backgroundSize: '100% 90px',
             backgroundPosition: '0 0',
           }}

@@ -270,27 +270,24 @@ export default function LilavatiCaseStudy() {
           <div className="-mt-[180px] -mx-6 lg:-mx-12 xl:-mx-16 pt-[80px] lg:pt-[100px] pb-12 lg:pb-20 bg-[#F4F7FA] border-b border-[#262626]/10 flex flex-col justify-center min-h-[90vh]">
             <section id="overview" className="w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 lg:gap-12 xl:gap-16 px-6 lg:px-12 xl:px-16">
               
-              {/* Left Column: Interactive Prototype (Raw Figma Embed) */}
+               {/* Left Column: Interactive Prototype (Raw Figma Embed) */}
               <div className="overview-anim flex flex-col items-center w-full lg:w-auto opacity-0 order-2 lg:order-1 pt-4 lg:pt-0 shrink-0">
                 <div className="relative w-[320px] sm:w-[380px] h-[650px] sm:h-[750px]">
-                  
-                  {/* Loading Spinner Overlay */}
-                  {isIframeLoading && (
-                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-[#F4F7FA] rounded-[40px]">
-                      <div className="w-8 h-8 border-[2.5px] border-[#262626]/10 border-t-[#262626] rounded-full animate-spin mb-4" />
-                      <p className="font-dm-sans text-[13px] text-[#262626]/50 tracking-[-0.02em]">
-                        Loading prototype...
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Updated Clean Figma Iframe */}
+                  {/* Clean Figma Iframe (Overlay spinner removed from here) */}
+                  {/* Clean Figma Iframe */}
                   <iframe
                     src="https://embed.figma.com/proto/BhakxuFIy0K6W8cbR8GiAm/Untitled?node-id=1-13961&viewport=-492%2C-1980%2C0.33&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&hide-ui=1&embed-host=share"
                     title="Lilavati Interactive Prototype"
                     className="w-full h-full border-0 relative z-0"
+                  
                     allowFullScreen
-                    onLoad={() => setIsIframeLoading(false)} 
+                    onLoad={() => {
+                      // The iframe wrapper has loaded (white screen), 
+                      // now wait 4.5 seconds for Figma's internal canvas to render the phone
+                      setTimeout(() => {
+                        setIsIframeLoading(false);
+                      }, 10000);
+                    }} 
                   />
                 </div>
               </div>
@@ -313,17 +310,24 @@ export default function LilavatiCaseStudy() {
                   A comprehensive redesign of the digital experience to simplify critical user journeys, including booking appointments, comparing health checkup packages, and streamlining job applications.
                 </p>
 
-                {/* Note directly beneath the text */}
-                <div className="mt-4 flex items-start gap-2">
-                  <svg className="w-4 h-4 text-[#262626]/50 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
-                  <div className="flex flex-col">
-                    <p className="font-dm-sans text-[13px] text-[#262626]/60 tracking-[-0.02em]">
-                      Interact with the final version of the prototype here
-                    </p>
-                    <p className="font-dm-sans text-[13px] text-[#262626]/60 tracking-[-0.02em]">
-                      Prototype takes 5 sec to load
+                {/* --- UPDATED: Note directly beneath the prototype with inline spinner --- */}
+                <div className="mt-6 flex flex-col gap-3">
+                  <div className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-[#262626]/50 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                    <p className="font-dm-sans text-[13px] text-[#262626]/60 tracking-[-0.02em] leading-relaxed">
+                      Interact with the final version of the prototype here.<br/>
                     </p>
                   </div>
+
+                  {/* Loading Spinner now sits below the text */}
+                  {isIframeLoading && (
+                    <div className="flex items-center gap-3 pl-6">
+                      <div className="w-4 h-4 border-[2px] border-[#262626]/10 border-t-[#262626] rounded-full animate-spin" />
+                      <p className="font-dm-sans text-[13px] text-[#262626]/50 tracking-[-0.02em]">
+                        Loading prototype...
+                      </p>
+                    </div>
+                  )}
                 </div>
               
               </div>

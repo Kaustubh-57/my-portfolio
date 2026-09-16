@@ -126,7 +126,6 @@ export default function ShoppinCaseStudy() {
   
   const [isExiting, setIsExiting] = useState(false);
 
-  // --- NEW STATE: Tracks if the Figma iframe has finished loading ---
   const [isIframeLoading, setIsIframeLoading] = useState(true);
 
   // --- SECTION 3 TAB ANIMATION ---
@@ -280,19 +279,14 @@ export default function ShoppinCaseStudy() {
           <div className="-mt-[180px] -mx-6 lg:-mx-12 xl:-mx-16 pt-[80px] lg:pt-[100px] pb-12 lg:pb-20 bg-[#FFFAF1] border-b border-[#262626]/10 flex flex-col">
             <section id="overview" className="w-full max-w-[1400px] mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-center gap-8 lg:gap-12 xl:gap-16 px-6 lg:px-12 xl:px-16">
               
-              {/* Left Column: Interactive Prototype (Raw Figma Embed) */}
               <div className="overview-anim flex flex-col items-center w-full lg:w-auto opacity-0 order-2 lg:order-1 pt-4 lg:pt-0 shrink-0">
                 <div className="relative w-[320px] sm:w-[380px] h-[650px] sm:h-[750px]">
-                  {/* Clean Figma Iframe (Overlay spinner removed from here) */}
-                  {/* Clean Figma Iframe */}
                   <iframe
                     src="https://embed.figma.com/proto/mS11cJ2vtJJcVtnLc1w27l/SHOPPIN?node-id=1986-7021&scaling=scale-down&content-scaling=fixed&starting-point-node-id=2836%3A24193&hide-ui=1&embed-host=share"
                     title="Shoppin Interactive Prototype"
                     className="w-full h-full border-0 relative z-0"
                     allowFullScreen
                     onLoad={() => {
-                      // The iframe wrapper has loaded (white screen), 
-                      // now wait 4.5 seconds for Figma's internal canvas to render the phone
                       setTimeout(() => {
                         setIsIframeLoading(false);
                       }, 10000);
@@ -301,7 +295,6 @@ export default function ShoppinCaseStudy() {
                 </div>
               </div>
 
-              {/* Right Column: Text & Details */}
               <div className="overview-anim flex-1 flex flex-col items-start w-full opacity-0 order-1 lg:order-2 mt-6 lg:mt-[60px] xl:mt-[80px]">
                 
                 <div className="flex items-center w-full mb-6 lg:mb-8">
@@ -319,7 +312,6 @@ export default function ShoppinCaseStudy() {
                   A digital companion for exploring Mumbai's street markets. It helps people discover shops, navigate crowded lanes, find what they're looking for and keep track of places.
                 </p>
 
-                {/* --- UPDATED: Note directly beneath the prototype with inline spinner --- */}
                 <div className="mt-6 flex flex-col gap-3">
                   <div className="flex items-start gap-2">
                     <svg className="w-4 h-4 text-[#262626]/50 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
@@ -328,7 +320,6 @@ export default function ShoppinCaseStudy() {
                     </p>
                   </div>
 
-                  {/* Loading Spinner now sits below the text */}
                   {isIframeLoading && (
                     <div className="flex items-center gap-3 pl-6">
                       <div className="w-4 h-4 border-[2px] border-[#262626]/10 border-t-[#262626] rounded-full animate-spin" />
@@ -338,13 +329,12 @@ export default function ShoppinCaseStudy() {
                     </div>
                   )}
                 </div>
-              
               </div>
 
             </section>
           </div>
 
-          {/* Project Details Grid (White Background) */}
+          {/* Project Details Grid */}
           <div className="w-full pt-16 lg:pt-20">
             <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_2.5fr] gap-12 lg:gap-16">
               
@@ -556,44 +546,57 @@ export default function ShoppinCaseStudy() {
           <hr className="direction-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
 
           {/* =========================================
-              SECTION 5: DESIGNING SHOPPIN
+              SECTION 5: DESIGNING SHOPPIN (UPDATED LAYOUT)
           ========================================= */}
           <section id="designing" className="w-full">
-            <h2 className="designing-anim font-momo text-[26px] lg:text-[32px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] mb-8 lg:mb-12 opacity-0">
-              Four things make up the Shoppin experience.
+            
+            {/* --- FULL BLEED HERO IMAGE --- */}
+            <div className="-mx-6 lg:-mx-12 xl:-mx-16 mb-16 lg:mb-24 designing-anim opacity-0">
+              <img 
+                src="/projects/shoppin/introducing.png" 
+                alt="Introducing Shoppin" 
+                className="w-full h-auto object-cover"
+                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+              />
+            </div>
+
+            <h2 className="designing-anim font-momo text-[26px] lg:text-[32px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] mb-10 lg:mb-14 opacity-0 text-center">
+              4 things make up the Shoppin experience.
             </h2>
 
-            <div className="-ml-6 lg:-ml-12 w-[calc(100%+3rem)] lg:w-[calc(100%+6rem)]">
-              <div className="designing-anim flex items-stretch w-full opacity-0">
+            {/* FULL BLEED WRAPPER */}
+            <div className="-mx-6 lg:-mx-12 xl:-mx-16">
+              <div className="designing-anim flex flex-col w-full opacity-0">
                 
-                <div className="flex flex-col w-[130px] lg:w-[150px] shrink-0 pt-16 lg:pt-4 relative z-10">
+                {/* TABS HEADER */}
+                <div className="flex w-full px-6 lg:px-12 xl:px-16 relative z-20 translate-y-[2px]">
                   {(Object.keys(DESIGN_TAB_DATA) as Array<keyof typeof DESIGN_TAB_DATA>).map((tab) => {
                     const isActive = activeDesignTab === tab;
                     return (
                       <button
                         key={tab}
                         onClick={() => handleDesignTabClick(tab)}
-                        className={`w-full text-left py-6 lg:py-6 pl-6 lg:pl-8 pr-4 flex items-center gap-2.5 lg:gap-3 font-dm-sans text-[12px] lg:text-[13px] font-bold tracking-[0.05em] transition-colors duration-300 ${
+                        className={`flex-1 text-center py-4 lg:py-5 flex justify-center items-center gap-2 font-dm-sans text-[13px] lg:text-[15px] font-bold tracking-[0.05em] transition-colors duration-300 relative ${
                           isActive 
-                            ? 'bg-[#FDF9F1] text-[#262626] rounded-l-[20px]' 
-                            : 'bg-transparent text-[#262626] hover:text-[#262626]/80'
+                            ? 'bg-[#FDF9F1] text-[#262626] rounded-t-[16px] z-30' 
+                            : 'bg-transparent text-[#262626]/60 hover:text-[#262626] z-10'
                         }`}
                       >
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#4A1515] shrink-0"></span>
                         {tab}
                       </button>
                     );
                   })}
                 </div>
 
-                <div className="flex-1 bg-[#FDF9F1] rounded-[0px] p-4 lg:p-8 min-h-[580px] relative overflow-hidden flex flex-col justify-between">
-                  <div ref={designContentRef} className="w-full flex flex-col h-full justify-between">
+                {/* CONTENT BODY */}
+                <div className="w-full bg-[#FDF9F1] px-6 lg:px-12 xl:px-16 py-8 lg:py-10 relative z-10 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1),_0_-12px_24px_-8px_rgba(0,0,0,0.12)] flex flex-col justify-between">
+                  <div ref={designContentRef} className="w-full flex flex-col h-full justify-between items-center">
                     
-                    <p className="font-dm-sans text-[16px] lg:text-[18px] text-[#262626]/85 tracking-[-0.05em] leading-[1.5] max-w-[700px] mb-8">
+                    <p className="font-dm-sans text-[15px] lg:text-[17px] text-[#262626]/85 tracking-[-0.05em] leading-[1.5] max-w-[700px] mb-4 text-center mx-auto">
                       {DESIGN_TAB_DATA[activeDesignTab].title}
                     </p>
 
-                    <div className="flex flex-wrap lg:flex-nowrap justify-center items-end mt-4 mb-10 gap-0">
+                    <div className="flex flex-wrap lg:flex-nowrap justify-center items-end mt-0 mb-0 gap-4 lg:gap-8 w-full">
                       {DESIGN_TAB_DATA[activeDesignTab].screens.map((screen, idx) => (
                         <div key={idx} className="flex flex-col items-center">
                           <span className="font-dm-sans text-[13px] lg:text-[14px] font-bold text-[#262626] tracking-[-0.05em] mb-4">
@@ -602,7 +605,7 @@ export default function ShoppinCaseStudy() {
                           <img 
                             src={screen.src} 
                             alt={screen.label} 
-                            className="w-[280px] lg:w-[320px] xl:w-[360px] object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.18)]"
+                            className="w-[240px] sm:w-[280px] lg:w-[280px] xl:w-[320px] object-contain drop-shadow-[0_20px_45px_rgba(0,0,0,0.18)]"
                             onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                           />
                         </div>
@@ -611,13 +614,17 @@ export default function ShoppinCaseStudy() {
 
                   </div>
                 </div>
+
+                {/* FOOTER TEXT */}
+                {DESIGN_TAB_DATA[activeDesignTab].footer && (
+                  <div className="w-full bg-[#ffffff] pt-12 pb-6 relative z-0 flex justify-center">
+                    <p className="font-dm-sans text-[16px] lg:text-[18px] xl:text-[20px] font-bold text-[#262626] tracking-[-0.03em] text-center max-w-[600px] leading-[1.5]">
+                      {DESIGN_TAB_DATA[activeDesignTab].footer}
+                    </p>
+                  </div>
+                )}
+
               </div>
-              
-              {DESIGN_TAB_DATA[activeDesignTab].footer && (
-                <p className="font-dm-sans text-[13px] lg:text-[14px] font-bold text-[#262626] tracking-[-0.05em] text-center mt-auto pt-6 border-t border-[#262626]/5">
-                  {DESIGN_TAB_DATA[activeDesignTab].footer}
-                </p>
-              )}
             </div>
           </section>
 

@@ -99,12 +99,12 @@ export default function StatusToast() {
       </div>
       
       <p className="text-[14px] leading-relaxed text-white/90 font-light mt-1">
-        Currently looking for product design opportunities.
-        I enjoy working across research, interaction, visual design and prototyping
+       Currently exploring:  Product Design · UX/UI · Design Internships
+    
       </p>
 
       <p className="text-[14px] leading-relaxed text-white/90 font-light">
-        Currently exploring: Product Design · UX/UI · Design Internships
+        
       </p>
       
       <a 
