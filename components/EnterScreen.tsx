@@ -33,8 +33,7 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentBlockRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const animatedTextRef = useRef<HTMLDivElement>(null); // --- NEW REF for the text block ---
+  const animatedTextRef = useRef<HTMLDivElement>(null); 
   
   const [progress, setProgress] = useState(0);
   const [currentImage, setCurrentImage] = useState(0);
@@ -61,13 +60,20 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
     }
   }, [onEnter]);
 
-  // --- UPDATED: Timer now waits until isReady is true to start cycling ---
+  // --- UPDATED: Slowed down to 1500ms and stops automatically on the last text ---
   useEffect(() => {
-    if (!shouldRender || !isReady) return;
+    if (!shouldRender || isReady) return;
 
     const timer = setInterval(() => {
-      setCurrentTextIndex((prev) => prev + 1);
-    }, 2000); 
+      setCurrentTextIndex((prev) => {
+        // If we are about to hit the last index, clear the interval so it stops cycling
+        if (prev >= PRELOADER_TEXTS.length - 2) {
+          clearInterval(timer);
+          return prev + 1;
+        }
+        return prev + 1;
+      });
+    }, 1500); 
     
     return () => clearInterval(timer);
   }, [shouldRender, isReady]);
@@ -77,13 +83,20 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
 
     const tl = gsap.timeline();
 
+    // 1. Initial entrance of the image box and the cycling text
     tl.fromTo(
       imageContainerRef.current,
       { clipPath: 'inset(100% 0% 0% 0%)' },
       { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'expo.inOut' },
       0 
     );
+    
+    gsap.fromTo(animatedTextRef.current,
+      { opacity: 0, x: -10 },
+      { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.5 }
+    );
 
+    // 2. The 5-second progress counter
     const counter = { val: 0 };
     tl.to(counter, {
       val: 100,
@@ -106,43 +119,30 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
       onComplete: () => {
         setIsReady(true);
         
-        // Static entrance for CTA
-        gsap.fromTo(ctaRef.current,
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
-        );
+        // Automatic "Curtain Reveal" Exit Sequence
+        const exitTl = gsap.timeline({
+          delay: 1.2, 
+          onComplete: () => {
+            sessionStorage.setItem('hasSeenPreloader', 'true');
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+            onEnter();
+          }
+        });
 
-        // --- NEW: Static entrance for the animated text block ---
-        gsap.fromTo(animatedTextRef.current,
-          { opacity: 0, x: -10 },
-          { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out', delay: 0.2 }
-        );
+        exitTl.to(contentBlockRef.current, { 
+          scale: 0.85, 
+          opacity: 0, 
+          duration: 0.8, 
+          ease: 'power3.inOut' 
+        })
+        .to(overlayRef.current, {
+          yPercent: -100, 
+          duration: 1.2,
+          ease: 'expo.inOut',
+        }, '-=0.4'); 
       }
     }, 0);
   }, { scope: overlayRef, dependencies: [shouldRender] });
-
-  const handleEnterClick = () => {
-    if (!isReady) return;
-
-    sessionStorage.setItem('hasSeenPreloader', 'true');
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-
-    const tl = gsap.timeline({
-      onComplete: onEnter,
-    });
-
-    tl.to(contentBlockRef.current, { 
-      scale: 0.95, 
-      opacity: 0, 
-      duration: 0.6, 
-      ease: 'power3.inOut' 
-    })
-    .to(overlayRef.current, {
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power2.inOut',
-    }, '-=0.2');
-  };
 
   if (!shouldRender) return null;
 
@@ -152,10 +152,7 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
   return (
     <div 
       ref={overlayRef}
-      className={`fixed inset-0 z-[200] bg-[#ffffff] flex flex-col items-center justify-center transition-colors ${
-        isReady ? 'cursor-pointer' : 'cursor-wait'
-      }`}
-      onClick={handleEnterClick}
+      className="fixed inset-0 z-[200] bg-[#ffffff] flex flex-col items-center justify-center cursor-wait will-change-transform"
     >
       <div ref={contentBlockRef} className="relative flex flex-col w-44 md:w-[220px]">
         
@@ -190,12 +187,10 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
           ))}
         </div>
 
-        {/* --- UPDATED: Added ref, initial opacity-0, and increased text/container sizes --- */}
         <div 
           ref={animatedTextRef}
           className="absolute top-[55%] -translate-y-1/2 left-[calc(100%+80px)] md:left-[calc(100%+160px)] font-dm-sans text-[#383838] opacity-0"
         >
-          {/* Increased container dimensions to accommodate larger text */}
           <div className="relative h-[20px] md:h-[24px] w-[180px] md:w-[200px] overflow-hidden">
             {PRELOADER_TEXTS.map((text, index) => {
               const isAnimating = index === activeTextIndex || index === prevTextIndex;
@@ -203,7 +198,6 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
               return (
                 <span
                   key={index}
-                  // Increased text size to text-sm md:text-base
                   className={`absolute left-0 bottom-0 text-sm md:text-base font-medium tracking-wide will-change-transform ${
                     isAnimating ? 'transition-all duration-700 ease-out' : 'transition-none'
                   } ${
@@ -221,13 +215,6 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
           </div>
         </div>
 
-      </div>
-
-      <div 
-        ref={ctaRef}
-        className="absolute bottom-24 font-dm-sans text-[11px] md:text-xs font-medium text-[#4A4A4A] tracking-[0.1em] uppercase opacity-0 pointer-events-none"
-      >
-        Click to enter
       </div>
     </div>
   );
