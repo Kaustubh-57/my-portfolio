@@ -125,7 +125,7 @@ export default function About({ hideIntro = false }: AboutProps) {
                 className="text-base md:text-lg text-white underline decoration-white/30 underline-offset-4 hover:text-[#C1001F] hover:decoration-[#C1001F] transition-colors"
                 data-cursor="hover"
               >
-                kaustubh.korde25@nmims.in
+               
               </a>
             </div>
 

@@ -9,155 +9,21 @@ import Navbar from '@/components/Navbar';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// --- UPDATED: Only kept Overview and Context ---
 const SIDEBAR_ITEMS = [
   { id: '01', title: 'Overview', target: 'overview' },
-  { id: '02', title: 'The Context', target: 'context' },
-  { id: '03', title: 'Usability Testing', target: 'deeper' },
-  { id: '04', title: 'The Direction', target: 'direction' },
-  { id: '05', title: 'Designing Lilavati', target: 'designing' },
-  { id: '06', title: 'Key Features', target: 'features' },
-  { id: '07', title: 'Prototyping & Testing', target: 'prototyping' },
-  { id: '08', title: 'Iterations', target: 'iterations' },
-  { id: '09', title: 'Final Experience', target: 'final' },
-  { id: '10', title: 'Reflection', target: 'reflection' }
+  { id: '02', title: 'The Context', target: 'context' }
 ];
-
-// --- TAB DATA FOR SECTION 3 ---
-const TAB_DATA = {
-  APPOINTMENTS: {
-    leftTitle: 'BOOKING AN APPOINTMENT',
-    leftContent: (
-      <>
-        <p className="mb-4 lg:mb-6">Patients found the existing appointment booking flow confusing and non-linear. The redesign focused on creating a step-by-step, intuitive process.</p>
-        <p>Testing showed that clear date/time selection and doctor availability transparency were critical.</p>
-      </>
-    ),
-    rightContent: [
-      { title: 'CLARITY', desc: 'Ensuring patients know exactly which specialist they are booking.' },
-      { title: 'SPEED', desc: 'Reducing the number of clicks required to confirm a slot.' },
-      { title: 'TRANSPARENCY', desc: 'Making doctor schedules and availability immediately visible.' }
-    ]
-  },
-  CHECKUPS: {
-    leftTitle: 'BOOKING A HEALTH CHECKUP',
-    leftContent: (
-      <>
-        <p className="mb-4 lg:mb-6">Health checkup packages were difficult to compare. Users struggled to understand what each package included before booking.</p>
-        <p><strong className="font-bold">The key takeaway:</strong><br />Patients need to quickly scan and compare tests, pricing, and fasting instructions before committing.</p>
-      </>
-    ),
-    rightContent: [
-      { title: 'PACKAGE COMPARISON', desc: 'Redesigned the UI to allow easy side-by-side comparison of medical packages.' },
-      { title: 'UPFRONT DETAILS', desc: 'Clear pricing and fasting instructions provided before the booking phase.' },
-      { title: 'CONFIDENCE', desc: 'Users felt more secure booking when they understood exactly what they were paying for.' }
-    ]
-  },
-  CAREERS: {
-    leftTitle: 'FAUX-APPLYING FOR A JOB',
-    leftContent: (
-      <p>We tested the career portal flow by having users faux-apply for a job to identify friction points in form submissions and document uploads.</p>
-    ),
-    rightContent: [
-      { isStat: true, title: 'Uploads', desc: 'Streamlined the resume upload process.' },
-      { isStat: true, title: 'Mobile', desc: 'Ensured the application form was easily fillable on mobile devices.' },
-      { isFooter: true, desc: 'A SMOOTHER APPLICATION PROCESS DIRECTLY IMPACTS HIRING QUALITY.' }
-    ]
-  }
-};
-
-// --- TAB DATA FOR SECTION 5 ---
-type DesignTabData = {
-  title: string;
-  screens: { label: string; src: string }[];
-  footer?: string; 
-};
-
-const DESIGN_TAB_DATA: Record<'BOOKING' | 'PACKAGES' | 'CAREERS', DesignTabData> = {
-  BOOKING: {
-    title: "Streamlined appointment booking with transparent doctor availability and instant confirmations.",
-    screens: [
-      { label: "Find Doctors", src: "/projects/lilavati/booking-1.png" },
-      { label: "Select Slot", src: "/projects/lilavati/booking-2.png" },
-      { label: "Confirm", src: "/projects/lilavati/booking-3.png" }
-    ],
-    footer: "From finding a specialist to confirming the time, the flow is completely linear."
-  },
-  PACKAGES: {
-    title: "Compare comprehensive health checkups side-by-side with clear pricing and prerequisites.",
-    screens: [
-      { label: "Browse Packages", src: "/projects/lilavati/package-1.png" },
-      { label: "Compare Tests", src: "/projects/lilavati/package-2.png" },
-      { label: "Pre-requisites", src: "/projects/lilavati/package-3.png" }
-    ]
-  },
-  CAREERS: {
-    title: "A mobile-optimized career portal designed for frictionless document uploads and quick applications.",
-    screens: [
-      { label: "Job Listings", src: "/projects/lilavati/career-1.png" },
-      { label: "Quick Apply", src: "/projects/lilavati/career-2.png" },
-      { label: "Success", src: "/projects/lilavati/career-3.png" }
-    ]
-  }
-};
 
 export default function LilavatiCaseStudy() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const tabContentRef = useRef<HTMLDivElement>(null);
-  const designContentRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   
   const [activeSection, setActiveSection] = useState('01');
-  
-  const [activeTab, setActiveTab] = useState<keyof typeof TAB_DATA>('APPOINTMENTS');
-  const [isAnimatingTab, setIsAnimatingTab] = useState(false);
-  
-  const [activeDesignTab, setActiveDesignTab] = useState<keyof typeof DESIGN_TAB_DATA>('BOOKING');
-  const [isAnimatingDesignTab, setIsAnimatingDesignTab] = useState(false);
-  
   const [isExiting, setIsExiting] = useState(false);
 
   // --- Tracks if the Figma iframe has finished loading ---
   const [isIframeLoading, setIsIframeLoading] = useState(true);
-
-  // --- SECTION 3 TAB ANIMATION ---
-  const handleTabClick = (tab: keyof typeof TAB_DATA) => {
-    if (tab === activeTab || isAnimatingTab) return;
-    setIsAnimatingTab(true);
-
-    gsap.to(tabContentRef.current, {
-      opacity: 0,
-      y: 8,
-      duration: 0.15,
-      ease: 'power2.in',
-      onComplete: () => {
-        setActiveTab(tab);
-        gsap.fromTo(tabContentRef.current,
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out', onComplete: () => setIsAnimatingTab(false) }
-        );
-      }
-    });
-  };
-
-  // --- SECTION 5 TAB ANIMATION ---
-  const handleDesignTabClick = (tab: keyof typeof DESIGN_TAB_DATA) => {
-    if (tab === activeDesignTab || isAnimatingDesignTab) return;
-    setIsAnimatingDesignTab(true);
-
-    gsap.to(designContentRef.current, {
-      opacity: 0,
-      y: 8,
-      duration: 0.15,
-      ease: 'power2.in',
-      onComplete: () => {
-        setActiveDesignTab(tab);
-        gsap.fromTo(designContentRef.current,
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out', onComplete: () => setIsAnimatingDesignTab(false) }
-        );
-      }
-    });
-  };
 
   useGSAP(() => {
     const tl = gsap.timeline({ delay: 0.2 });
@@ -173,7 +39,8 @@ export default function LilavatiCaseStudy() {
       '-=0.6'
     );
 
-    const sectionClasses = ['.context-anim', '.found-anim', '.direction-anim', '.designing-anim'];
+    // Only keeping context-anim since other sections were removed
+    const sectionClasses = ['.context-anim'];
     
     sectionClasses.forEach(selector => {
       gsap.utils.toArray(selector).forEach((el: any) => {
@@ -273,7 +140,6 @@ export default function LilavatiCaseStudy() {
                {/* Left Column: Interactive Prototype (Raw Figma Embed) */}
               <div className="overview-anim flex flex-col items-center w-full lg:w-auto opacity-0 order-2 lg:order-1 pt-4 lg:pt-0 shrink-0">
                 <div className="relative w-[320px] sm:w-[380px] h-[650px] sm:h-[750px]">
-                  {/* Clean Figma Iframe (Overlay spinner removed from here) */}
                   {/* Clean Figma Iframe */}
                   <iframe
                     src="https://embed.figma.com/proto/BhakxuFIy0K6W8cbR8GiAm/Untitled?node-id=1-13961&viewport=-492%2C-1980%2C0.33&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&hide-ui=1&embed-host=share"
@@ -282,8 +148,6 @@ export default function LilavatiCaseStudy() {
                   
                     allowFullScreen
                     onLoad={() => {
-                      // The iframe wrapper has loaded (white screen), 
-                      // now wait 4.5 seconds for Figma's internal canvas to render the phone
                       setTimeout(() => {
                         setIsIframeLoading(false);
                       }, 10000);
@@ -310,7 +174,7 @@ export default function LilavatiCaseStudy() {
                   A comprehensive redesign of the digital experience to simplify critical user journeys, including booking appointments, comparing health checkup packages, and streamlining job applications.
                 </p>
 
-                {/* --- UPDATED: Note directly beneath the prototype with inline spinner --- */}
+                {/* Note directly beneath the prototype with inline spinner */}
                 <div className="mt-6 flex flex-col gap-3">
                   <div className="flex items-start gap-2">
                     <svg className="w-4 h-4 text-[#262626]/50 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
@@ -419,86 +283,11 @@ export default function LilavatiCaseStudy() {
                   />
                 </div>
                 <p className="font-dm-sans text-[12px] lg:text-[13px] text-[#262626]/60 tracking-[-0.05em] mt-3 text-center">
-                  *hover over the images to see the problem
+                  *
                 </p>
               </div>
             </div>
           </section>
-
-          <hr className="context-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
-
-          {/* =========================================
-              SECTION 3: DIGGING DEEPER 
-          ========================================= */}
-          <section id="deeper" className="w-full">
-            <div className="found-anim flex flex-col md:flex-row justify-between items-end mb-0 opacity-0 relative z-20">
-              <h2 className="font-momo text-[26px] lg:text-[28px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] pb-3 whitespace-nowrap flex-shrink-0">
-                Usability Testing Insights
-              </h2>
-              <div className="flex items-center gap-2 lg:gap-6">
-                {(Object.keys(TAB_DATA) as Array<keyof typeof TAB_DATA>).map((tab) => {
-                  const isActive = activeTab === tab;
-                  return (
-                    <button
-                      key={tab}
-                      onClick={() => handleTabClick(tab)}
-                      className={`flex items-center gap-2 px-5 lg:px-6 py-3 font-dm-sans text-[12px] lg:text-[13px] font-bold tracking-[-0.05em] transition-colors duration-300 relative top-[1px] ${
-                        isActive 
-                          ? 'bg-[#F4F7FA] text-[#262626] rounded-t-[12px]' 
-                          : 'bg-transparent text-[#262626]/60 hover:text-[#262626]'
-                      }`}
-                    >
-                      {isActive && <span className="w-2.5 h-2.5 rounded-full bg-[#00509E]"></span>}
-                      {tab}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="-ml-6 lg:-ml-8 w-[calc(100%+1.5rem)] lg:w-[calc(100%+2rem)]">
-              <div className="found-anim bg-[#F4F7FA] rounded-none relative z-10 opacity-0 min-h-[300px]">
-                <div ref={tabContentRef} className="p-6 lg:p-8">
-                  <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-12 lg:gap-16">
-                    <div className="flex flex-col">
-                      <h3 className="font-dm-sans text-[14px] lg:text-[15px] font-bold text-[#262626] tracking-[-0.05em] uppercase mb-4 lg:mb-5">
-                        {TAB_DATA[activeTab].leftTitle}
-                      </h3>
-                      <div className="font-dm-sans text-[14px] lg:text-[15px] text-[#262626]/80 tracking-[-0.05em] leading-[1.5]">
-                        {TAB_DATA[activeTab].leftContent}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col">
-                      {TAB_DATA[activeTab].rightContent.map((item: any, index: number) => (
-                        <React.Fragment key={index}>
-                          {index > 0 && <hr className="border-t border-[#262626]/10 my-4" />}
-                          <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 md:gap-6 items-start">
-                            <h4 className="font-dm-sans text-[#262626] tracking-[-0.05em] text-[14px] font-bold uppercase mt-1">
-                              {item.title}
-                            </h4>
-                            <p className="font-dm-sans text-[14px] lg:text-[15px] text-[#262626]/80 tracking-[-0.05em] leading-[1.5]">
-                              {item.desc}
-                            </p>
-                          </div>
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </section>
-
-          <hr className="found-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
-
-          {/* Dummy sections for ScrollTrigger */}
-          {SIDEBAR_ITEMS.slice(5).map(item => (
-             <section key={item.id} id={item.target} className="w-full h-[50vh] pt-12">
-                <h2 className="font-momo text-2xl text-[#262626]/20 tracking-[-0.02em]">{item.title} Placeholder</h2>
-             </section>
-          ))}
 
         </div>
       </div>
