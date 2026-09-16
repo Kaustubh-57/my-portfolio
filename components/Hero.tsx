@@ -318,7 +318,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
               ref={addToRefs} 
               className="text-[28px] md:text-[32px] lg:text-[26px] text-[#141613] leading-[1.1] tracking-normal font-semibold"
             >
-              I design digital products that<br className="hidden md:block" /> work beautifully
+              I design digital products that<br className="hidden md:block" /> work beautifully.
             </h2>
             <h2 
               ref={addToRefs} 
