@@ -67,6 +67,21 @@ const TAB_DATA = {
   }
 };
 
+// --- DATA FOR DESIGN SYSTEM ACCORDION ---
+const DESIGN_SYSTEM_ITEMS = [
+  { id: 'typography', title: 'Typography System', image: '/projects/shoppin/typography.png' },
+  { id: 'color', title: 'Color Pallete', image: '/projects/shoppin/color.png' },
+  { id: 'iconography', title: 'Iconography', image: '/projects/shoppin/iconography.png' },
+  { id: 'guidelines', title: 'Design Guidelines', image: '/projects/shoppin/guidelines.png' },
+  { id: 'components', title: 'Component Library', image: '/projects/shoppin/components.png' },
+  { id: 'buttons', title: 'Buttons & Controls', image: '/projects/shoppin/buttons.png' },
+  { id: 'status', title: 'Status Overlays', image: '/projects/shoppin/status.png' },
+  { id: 'feedback', title: 'Feedback', image: '/projects/shoppin/feedback.png' },
+  { id: 'map', title: 'Map Card', image: '/projects/shoppin/Map Cards.png' },
+  { id: 'category', title: 'Category Cards', image: '/projects/shoppin/category.png' },
+  { id: 'save', title: 'Save Boards', image: '/projects/shoppin/save.png' }
+];
+
 // --- TAB DATA FOR SECTION 5 ---
 type DesignTabData = {
   title: string;
@@ -127,6 +142,9 @@ export default function ShoppinCaseStudy() {
   const [isExiting, setIsExiting] = useState(false);
 
   const [isIframeLoading, setIsIframeLoading] = useState(true);
+  
+  // State for the new Design System Accordion
+  const [openAccordionId, setOpenAccordionId] = useState<string | null>(null);
 
   // --- SECTION 3 TAB ANIMATION ---
   const handleTabClick = (tab: keyof typeof TAB_DATA) => {
@@ -166,6 +184,10 @@ export default function ShoppinCaseStudy() {
         );
       }
     });
+  };
+
+  const toggleAccordion = (id: string) => {
+    setOpenAccordionId(prev => prev === id ? null : id);
   };
 
   useGSAP(() => {
@@ -546,11 +568,11 @@ export default function ShoppinCaseStudy() {
           <hr className="direction-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
 
           {/* =========================================
-              SECTION 5: DESIGNING SHOPPIN (UPDATED LAYOUT)
+              SECTION 5: DESIGNING SHOPPIN
           ========================================= */}
           <section id="designing" className="w-full">
             
-            {/* --- FULL BLEED HERO IMAGE --- */}
+            {/* 1. FULL BLEED HERO IMAGE */}
             <div className="-mx-6 lg:-mx-12 xl:-mx-16 mb-16 lg:mb-24 designing-anim opacity-0">
               <img 
                 src="/projects/shoppin/introducing.png" 
@@ -560,12 +582,13 @@ export default function ShoppinCaseStudy() {
               />
             </div>
 
+            {/* 2. 4 THINGS TABS */}
             <h2 className="designing-anim font-momo text-[26px] lg:text-[32px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] mb-10 lg:mb-14 opacity-0 text-center">
               4 things make up the Shoppin experience.
             </h2>
 
-            {/* FULL BLEED WRAPPER */}
-            <div className="-mx-6 lg:-mx-12 xl:-mx-16">
+            {/* FULL BLEED WRAPPER FOR 4 THINGS */}
+            <div className="-mx-6 lg:-mx-12 xl:-mx-16 mb-20 lg:mb-32">
               <div className="designing-anim flex flex-col w-full opacity-0">
                 
                 {/* TABS HEADER */}
@@ -626,6 +649,56 @@ export default function ShoppinCaseStudy() {
 
               </div>
             </div>
+
+            {/* 3. DESIGNING SHOPPIN INTRO & ACCORDION */}
+            <div className="designing-anim opacity-0 mb-10">
+              <h2 className="font-momo text-[26px] lg:text-[32px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] mb-6">
+                Designing Shoppin
+              </h2>
+              <p className="font-dm-sans text-[15px] lg:text-[16px] text-[#262626]/85 tracking-[-0.05em] leading-[1.6] max-w-[650px] mb-12">
+                With the product direction established, I worked with Aaron on the UI direction and interaction ideas. I took ownership of the Login, Home and Maps experiences, and prototyped these flows as part of the final product.
+              </p>
+
+              {/* Accordion Component */}
+              <div className="flex flex-col w-full max-w-[800px]">
+                {DESIGN_SYSTEM_ITEMS.map((item) => {
+                  const isOpen = openAccordionId === item.id;
+                  
+                  return (
+                    <div key={item.id} className="flex flex-col border-b border-[#262626]/20">
+                      <button
+                        onClick={() => toggleAccordion(item.id)}
+                        className="w-full flex justify-between items-center py-5 lg:py-6 text-left hover:opacity-70 transition-opacity"
+                      >
+                        <span className="font-dm-sans text-[20px] lg:text-[24px] font-bold text-[#262626] tracking-[-0.02em]">
+                          {item.title}
+                        </span>
+                        
+                        {/* Circular Arrow Icon */}
+                        <div className={`w-10 h-10 rounded-full bg-[#f4f4f4] border border-[#e5e5e5] flex items-center justify-center shrink-0 transition-transform duration-300 shadow-sm ${isOpen ? 'rotate-180' : ''}`}>
+                          <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 1L7 7L13 1" stroke="#262626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                      </button>
+                      
+                      {/* Expandable Image Content */}
+                      <div
+                        className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-[2000px] opacity-100 mb-8' : 'max-h-0 opacity-0'}`}
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-full h-auto object-contain mt-4"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
           </section>
 
           <hr className="designing-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
