@@ -33,18 +33,7 @@ const allProjects = [
     accentColor: '#fffc34',
     textColor: '#FFFFFF'
   },
-  {
-    id: '03',
-    slug: 'lilavati',
-    badge: 'UX/UI REDESIGN • USABILITY TESTING',
-    title: 'Lilavati Hospital:\nWebsite Redesign',
-    description: 'A comprehensive redesign of the digital experience to streamline appointment bookings, health checkups, and user journeys.',
-    role: 'UX Research | UI/UX | Usability Testing',
-    image: '/projects/lilavati/mockup.png', 
-    bgColor: '#F4F7FA', 
-    accentColor: '#00509E', 
-    textColor: '#151515'
-  },
+  
   {
     id: '04',
     slug: 'decicon', 
@@ -56,6 +45,18 @@ const allProjects = [
     bgColor: '#171918',
     accentColor: '#C7E86B',
     textColor: '#FFFFFF'
+  },
+  {
+    id: '03',
+    slug: 'lilavati',
+    badge: 'UX/UI REDESIGN • USABILITY TESTING',
+    title: 'Lilavati Hospital:\nWebsite Redesign',
+    description: 'A comprehensive redesign of the digital experience to streamline appointment bookings, health checkups, and user journeys.',
+    role: 'UX Research | UI/UX | Usability Testing',
+    image: '/projects/lilavati/mockup.png', 
+    bgColor: '#F4F7FA', 
+    accentColor: '#00509E', 
+    textColor: '#151515'
   },
   {
     id: '05',
