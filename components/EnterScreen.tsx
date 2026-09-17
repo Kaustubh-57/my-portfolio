@@ -9,21 +9,12 @@ interface EnterScreenProps {
 }
 
 const ALL_PRELOADER_IMAGES = [
-  '/preloader/1.png',
-  '/preloader/2.png',
   '/preloader/3.png',
   '/preloader/4.png',
   '/preloader/5.png',
   '/preloader/6.png',
   '/preloader/7.png',
   '/preloader/final.jpg',
-];
-
-const PRELOADER_TEXTS = [
-  'Look Around',
-  'Stay Curious',
-  'Make Something',
-  'Make It Better',
 ];
 
 const FINAL_IMAGE_INDEX = ALL_PRELOADER_IMAGES.length - 1;
@@ -33,15 +24,13 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentBlockRef = useRef<HTMLDivElement>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
-  const animatedTextRef = useRef<HTMLDivElement>(null); 
+  const bottomTextRef = useRef<HTMLDivElement>(null); 
   
   const [progress, setProgress] = useState(0);
   const [currentImage, setCurrentImage] = useState(0);
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [isReady, setIsReady] = useState(false);
   const [shouldRender, setShouldRender] = useState(true);
 
-  // Check memory on mount and cache images
   useEffect(() => {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
@@ -60,48 +49,27 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
     }
   }, [onEnter]);
 
-  // --- UPDATED: Slowed down to 1500ms and stops automatically on the last text ---
-  useEffect(() => {
-    if (!shouldRender || isReady) return;
-
-    const timer = setInterval(() => {
-      setCurrentTextIndex((prev) => {
-        // If we are about to hit the last index, clear the interval so it stops cycling
-        if (prev >= PRELOADER_TEXTS.length - 2) {
-          clearInterval(timer);
-          return prev + 1;
-        }
-        return prev + 1;
-      });
-    }, 1500); 
-    
-    return () => clearInterval(timer);
-  }, [shouldRender, isReady]);
-
   useGSAP(() => {
     if (!shouldRender) return;
 
     const tl = gsap.timeline();
 
-    // 1. Initial entrance of the image box and the cycling text
     tl.fromTo(
       imageContainerRef.current,
       { clipPath: 'inset(100% 0% 0% 0%)' },
-      { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'expo.inOut' },
-      0 
+      { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.0, ease: 'expo.inOut' }
     );
     
-    gsap.fromTo(animatedTextRef.current,
-      { opacity: 0, x: -10 },
-      { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.5 }
+    gsap.fromTo(bottomTextRef.current,
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.6 }
     );
 
-    // 2. The 5-second progress counter
     const counter = { val: 0 };
     tl.to(counter, {
       val: 100,
-      duration: 5,
-      ease: 'power2.out',
+      duration: 3.6,
+      ease: 'none',
       onUpdate: () => {
         const val = Math.round(counter.val);
         setProgress(val);
@@ -119,9 +87,8 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
       onComplete: () => {
         setIsReady(true);
         
-        // Automatic "Curtain Reveal" Exit Sequence
         const exitTl = gsap.timeline({
-          delay: 1.2, 
+          delay: 0.1, 
           onComplete: () => {
             sessionStorage.setItem('hasSeenPreloader', 'true');
             window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
@@ -129,25 +96,25 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
           }
         });
 
-        exitTl.to(contentBlockRef.current, { 
-          scale: 0.85, 
-          opacity: 0, 
-          duration: 0.8, 
+        exitTl.to(imageContainerRef.current, { 
+          clipPath: 'inset(0% 0% 100% 0%)', 
+          duration: 1, 
           ease: 'power3.inOut' 
         })
+        .to([bottomTextRef.current, '.preloader-header'], {
+          opacity: 0,
+          duration: 0.3
+        }, '<')
         .to(overlayRef.current, {
-          yPercent: -100, 
-          duration: 1.2,
-          ease: 'expo.inOut',
-        }, '-=0.4'); 
+          opacity: 0, 
+          duration: 0.4, 
+          ease: 'power2.inOut',
+        }, '-=0.1'); 
       }
-    }, 0);
+    }); 
   }, { scope: overlayRef, dependencies: [shouldRender] });
 
   if (!shouldRender) return null;
-
-  const activeTextIndex = currentTextIndex % PRELOADER_TEXTS.length;
-  const prevTextIndex = (currentTextIndex - 1 + PRELOADER_TEXTS.length) % PRELOADER_TEXTS.length;
 
   return (
     <div 
@@ -156,11 +123,12 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
     >
       <div ref={contentBlockRef} className="relative flex flex-col w-44 md:w-[220px]">
         
-        <div className="flex justify-between items-end mb-2.5 font-dm-sans text-[#141613]">
-          <span className="text-[11px] md:text-xs font-medium tracking-wide uppercase">
+        {/* --- UPDATED: Matching the exact sizes and tracking of the Hero Product Designer text --- */}
+        <div className="preloader-header flex justify-between items-end mb-2.5 font-dm-sans text-[#141613]">
+          <span className="text-[11px] md:text-[14px] font-medium tracking-[-0.02em] uppercase">
             DOESKAUS
           </span>
-          <span className="text-[11px] md:text-xs font-medium">
+          <span className="text-[11px] md:text-[14px] font-medium tracking-[-0.02em]">
             {progress}
           </span>
         </div>
@@ -187,32 +155,13 @@ export default function EnterScreen({ onEnter }: EnterScreenProps) {
           ))}
         </div>
 
+        {/* --- UPDATED: Elegant editorial serif italic --- */}
         <div 
-          ref={animatedTextRef}
-          className="absolute top-[55%] -translate-y-1/2 left-[calc(100%+80px)] md:left-[calc(100%+160px)] font-dm-sans text-[#383838] opacity-0"
+          ref={bottomTextRef}
+          className="mt-4 text-[15px] md:text-[17px] text-[#141613]/80 text-center opacity-0 tracking-wide italic"
+          style={{ fontFamily: "'Instrument Serif', 'Newsreader', 'Playfair Display', Georgia, serif" }}
         >
-          <div className="relative h-[20px] md:h-[24px] w-[180px] md:w-[200px] overflow-hidden">
-            {PRELOADER_TEXTS.map((text, index) => {
-              const isAnimating = index === activeTextIndex || index === prevTextIndex;
-              
-              return (
-                <span
-                  key={index}
-                  className={`absolute left-0 bottom-0 text-sm md:text-base font-medium tracking-wide will-change-transform ${
-                    isAnimating ? 'transition-all duration-700 ease-out' : 'transition-none'
-                  } ${
-                    index === activeTextIndex
-                      ? 'translate-y-0 opacity-100'
-                      : index === prevTextIndex
-                      ? '-translate-y-full opacity-0'
-                      : 'translate-y-full opacity-0'
-                  }`}
-                >
-                  {text}
-                </span>
-              );
-            })}
-          </div>
+          Staying curious
         </div>
 
       </div>

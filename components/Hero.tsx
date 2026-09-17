@@ -21,11 +21,8 @@ export default function Hero({ hasEntered = true }: HeroProps) {
   const textRefs = useRef<(HTMLHeadingElement | HTMLDivElement | HTMLParagraphElement | null)[]>([]);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
   
-  // Audio Refs
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const wasMusicPlaying = useRef(false);
-
-  // New Ref for the Polaroid Photo
   const photoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,18 +46,19 @@ export default function Hero({ hasEntered = true }: HeroProps) {
   useGSAP(() => {
     if (!hasEntered) return;
 
-    const tl = gsap.timeline({ delay: 0.2 });
+    // --- UPDATED: Removed the 0.2s start delay so it fires exactly when the preloader exits
+    const tl = gsap.timeline();
 
     tl.to(verticalGridRef.current, {
       scaleY: 1,
-      duration: 1.2,
+      duration: 1.0, // Slightly sped up grid entrance
       ease: 'expo.inOut',
     });
     tl.to(horizontalGridRef.current, {
       scaleX: 1,
-      duration: 1.2,
+      duration: 1.0,
       ease: 'expo.inOut',
-    }, '-=0.8');
+    }, '-=0.7');
 
     tl.to(bottomSectionRef.current, { 
       yPercent: 0, 
@@ -227,7 +225,6 @@ export default function Hero({ hasEntered = true }: HeroProps) {
     }
   };
 
-  // --- NEW: Hover Handlers for the Portrait ---
   const handlePortraitEnter = () => {
     if (window.innerWidth < 768 || !photoRef.current) return;
     gsap.killTweensOf(photoRef.current);

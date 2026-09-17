@@ -13,7 +13,7 @@ export default function Navbar() {
   const progressRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
-  const soundBtnRef = useRef<HTMLButtonElement>(null); // New ref for the sound button
+  const soundBtnRef = useRef<HTMLButtonElement>(null); 
   const menuLinksRef = useRef<(HTMLAnchorElement | null)[]>([]);
   const footerRef = useRef<HTMLDivElement>(null);
   
@@ -99,12 +99,12 @@ export default function Navbar() {
       '<0.15' 
     );
 
-    // --- NEW: Sound Button Pop-in Animation ---
+    // Sound Button Pop-in Animation
     initTl.fromTo(
       soundBtnRef.current,
       { scale: 0, opacity: 0 },
       { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.5)' },
-      '<0.2' // Triggers slightly after the text links start fading in
+      '<0.2' 
     );
 
     gsap.to(progressRef.current, {
@@ -122,12 +122,14 @@ export default function Navbar() {
       const hasSeenPreloader = typeof window !== 'undefined' && sessionStorage.getItem('hasSeenPreloader') === 'true';
       
       if (hasSeenPreloader) {
-        setTimeout(() => initTl.play(), 1700);
+        // --- UPDATED: Synced to exactly 1.2s to match the Hero text animation ---
+        setTimeout(() => initTl.play(), 1200);
       } else {
         const checkReady = setInterval(() => {
           if (sessionStorage.getItem('hasSeenPreloader') === 'true') {
             clearInterval(checkReady);
-            setTimeout(() => initTl.play(), 2900);
+            // --- UPDATED: Synced to exactly 1.2s to match the Hero text animation ---
+            setTimeout(() => initTl.play(), 1200);
           }
         }, 100);
       }
@@ -174,7 +176,6 @@ export default function Navbar() {
       <button 
         ref={soundBtnRef}
         onClick={toggleMusic}
-        // Removed 'nav-item' so it isn't grabbed by the generic stagger array. Kept 'opacity-0' to prevent flash before JS loads.
         className="fixed top-24 right-8 md:top-20 md:right-10 z-[85] w-12 h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:scale-105 transition-transform duration-300 outline-none opacity-0"
         data-cursor="hover"
         aria-label="Toggle background music"
