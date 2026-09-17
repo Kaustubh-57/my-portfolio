@@ -303,7 +303,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
             </h1>
             <p 
               ref={addToRefs} 
-              className="font-dm-sans text-[#141613]/50 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium mt-0.5"
+              className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium mt-0.5"
             >
               Product Designer
             </p>
@@ -315,28 +315,22 @@ export default function Hero({ hasEntered = true }: HeroProps) {
               ref={addToRefs} 
               className="text-[28px] md:text-[32px] lg:text-[26px] text-[#141613] leading-[1.1] tracking-normal font-semibold"
             >
-              I design digital products that<br className="hidden md:block" /> work beautifully.
+              turning messy problems into clear,<br className="hidden md:block" /> useful digital experiences.
             </h2>
-            <h2 
-              ref={addToRefs} 
-              className="text-[28px] md:text-[32px] lg:text-[26px] text-[#141613] leading-[1.1] tracking-normal font-semibold mt-0.5 whitespace-nowrap"
-            >
-              Accessible, clear & intentional
-            </h2>
+            
           </div>
 
           {/* Row 2, Col 1: Location */}
           <div ref={addToRefs} className="hidden md:block">
-            <p className="font-dm-sans text-[#141613]/40 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium">
-              Based in Mumbai
-            </p>
+             <p className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium">
+              Previously at <a href="https://www.linkedin.com/company/realty-sharks/ " target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-[#141613] transition-colors">Realty Sharks</a>
+              , Mumbai</p>
           </div>
 
           {/* Row 2, Col 2: Previous */}
           <div ref={addToRefs}>
-            <p className="font-dm-sans text-[#141613]/40 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium">
-              Previously at <a href="https://www.linkedin.com/company/realty-sharks/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-[#141613] transition-colors">Realty Sharks</a>
-            </p>
+           <p className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium">
+research · product thinking · UX · visual design            </p>
           </div>
 
         </div>
