@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Hero from '@/components/Hero';
 import SelectedWorks from '@/components/SelectedWorks';
+import Capabilities from '@/components/Capabilities';
 import About from '@/components/About';
 import EnterScreen from '@/components/EnterScreen';
 
@@ -17,6 +18,10 @@ export default function Home() {
       {/* We pass hasEntered to Hero so it knows when to trigger its entrance animations */}
       <Hero hasEntered={hasEntered} />
       <SelectedWorks />
+      
+      {/* The new Niklas-style pinned accordion section */}
+      <Capabilities />
+      
       <About />
     </main>
   );
