@@ -9,25 +9,24 @@ gsap.registerPlugin(ScrollTrigger);
 
 const CAPABILITIES = [
   {
-    title: 'PRODUCT DESIGN',
-    desc: 'I turn messy problems into structured product experiences, from understanding the problem to defining the flow and designing the interface',
-    // Replace these paths with your actual exported Figma images
-    image: '/capabilities/uiux.jpg' 
+    title: 'UI / UX DESIGN',
+    desc: 'Exceptional design starts with the user. I craft intuitive interfaces and seamless experiences that not only look stunning but also drive engagement and enhance usability, putting your audience first.',
+    image: '/Capabilities/uiux.jpg' // Updated capital 'C' and removed hyphen
   },
   {
-    title: 'INTERACTION & PROTOTYPING',
+    title: 'INTERACTION DESIGN',
     desc: 'Motion and micro-interactions breathe life into digital products. I design meaningful transitions that guide users, provide feedback, and make the overall experience feel natural and responsive.',
-    image: '/capabilities/interaction.jpg'
+    image: '/Capabilities/interaction.jpg' // Updated capital 'C'
   },
   {
     title: 'VISUAL DESIGN',
     desc: 'Aesthetics matter. I create cohesive visual languages, typography systems, and color palettes that align with brand identities and elevate the perceived value of the product.',
-    image: '/capabilities/visual.jpg'
+    image: '/Capabilities/visual.jpg' // Updated capital 'C'
   },
   {
-    title: 'PHYSICAL & EXPERIMENTAL',
+    title: 'EXPERIMENTS',
     desc: 'Innovation requires play. I constantly explore new tools, emerging tech, and unconventional layouts to discover fresh ways to solve complex design challenges.',
-    image: '/capabilities/experiments.jpg'
+    image: '/Capabilities/experiments.jpg' // Updated capital 'C'
   }
 ];
 
