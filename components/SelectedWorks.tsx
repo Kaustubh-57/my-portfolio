@@ -158,7 +158,7 @@ export default function SelectedWorks() {
   };
 
   return (
-    <section ref={containerRef} id="works" className="relative w-full h-screen bg-[#ffffff] flex flex-col justify-center px-10 md:px-12 pt-6">
+    <section ref={containerRef} id="works" className="relative w-full h-screen bg-[#ffffff] flex flex-col justify-center px-12 md:px-16 pt-6">
       <div className="works-content w-full h-full flex flex-col justify-center">
         <div className="w-full max-w-[1440px] mx-auto mb-6 flex-shrink-0">
           <h2 className="font-dm-sans text-2xl md:text-2xl text-[#141613] tracking-[-0.03em] font-medium">

@@ -303,7 +303,7 @@ export default function Hero({ hasEntered = true }: HeroProps) {
             </h1>
             <p 
               ref={addToRefs} 
-              className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium mt-0.5"
+              className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[16px] tracking-[-0.01em] uppercase font-medium mt-0.5"
             >
               Product Designer
             </p>
@@ -315,21 +315,20 @@ export default function Hero({ hasEntered = true }: HeroProps) {
               ref={addToRefs} 
               className="text-[28px] md:text-[32px] lg:text-[26px] text-[#141613] leading-[1.1] tracking-normal font-semibold"
             >
-              turning messy problems into clear,<br className="hidden md:block" /> useful digital experiences.
+              Turning messy problems into clear,<br className="hidden md:block" /> useful digital experiences.
             </h2>
             
           </div>
 
           {/* Row 2, Col 1: Location */}
           <div ref={addToRefs} className="hidden md:block">
-             <p className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium">
-              Previously at <a href="https://www.linkedin.com/company/realty-sharks/ " target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-[#141613] transition-colors">Realty Sharks</a>
-              , Mumbai</p>
+             <p className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[16px] tracking-[-0.01em] uppercase font-medium">
+Previously at Realty Sharks, Mumbai           </p>
           </div>
 
           {/* Row 2, Col 2: Previous */}
           <div ref={addToRefs}>
-           <p className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[14px] tracking-[-0.02em] uppercase font-medium">
+           <p className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[16px] tracking-[-0.01em] uppercase font-medium">
 research · product thinking · UX · visual design            </p>
           </div>
 

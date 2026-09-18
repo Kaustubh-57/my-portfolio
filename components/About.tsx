@@ -53,9 +53,13 @@ export default function About({ hideIntro = false }: AboutProps) {
     <section 
       ref={containerRef} 
       id="contact"
-      // --- FIX: Removed overflow-hidden so the red graphic can safely bleed into the section above it ---
-      className="relative w-full bg-[#ffffff] flex flex-col z-30"
+      // --- FIX 1: Added -mt-[1px] to pull the section up over the GSAP pin-spacer gap ---
+      className="relative w-full bg-[#ffffff] flex flex-col z-30 -mt-[1px]"
     >
+      
+      {/* --- FIX 2: A 2px white masking bar to physically hide any gradient or sub-pixel bleeding --- */}
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-[#ffffff] z-10" />
+
       {/* Background Grid Layer */}
       <div 
         className="absolute inset-0 w-full h-full pointer-events-none opacity-60 z-0"
@@ -65,6 +69,7 @@ export default function About({ hideIntro = false }: AboutProps) {
             linear-gradient(to bottom, #E5E7EB 1px, transparent 1px)
           `,
           backgroundSize: '90px 90px',
+          backgroundPosition: '0 0, 0 -1px' 
         }}
       />
 
