@@ -12,7 +12,7 @@ const CAPABILITIES = [
     title: 'PRODUCT DESIGN',
     desc: 'I turn messy problems into structured product experiences, from understanding the problem to defining the flow and designing the interface',
     // Replace these paths with your actual exported Figma images
-    image: '/capabilities/ui-ux.jpg' 
+    image: '/capabilities/uiux.jpg' 
   },
   {
     title: 'INTERACTION & PROTOTYPING',
