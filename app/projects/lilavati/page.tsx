@@ -22,8 +22,10 @@ export default function LilavatiCaseStudy() {
   const [activeSection, setActiveSection] = useState('01');
   const [isExiting, setIsExiting] = useState(false);
 
-  // --- Tracks if the Figma iframe has finished loading ---
+  // --- REFACTORED PROGRESS BAR LOGIC ---
   const [isIframeLoading, setIsIframeLoading] = useState(true);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const hasStartedLoading = useRef(false);
 
   useGSAP(() => {
     const tl = gsap.timeline({ delay: 0.2 });
@@ -145,12 +147,24 @@ export default function LilavatiCaseStudy() {
                     src="https://embed.figma.com/proto/BhakxuFIy0K6W8cbR8GiAm/Untitled?node-id=1-13961&viewport=-492%2C-1980%2C0.33&scaling=scale-down&content-scaling=fixed&page-id=0%3A1&hide-ui=1&embed-host=share"
                     title="Lilavati Interactive Prototype"
                     className="w-full h-full border-0 relative z-0"
-                  
                     allowFullScreen
                     onLoad={() => {
-                      setTimeout(() => {
-                        setIsIframeLoading(false);
-                      }, 10000);
+                      // Block multiple onLoad triggers
+                      if (hasStartedLoading.current) return;
+                      hasStartedLoading.current = true;
+                      
+                      // Smooth GSAP bar animation
+                      if (progressBarRef.current) {
+                        gsap.to(progressBarRef.current, {
+                          width: '100%',
+                          duration: 10,
+                          ease: 'none', // linear fill
+                          onComplete: () => setIsIframeLoading(false)
+                        });
+                      } else {
+                        // Fallback
+                        setTimeout(() => setIsIframeLoading(false), 10000);
+                      }
                     }} 
                   />
                 </div>
@@ -174,7 +188,7 @@ export default function LilavatiCaseStudy() {
                   A comprehensive redesign of the digital experience to simplify critical user journeys, including booking appointments, comparing health checkup packages, and streamlining job applications.
                 </p>
 
-                {/* Note directly beneath the prototype with inline spinner */}
+                {/* Note directly beneath the prototype */}
                 <div className="mt-6 flex flex-col gap-3">
                   <div className="flex items-start gap-2">
                     <svg className="w-4 h-4 text-[#262626]/50 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
@@ -183,12 +197,18 @@ export default function LilavatiCaseStudy() {
                     </p>
                   </div>
 
-                  {/* Loading Spinner now sits below the text */}
+                  {/* Windows-style progress bar */}
                   {isIframeLoading && (
-                    <div className="flex items-center gap-3 pl-6">
-                      <div className="w-4 h-4 border-[2px] border-[#262626]/10 border-t-[#262626] rounded-full animate-spin" />
+                    <div className="flex flex-col gap-2 pl-6 pt-1">
+                      <div className="w-[200px] h-2 border border-[#262626]/20 bg-[#262626]/5 p-[1px] rounded-[2px] overflow-hidden">
+                        <div 
+                          ref={progressBarRef}
+                          className="h-full bg-[#262626] rounded-[1px]" 
+                          style={{ width: '0%' }}
+                        />
+                      </div>
                       <p className="font-dm-sans text-[13px] text-[#262626]/50 tracking-[-0.02em]">
-                        Loading prototype...
+                        The prototype is loading.
                       </p>
                     </div>
                   )}

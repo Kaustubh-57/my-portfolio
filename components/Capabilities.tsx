@@ -76,7 +76,7 @@ export default function Capabilities() {
           
           {/* UPDATED: Added pt-3 md:pt-4 here to push the paragraph down slightly */}
           <p className="font-dm-sans text-[14px] md:text-[15px] text-[#141613]/80 leading-relaxed max-w-[480px] tracking-[-0.01em] pt-3 md:pt-4">
-            A few things I like to work on.
+            
           </p>
         </div>
 

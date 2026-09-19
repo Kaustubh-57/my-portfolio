@@ -123,7 +123,7 @@ export default function Navbar() {
       
       if (hasSeenPreloader) {
         // --- UPDATED: Synced to exactly 1.2s to match the Hero text animation ---
-        setTimeout(() => initTl.play(), 1200);
+        setTimeout(() => initTl.play(), 800);
       } else {
         const checkReady = setInterval(() => {
           if (sessionStorage.getItem('hasSeenPreloader') === 'true') {

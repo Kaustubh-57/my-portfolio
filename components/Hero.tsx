@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { useRouter } from 'next/navigation';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,6 +26,8 @@ export default function Hero({ hasEntered = true }: HeroProps) {
   const wasMusicPlaying = useRef(false);
   const photoRef = useRef<HTMLDivElement>(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     audioRef.current = new Audio('/trees.mp3');
     audioRef.current.loop = true;
@@ -40,39 +43,42 @@ export default function Hero({ hasEntered = true }: HeroProps) {
 
   useGSAP(() => {
     gsap.set(bottomSectionRef.current, { yPercent: 100 });
-    gsap.set(textRefs.current, { y: 40, opacity: 0 });
+    gsap.set(textRefs.current, { y: 30, opacity: 0 });
   }, { scope: containerRef }); 
 
   useGSAP(() => {
     if (!hasEntered) return;
 
-    // --- UPDATED: Removed the 0.2s start delay so it fires exactly when the preloader exits
     const tl = gsap.timeline();
 
+    // Grids draw in smoothly
     tl.to(verticalGridRef.current, {
       scaleY: 1,
-      duration: 1.0, // Slightly sped up grid entrance
+      duration: 0.8, 
       ease: 'expo.inOut',
     });
     tl.to(horizontalGridRef.current, {
       scaleX: 1,
-      duration: 1.0,
+      duration: 0.8,
       ease: 'expo.inOut',
-    }, '-=0.7');
+    }, '-=0.5');
 
+    // Bottom video panel slides up quickly
     tl.to(bottomSectionRef.current, { 
       yPercent: 0, 
-      duration: 1.2, 
+      duration: 1.0, 
       ease: 'expo.out' 
-    }, '-=0.6');
+    }, '-=0.5');
 
+    // --- SNAPPY TEXT ENTRANCE ---
+    // All hero text and supporting elements animate in instantly together (0.6s duration)
     tl.to(textRefs.current, { 
       y: 0, 
       opacity: 1, 
-      duration: 1.5, 
-      stagger: 0.1, 
-      ease: 'power2.out' 
-    }, '-=0.7');
+      duration: 0.6, 
+      stagger: 0.04, 
+      ease: 'power3.out' 
+    }, '-=0.8');
 
     gsap.to(scrollIndicatorRef.current, {
       y: 4,
@@ -247,6 +253,10 @@ export default function Hero({ hasEntered = true }: HeroProps) {
     });
   };
 
+  const handleAboutClick = () => {
+    router.push('/about');
+  };
+
   return (
     <section ref={containerRef} className="relative w-full flex flex-col bg-[#FAFAFA] overflow-hidden" style={{ fontFamily: "'Stack Sans Headline', sans-serif" }}>
       
@@ -358,7 +368,12 @@ research · product thinking · UX · visual design            </p>
         <div className="relative z-10 w-full max-w-[1440px] h-full mx-auto px-8 md:px-12 py-16 flex justify-end items-end pointer-events-none">
           
           <div className="flex flex-col items-end text-white gap-8 pointer-events-auto">
-            <div className="group cursor-pointer flex flex-col items-end" data-cursor="hover">
+            
+            <div 
+              onClick={handleAboutClick}
+              className="group cursor-pointer flex flex-col items-end" 
+              data-cursor="hover"
+            >
               <div className="flex items-center gap-3">
                 <span className="w-12 h-[1px] bg-white transition-transform duration-300 origin-right group-hover:scale-x-125" />
                 <span className="font-dm-sans text-lg md:text-xl tracking-[-0.05em] drop-shadow-md">

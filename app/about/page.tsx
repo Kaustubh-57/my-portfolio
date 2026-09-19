@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -58,8 +58,12 @@ export default function AboutPage() {
   const horizontalGridRef = useRef<HTMLDivElement>(null);
   const slideUpElementsRef = useRef<(HTMLElement | null)[]>([]);
   
-  // --- NEW: Dedicated ref for the polaroid image ---
   const polaroidRef = useRef<HTMLDivElement>(null);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollTrackRef = useRef<HTMLDivElement>(null);
+  const scrollThumbRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     audioRef.current = new Audio('/trees.mp3');
@@ -75,49 +79,43 @@ export default function AboutPage() {
   }, []);
 
   useGSAP(() => {
-    // Initial Setup
     gsap.set(videoContainerRef.current, { yPercent: -100 });
-    // --- UPDATED: Set the polaroid to start high up, ready to drop ---
     gsap.set(polaroidRef.current, { y: -250, opacity: 0 });
     gsap.set(slideUpElementsRef.current, { y: 40, opacity: 0 });
 
-    const tl = gsap.timeline({ delay: 0.2 });
+    const tl = gsap.timeline({ delay: 0.1 });
 
-    // 1. Grid Lines Draw In
     tl.to(verticalGridRef.current, {
       scaleY: 1,
-      duration: 1.2,
+      duration: 0.8,
       ease: 'expo.inOut',
     });
     tl.to(horizontalGridRef.current, {
       scaleX: 1,
-      duration: 1.2,
+      duration: 0.8,
       ease: 'expo.inOut',
-    }, '-=0.8');
+    }, '-=0.5');
 
-    // 2. Video Panel and Photo Drop Down Together
     tl.to(videoContainerRef.current, { 
       yPercent: 0, 
-      duration: 1.2, 
+      duration: 0.8, 
       ease: 'expo.out' 
-    }, '-=0.6');
+    }, '-=0.4');
 
-    // --- UPDATED: Polaroid drops at the exact same time ('<' syncs it with the animation above) ---
     tl.to(polaroidRef.current, {
       y: 0,
       opacity: 1,
-      duration: 1.2,
+      duration: 0.8,
       ease: 'expo.out'
     }, '<');
 
-    // 3. Text and Blossoms Slide Up
     tl.to(slideUpElementsRef.current, { 
       y: 0, 
       opacity: 1, 
-      duration: 1.5, 
-      stagger: 0.15, 
+      duration: 0.8, 
+      stagger: 0.1, 
       ease: 'power2.out' 
-    }, '-=0.7');
+    }, '-=0.5');
 
   }, { scope: containerRef });
 
@@ -197,6 +195,87 @@ export default function AboutPage() {
     }
   };
 
+  // --- SMOOTH DOM Scrollbar Logic ---
+  const updateScrollbar = useCallback(() => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    
+    rafRef.current = requestAnimationFrame(() => {
+      if (!scrollContainerRef.current || !scrollTrackRef.current || !scrollThumbRef.current) return;
+      
+      const container = scrollContainerRef.current;
+      const track = scrollTrackRef.current;
+      const thumb = scrollThumbRef.current;
+
+      const scrollRatio = container.scrollLeft / (container.scrollWidth - container.clientWidth);
+      const visibleRatio = container.clientWidth / container.scrollWidth;
+
+      if (visibleRatio >= 1) {
+        track.style.display = 'none';
+        return;
+      } else {
+        track.style.display = 'block';
+      }
+
+      const thumbWidth = Math.max(visibleRatio * track.clientWidth, 60);
+      thumb.style.width = `${thumbWidth}px`;
+
+      const maxThumbTravel = track.clientWidth - thumbWidth;
+      thumb.style.transform = `translateX(${scrollRatio * maxThumbTravel}px)`;
+    });
+  }, []);
+
+  useEffect(() => {
+    updateScrollbar();
+    window.addEventListener('resize', updateScrollbar);
+    return () => window.removeEventListener('resize', updateScrollbar);
+  }, [updateScrollbar]);
+
+  // Handle Smooth Dragging
+  const handleDragStart = (e: React.PointerEvent) => {
+    e.preventDefault();
+    if (!scrollContainerRef.current || !scrollTrackRef.current || !scrollThumbRef.current) return;
+    
+    const container = scrollContainerRef.current;
+    const track = scrollTrackRef.current;
+    const thumb = scrollThumbRef.current;
+
+    // IMPORTANT: Disable scroll snapping during drag to prevent jittering/fighting
+    container.style.scrollSnapType = 'none';
+    container.style.scrollBehavior = 'auto';
+
+    const startX = e.clientX;
+    const startScrollLeft = container.scrollLeft;
+    
+    const thumbWidth = parseFloat(thumb.style.width);
+    const maxThumbTravel = track.clientWidth - thumbWidth;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+
+    let dragRafId: number;
+
+    const onPointerMove = (moveEvent: PointerEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      const scrollDelta = (deltaX / maxThumbTravel) * maxScroll;
+      
+      if (dragRafId) cancelAnimationFrame(dragRafId);
+      dragRafId = requestAnimationFrame(() => {
+        container.scrollLeft = startScrollLeft + scrollDelta;
+      });
+    };
+
+    const onPointerUp = () => {
+      document.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('pointerup', onPointerUp);
+      
+      // Restore scroll snapping behavior
+      if (dragRafId) cancelAnimationFrame(dragRafId);
+      container.style.scrollSnapType = '';
+      container.style.scrollBehavior = '';
+    };
+
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', onPointerUp);
+  };
+
   return (
     <main 
       ref={containerRef} 
@@ -248,7 +327,6 @@ export default function AboutPage() {
         <div className="relative w-full max-w-[1440px] mx-auto px-8 md:px-12 lg:px-24 z-20 flex flex-col pb-12">
           <div className="flex flex-col items-start lg:ml-12">
             
-            {/* --- UPDATED: Uses polaroidRef instead of addToSlideUp --- */}
             <div ref={polaroidRef}>
               <div className="relative w-[310px] md:w-[380px] -mt-20 lg:-mt-60 group cursor-pointer transition-transform duration-500 hover:rotate-[-3deg] hover:scale-[1.02] origin-bottom-left">
                 <img 
@@ -305,8 +383,9 @@ export default function AboutPage() {
         />
       </div>
 
-      {/* --- NATIVE HORIZONTAL SCROLL SECTION --- */}
+      {/* --- BITS AND PIECES SCROLL SECTION --- */}
       <section className="relative w-full pt-16 pb-20 z-20 bg-transparent">
+        
         <div className="w-full max-w-[1440px] mx-auto px-8 md:px-12 lg:px-24 mb-6 md:mb-10 flex flex-col items-start lg:ml-12">
           <div className="w-full pl-6 md:pl-8">
             <h2 className="text-3xl md:text-4xl lg:text-[42px] text-[#141613] tracking-[-0.01em] leading-[1.1] font-bold mb-2">
@@ -320,7 +399,13 @@ export default function AboutPage() {
 
         <div className="w-full max-w-[1440px] mx-auto px-8 md:px-12 lg:px-24">
           <div className="w-full pl-6 md:pl-8">
-            <div className="flex overflow-x-auto gap-6 md:gap-10 pb-8 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            
+            {/* 1. SCROLLABLE CONTENT */}
+            <div 
+              ref={scrollContainerRef}
+              onScroll={updateScrollbar}
+              className="flex overflow-x-auto gap-6 md:gap-10 pb-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
               {bitsAndPieces.map((item) => (
                 <div key={item.id} className="flex flex-col w-[280px] md:w-[380px] lg:w-[420px] flex-shrink-0 snap-start">
                   
@@ -364,6 +449,21 @@ export default function AboutPage() {
                 </div>
               ))}
             </div>
+
+            {/* 2. CUSTOM DOM SCROLLBAR */}
+            <div className="w-full mt-4 md:mt-6 pr-6 md:pr-10">
+              <div 
+                ref={scrollTrackRef}
+                className="w-full h-[8px] bg-[#F3F4F6] rounded-full relative"
+              >
+                <div 
+                  ref={scrollThumbRef}
+                  onPointerDown={handleDragStart}
+                  className="absolute top-0 left-0 h-full bg-[#141613]/25 hover:bg-[#141613]/40 rounded-full cursor-grab active:cursor-grabbing touch-none transition-colors"
+                />
+              </div>
+            </div>
+
           </div>
         </div>
       </section>

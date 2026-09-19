@@ -153,7 +153,10 @@ export default function ShoppinCaseStudy() {
   
   const [isExiting, setIsExiting] = useState(false);
 
+  // --- REFACTORED PROGRESS BAR LOGIC ---
   const [isIframeLoading, setIsIframeLoading] = useState(true);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const hasStartedLoading = useRef(false);
   
   const [openAccordionId, setOpenAccordionId] = useState<string | null>(null);
 
@@ -233,7 +236,6 @@ export default function ShoppinCaseStudy() {
       '-=0.6'
     );
 
-    // Added all 10 section classes back into the GSAP hook
     const sectionClasses = ['.context-anim', '.problem-anim', '.found-anim', '.direction-anim', '.features-anim', '.designing-anim', '.testing-anim', '.final-anim', '.reflection-anim'];
     
     sectionClasses.forEach(selector => {
@@ -339,9 +341,22 @@ export default function ShoppinCaseStudy() {
                     className="w-full h-full border-0 relative z-0"
                     allowFullScreen
                     onLoad={() => {
-                      setTimeout(() => {
-                        setIsIframeLoading(false);
-                      }, 10000);
+                      // Block multiple onLoad triggers
+                      if (hasStartedLoading.current) return;
+                      hasStartedLoading.current = true;
+                      
+                      // Smooth GSAP bar animation (avoids React re-renders)
+                      if (progressBarRef.current) {
+                        gsap.to(progressBarRef.current, {
+                          width: '100%',
+                          duration: 10,
+                          ease: 'none', // linear fill
+                          onComplete: () => setIsIframeLoading(false)
+                        });
+                      } else {
+                        // Fallback just in case ref isn't ready
+                        setTimeout(() => setIsIframeLoading(false), 10000);
+                      }
                     }} 
                   />
                 </div>
@@ -372,11 +387,18 @@ export default function ShoppinCaseStudy() {
                     </p>
                   </div>
 
+                  {/* Windows-style progress bar */}
                   {isIframeLoading && (
-                    <div className="flex items-center gap-3 pl-6">
-                      <div className="w-4 h-4 border-[2px] border-[#262626]/10 border-t-[#262626] rounded-full animate-spin" />
+                    <div className="flex flex-col gap-2 pl-6 pt-1">
+                      <div className="w-[200px] h-2 border border-[#262626]/20 bg-[#262626]/5 p-[1px] rounded-[2px] overflow-hidden">
+                        <div 
+                          ref={progressBarRef}
+                          className="h-full bg-[#262626] rounded-[1px]" 
+                          style={{ width: '0%' }}
+                        />
+                      </div>
                       <p className="font-dm-sans text-[13px] text-[#262626]/50 tracking-[-0.02em]">
-                        Loading prototype...
+                        The prototype is loading.
                       </p>
                     </div>
                   )}
