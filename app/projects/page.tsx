@@ -70,12 +70,12 @@ const PHOTOGRAPHY_IMAGES = [
   { id: 2, src: '/photography/2.jpg', span: 'col-span-6 md:col-span-3' },
   { id: 3, src: '/photography/3.jpg', span: 'col-span-6 md:col-span-3' },
   // ROW 2
-  { id: 4, src: '/photography/4.jpg', span: 'col-span-12 md:col-span-5' },
+  { id: 4, src: '/photography/40.jpg', span: 'col-span-12 md:col-span-5' },
   { id: 5, src: '/photography/5.jpg', span: 'col-span-6 md:col-span-3' },
-  { id: 6, src: '/photography/6.jpg', span: 'col-span-6 md:col-span-4' },
+  { id: 6, src: '/photography/60.jpg', span: 'col-span-6 md:col-span-4' },
   // ROW 3
-  { id: 7, src: '/photography/7.jpg', span: 'col-span-12 md:col-span-4' },
-  { id: 8, src: '/photography/8.jpg', span: 'col-span-6 md:col-span-4' },
+  { id: 7, src: '/photography/70.jpg', span: 'col-span-12 md:col-span-4' },
+  { id: 8, src: '/photography/80.jpg', span: 'col-span-6 md:col-span-4' },
   { id: 9, src: '/photography/90.jpg', span: 'col-span-6 md:col-span-4' },
 ];
 
