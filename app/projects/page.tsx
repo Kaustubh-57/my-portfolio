@@ -76,7 +76,7 @@ const PHOTOGRAPHY_IMAGES = [
   // ROW 3
   { id: 7, src: '/photography/7.jpg', span: 'col-span-12 md:col-span-4' },
   { id: 8, src: '/photography/8.jpg', span: 'col-span-6 md:col-span-4' },
-  { id: 9, src: '/photography/9.jpg', span: 'col-span-6 md:col-span-4' },
+  { id: 9, src: '/photography/90.jpg', span: 'col-span-6 md:col-span-4' },
 ];
 
 export default function ProjectsPage() {
