@@ -75,22 +75,13 @@ export default function About({ hideIntro = false }: AboutProps) {
 
       {/* --- TOP WHITE SECTION (Conditionally Rendered) --- */}
       {!hideIntro && (
-        <div ref={contentRef} className="relative z-10 w-full max-w-[1440px] mx-auto px-8 md:px-12 pt-16 md:pt-24 pb-12">
+        <div ref={contentRef} className="relative z-10 w-full max-w-[1440px] mx-auto px-8 md:px-12 pt-16 md:pt-8 pb-20">
           <h2 className="font-momo text-4xl md:text-5xl lg:text-[56px] text-[#141613] leading-[1.1] tracking-[-0.03em] max-w-5xl">
             Because good design isn’t just about visuals.{' '}
             <span className="text-[#141613]/50">
               It’s about listening, understanding, clarity, and helping teams move forward.
             </span>
           </h2>
-
-          <div className="mt-8 max-w-2xl" data-cursor="hover">
-            <p className="font-dm-sans text-sm md:text-base text-[#141613]/80 leading-relaxed tracking-[-0.02em]">
-              I’m a designer who enjoys figuring things out
-            </p>
-            <p className="font-dm-sans text-sm md:text-base text-[#141613]/80 leading-relaxed tracking-[-0.02em]">
-              whether that’s a product problem, a new tool, a technical constraint or an unfamiliar domain.
-            </p>
-          </div>
         </div>
       )}
 

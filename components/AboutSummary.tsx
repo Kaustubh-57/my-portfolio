@@ -11,7 +11,7 @@ const TABS = [
   {
     id: 'who',
     label: 'WHO I AM',
-    text: "I’m curious, if I don’t understand how something works, I’ll probably spend some time figuring it out."
+    text: "Designer who enjoys figuring things out whether that’s a product problem, a new tool, a technical constraint or an unfamiliar domain."
   },
   {
     id: 'care',
@@ -28,10 +28,9 @@ const TABS = [
     label: 'I AM UPTO?',
     text: "I AM UP TO? / SEP 26'",
     bullets: [
-      "finishing up my final year at NMIMS",
-      "working on my capstone & getting deeper into system design",
-      "improving on the portfolio",
-      "exploring how AI can actually fit into my design workflow"
+      "Finishing up my final year at NMIMS School of Design",
+      "Working on my graduation project on agricultural wholesale markets",
+      "Exploring how AI can actually fit into my design workflow"
     ]
   }
 ];
@@ -64,22 +63,12 @@ export default function AboutSummary() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
-        start: 'top 85%',
+        start: 'top 90%',
         toggleActions: 'play none none reverse'
       }
     });
 
-    tl.fromTo(
-      imageRef.current,
-      { opacity: 0, y: 30, rotation: -8 },
-      { opacity: 1, y: 0, rotation: -3, duration: 1, ease: 'back.out(1.5)' }
-    )
-    .fromTo(
-      contentRef.current,
-      { opacity: 0, x: 20 },
-      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' },
-      '-=0.7'
-    );
+  
   }, { scope: containerRef });
 
   const handleTabClick = (tabId: string) => {

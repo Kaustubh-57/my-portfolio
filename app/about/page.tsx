@@ -26,25 +26,20 @@ const bitsAndPieces = [
     type: 'split',
     image: '/about/hotwheels-left.jpg', 
     video: '/about/hotwheelsright.mp4', 
-    caption: 'Building tiny dioramas for my Hot Wheels is how I unwind...'
+    caption: 'I like building tiny dioramas for my Hot Wheels'
   },
   {
     id: 4,
     type: 'single',
     image: '/about/bit-4.jpg',
-    caption: 'I enjoy moving—running, riding or just being outdoors.'
+    caption: 'I have always enjoyed dressing up'
   },
-  {
-    id: 5,
-    type: 'single',
-    image: '/about/bit-5.jpg',
-    caption: 'A little obsessed with good stories and fast things.'
-  },
+ 
   {
     id: 6,
     type: 'single',
     image: '/about/bit-6.jpg',
-    caption: 'A little obsessed with good stories and fast things.'
+    caption: 'Some of my favourite moments in Mumbai happen somewhere between getting there and getting lost.'
   }
 ];
 

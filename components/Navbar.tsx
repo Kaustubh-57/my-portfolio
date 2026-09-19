@@ -271,7 +271,7 @@ export default function Navbar() {
 
       <div 
         ref={overlayRef}
-        className="fixed top-0 left-0 w-full h-[85vh] md:h-[80vh] bg-[#FFFFFF] z-[80] flex flex-col justify-center items-center pointer-events-auto shadow-2xl"
+        className="fixed top-0 left-0 w-full h-[85vh] md:h-[75vh] bg-[#FFFFFF] z-[80] flex flex-col justify-center items-center pointer-events-auto shadow-2xl"
         style={{ clipPath: 'inset(0% 0% 100% 0%)' }}
       >
         <nav className="flex flex-col items-center gap-2 md:gap-1">
@@ -282,7 +282,7 @@ export default function Navbar() {
               href={link.href}
               target={link.isExternal ? "_blank" : "_self"}
               rel={link.isExternal ? "noopener noreferrer" : undefined}
-              className="font-momo text-5xl md:text-[4.5vw] leading-[1.1] tracking-tight text-[#141613] font-medium hover:text-[#C1001F] transition-colors duration-400"
+              className="font-momo text-5xl md:text-[4vw] leading-[1.1] tracking-tight text-[#141613] font-medium hover:text-[#C1001F] transition-colors duration-400"
               data-cursor="hover"
               onClick={() => {
                 if (!link.isExternal) setIsOpen(false);
@@ -298,10 +298,10 @@ export default function Navbar() {
           className="absolute bottom-6 left-8 right-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-8 md:gap-0 font-dm-sans text-[#141613]"
         >
           <div className="flex flex-col z-10 relative">
-            <span className="text-sm opacity-80">...</span>
+            <span className="text-sm opacity-80">.</span>
             <a 
               href="mailto:kaustubh.workspace@gmail.com" 
-              className="text-xl md:text-1xl font-small underline mt-1 decoration-1 underline-offset-4 hover:text-[#C1001F] transition-colors"
+              className="text-l md:text-1xl font-small underline mt-1 decoration-1 underline-offset-4 hover:text-[#C1001F] transition-colors"
               data-cursor="hover"
             >
               kaustubh.workspace@gmail.com
