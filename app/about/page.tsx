@@ -25,8 +25,8 @@ const bitsAndPieces = [
     id: 3,
     type: 'split',
     image: '/about/hotwheels-left.jpg', 
-    video: '/about/hotwheels-right.mp4', 
-    caption: 'Building tiny dioramas for my Hot Wheels is how I unwind.'
+    video: '/about/hotwheelsright.mp4', 
+    caption: 'Building tiny dioramas for my Hot Wheels is how I unwind...'
   },
   {
     id: 4,
