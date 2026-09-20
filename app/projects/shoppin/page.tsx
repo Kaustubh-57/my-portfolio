@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import About from '@/components/About'; 
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -236,6 +237,15 @@ export default function ShoppinCaseStudy() {
       '-=0.6'
     );
 
+    // Fade in the back-to-top section when scrolled to the bottom
+    gsap.fromTo('.footer-anim',
+      { opacity: 0, y: 20 },
+      {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.footer-anim', start: 'top 95%', toggleActions: 'play none none none' }
+      }
+    );
+
     const sectionClasses = ['.context-anim', '.problem-anim', '.found-anim', '.direction-anim', '.features-anim', '.designing-anim', '.testing-anim', '.final-anim', '.reflection-anim'];
     
     sectionClasses.forEach(selector => {
@@ -287,6 +297,10 @@ export default function ShoppinCaseStudy() {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <main ref={containerRef} className="relative w-full min-h-screen bg-[#ffffff]">
       <Navbar />
@@ -311,9 +325,7 @@ export default function ShoppinCaseStudy() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.target)}
-                  className={`sidebar-anim flex items-center gap-4 text-left transition-all duration-300 opacity-0 ${
-                    isActive ? 'text-[#262626] font-medium' : 'text-[#262626]/40 hover:text-[#262626]/80'
-                  }`}
+                  className={`sidebar-anim flex items-center gap-4 text-left transition-all duration-300 opacity-0 ${isActive ? 'text-[#262626] font-medium' : 'text-[#262626]/40 hover:text-[#262626]/80'}`}
                   data-cursor="hover"
                 >
                   <span className="text-[11px] xl:text-xs font-momo w-4">{item.id}</span>
@@ -325,7 +337,7 @@ export default function ShoppinCaseStudy() {
         </aside>
 
         {/* --- RIGHT CONTENT --- */}
-        <div className="w-full lg:w-[81%] px-6 lg:px-12 xl:px-16 pt-[120px] pb-32 overflow-hidden">
+        <div className="w-full lg:w-[81%] px-6 lg:px-12 xl:px-16 pt-[120px] pb-24 overflow-hidden z-10">
           
           {/* =========================================
               SECTION 1: OVERVIEW 
@@ -341,20 +353,17 @@ export default function ShoppinCaseStudy() {
                     className="w-full h-full border-0 relative z-0"
                     allowFullScreen
                     onLoad={() => {
-                      // Block multiple onLoad triggers
                       if (hasStartedLoading.current) return;
                       hasStartedLoading.current = true;
                       
-                      // Smooth GSAP bar animation (avoids React re-renders)
                       if (progressBarRef.current) {
                         gsap.to(progressBarRef.current, {
                           width: '100%',
                           duration: 10,
-                          ease: 'none', // linear fill
+                          ease: 'none', 
                           onComplete: () => setIsIframeLoading(false)
                         });
                       } else {
-                        // Fallback just in case ref isn't ready
                         setTimeout(() => setIsIframeLoading(false), 10000);
                       }
                     }} 
@@ -365,9 +374,7 @@ export default function ShoppinCaseStudy() {
               <div className="overview-anim flex-1 flex flex-col items-start w-full opacity-0 order-1 lg:order-2 mt-6 lg:mt-[60px] xl:mt-[80px]">
                 
                 <div className="flex items-center w-full mb-6 lg:mb-8">
-                  <div 
-                    className="inline-flex items-center px-6 md:px-7 py-1.5 md:py-2 rounded-full border-[1.5px] border-[#262626]/30 font-dm-sans text-[11px] md:text-xs tracking-wider uppercase text-[#262626]/80"
-                  >
+                  <div className="inline-flex items-center px-6 md:px-7 py-1.5 md:py-2 rounded-full border-[1.5px] border-[#262626]/30 font-dm-sans text-[11px] md:text-xs tracking-wider uppercase text-[#262626]/80">
                     CONNECTED PRODUCT • SYSTEM DESIGN • UX/UI
                   </div>
                 </div>
@@ -387,7 +394,6 @@ export default function ShoppinCaseStudy() {
                     </p>
                   </div>
 
-                  {/* Windows-style progress bar */}
                   {isIframeLoading && (
                     <div className="flex flex-col gap-2 pl-6 pt-1">
                       <div className="w-[200px] h-2 border border-[#262626]/20 bg-[#262626]/5 p-[1px] rounded-[2px] overflow-hidden">
@@ -902,7 +908,7 @@ export default function ShoppinCaseStudy() {
           {/* =========================================
               SECTION 10: REFLECTION
           ========================================= */}
-          <section id="reflection" className="w-full pb-20">
+          <section id="reflection" className="w-full">
             <div className="reflection-anim opacity-0 flex flex-col max-w-[800px]">
               <h2 className="font-momo text-[26px] lg:text-[32px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] mb-6 lg:mb-8">
                 Reflection
@@ -922,8 +928,38 @@ export default function ShoppinCaseStudy() {
             </div>
           </section>
 
+          {/* =========================================
+              BACK TO TOP
+          ========================================= */}
+          <div className="footer-anim opacity-0 w-full flex flex-col items-center justify-center pt-12 pb-24 mt-16 border-t border-[#262626]/10">
+            <h3 className="font-momo text-[20px] lg:text-[24px] font-bold text-[#262626] tracking-[-0.02em] mb-2 text-center">
+              Interact with the Shoppin prototype
+            </h3>
+            <p className="font-dm-sans text-[14px] lg:text-[15px] text-[#262626]/60 tracking-[-0.02em] mb-8 text-center">
+              Go back to the top to explore the final experience yourself.
+            </p>
+
+            <button
+              onClick={scrollToTop}
+              className="group flex flex-col items-center gap-3"
+            >
+              <div className="w-14 h-14 rounded-full bg-[#262626] flex items-center justify-center text-[#FFFAF1] transition-transform duration-300 group-hover:-translate-y-2 shadow-lg">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 19V5M5 12l7-7 7 7"/>
+                </svg>
+              </div>
+              <span className="font-dm-sans text-[14px] font-bold tracking-[-0.02em] text-[#262626]/50 group-hover:text-[#262626] transition-colors">
+                Back to top
+              </span>
+            </button>
+          </div>
+
         </div>
       </div>
+
+      {/* --- Contact Footer Module (From About Page) --- */}
+      <About hideIntro={true} />
+
     </main>
   );
 }

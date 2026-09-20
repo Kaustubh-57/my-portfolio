@@ -6,58 +6,46 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import About from '@/components/About'; 
 
 gsap.registerPlugin(ScrollTrigger);
-
-const SIDEBAR_ITEMS = [
-  { id: '01', title: 'Overview', target: 'overview' },
-  { id: '02', title: 'The Context', target: 'context' },
-  { id: '03', title: 'Digging Deeper', target: 'deeper' },
-  { id: '04', title: 'The Direction', target: 'direction' },
-  { id: '05', title: 'Designing Bubbleshare', target: 'designing' },
-  { id: '06', title: 'Key Features', target: 'features' },
-  { id: '07', title: 'Prototyping & Testing', target: 'prototyping' },
-  { id: '08', title: 'Iterations', target: 'iterations' },
-  { id: '09', title: 'Final Experience', target: 'final' },
-  { id: '10', title: 'Reflection', target: 'reflection' }
-];
 
 export default function BubbleshareCaseStudy() {
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   
-  const [activeSection, setActiveSection] = useState('01');
   const [isExiting, setIsExiting] = useState(false);
 
   useGSAP(() => {
     const tl = gsap.timeline({ delay: 0.2 });
 
-    tl.fromTo('.sidebar-anim',
-      { opacity: 0, x: -15 },
-      { opacity: 1, x: 0, duration: 0.8, stagger: 0.05, ease: 'power3.out' }
-    );
-
     tl.fromTo('.overview-anim',
       { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: 'power3.out' },
-      '-=0.6'
+      { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: 'power3.out' }
     );
 
-    // Added a check so GSAP doesn't break if the dummy sections don't exist
-    SIDEBAR_ITEMS.forEach((item) => {
-      const element = document.getElementById(item.target);
-      if (element) {
-        ScrollTrigger.create({
-          trigger: element,
-          start: 'top center',
-          end: 'bottom center',
-          onToggle: (self) => {
-            if (self.isActive) {
-              setActiveSection(item.id);
-            }
-          }
-        });
+    // Fade in the back-to-top section when scrolled to the bottom
+    gsap.fromTo('.footer-anim',
+      { opacity: 0, y: 20 },
+      {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.footer-anim', start: 'top 95%', toggleActions: 'play none none none' }
       }
+    );
+
+    // Fade in section scroll triggers (added .concept-anim and .video-anim)
+    const sectionClasses = ['.concept-anim', '.video-anim'];
+    
+    sectionClasses.forEach(selector => {
+      gsap.utils.toArray(selector).forEach((el: any) => {
+        gsap.fromTo(el,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' }
+          }
+        );
+      });
     });
 
   }, { scope: containerRef });
@@ -76,53 +64,18 @@ export default function BubbleshareCaseStudy() {
     });
   };
 
-  const scrollToSection = (targetId: string) => {
-    const element = document.getElementById(targetId);
-    if (element) {
-      const y = element.getBoundingClientRect().top + window.scrollY - 120;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <main ref={containerRef} className="relative w-full min-h-screen bg-[#ffffff]">
       <Navbar />
       
-      <div className="case-study-content w-full flex">
+      <div className="case-study-content w-full flex flex-col">
         
-        {/* --- LEFT SIDEBAR (Dark Blue Background + Added Shadow) --- */}
-        <aside className="hidden lg:flex flex-col w-[19%] h-screen sticky top-0 bg-[#4438B5] pl-6 xl:pl-10 pt-[120px] pb-12 z-20 border-r border-white/10 shadow-[8px_0_30px_rgba(0,0,0,0.12)]">
-          <button 
-            onClick={handleGoBack}
-            className="sidebar-anim flex items-center justify-center gap-2 w-fit px-5 py-2 rounded-full border border-white/30 text-white font-dm-sans text-[14px] tracking-[-0.05em] hover:bg-white hover:text-[#4438B5] transition-colors duration-300 mb-14 opacity-0"
-            data-cursor="hover"
-          >
-            <span className="text-lg leading-none -mt-[2px]">←</span> Go back
-          </button>
-
-          <nav className="flex flex-col gap-4 font-dm-sans text-[14px] xl:text-[15px] tracking-[-0.05em]">
-            {SIDEBAR_ITEMS.map((item) => {
-              const isActive = activeSection === item.id;
-              
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.target)}
-                  className={`sidebar-anim flex items-center gap-4 text-left transition-all duration-300 opacity-0 ${
-                    isActive ? 'text-[#fffc34] font-medium' : 'text-white/40 hover:text-white/80'
-                  }`}
-                  data-cursor="hover"
-                >
-                  <span className="text-[11px] xl:text-xs font-momo w-4">{item.id}</span>
-                  <span>{item.title}</span>
-                </button>
-              );
-            })}
-          </nav>
-        </aside>
-
-        {/* --- RIGHT CONTENT --- */}
-        <div className="w-full lg:w-[81%] px-6 lg:px-12 xl:px-16 pt-[120px] pb-32 overflow-hidden z-10">
+        {/* --- MAIN CONTENT (Full Width - NO SIDEBAR) --- */}
+        <div className="w-full px-6 lg:px-12 xl:px-16 pt-[120px] pb-24 overflow-hidden z-10">
           
           {/* =========================================
               SECTION 1: OVERVIEW (Dark Blue Header)
@@ -131,15 +84,23 @@ export default function BubbleshareCaseStudy() {
             <section id="overview" className="w-full max-w-[1400px] mx-auto flex flex-col flex-1">
               
               {/* Text Area */}
-              <div className="px-6 lg:px-12 xl:px-16 w-full flex flex-col">
-                <div className="overview-anim flex justify-between items-center w-full pr-0 mb-10 opacity-0 mt-6 lg:mt-0">
+              <div className="px-6 lg:px-12 xl:px-16 w-full flex flex-col pt-8 lg:pt-10">
+                
+                {/* Top Actions: Go Back Button */}
+                <button 
+                  onClick={handleGoBack}
+                  className="overview-anim flex items-center justify-center gap-2 w-fit px-5 py-2 rounded-full border border-white/30 text-white font-dm-sans text-[14px] tracking-[-0.05em] hover:bg-white hover:text-[#4438B5] transition-colors duration-300 mb-10 opacity-0"
+                  data-cursor="hover"
+                >
+                  <span className="text-lg leading-none -mt-[2px]">←</span> Go back
+                </button>
+
+                {/* Tags */}
+                <div className="overview-anim flex items-center w-full mb-8 opacity-0">
                   <div 
                     className="inline-flex items-center px-6 md:px-7 py-1.5 md:py-2 rounded-full border-[1.5px] border-[#fffc34]/30 font-dm-sans text-xs tracking-wider uppercase text-[#fffc34]"
                   >
                     INTERACTION Design • UX/UI Design
-                  </div>
-                  <div className="font-momo text-2xl md:text-3xl font-light text-white/60">
-                    (01)
                   </div>
                 </div>
 
@@ -183,7 +144,6 @@ export default function BubbleshareCaseStudy() {
                     <li>Aaron Carvalho</li>
                     <li>Sai Ghate</li>
                     <li>Rohit Chhatre</li>
-                   
                   </ul>
                 </div>
               </div>
@@ -193,16 +153,16 @@ export default function BubbleshareCaseStudy() {
                   <h2 className="font-momo text-[24px] lg:text-[28px] font-bold text-[#262626] tracking-[-0.02em] mb-3">Context</h2>
                   <div className="flex flex-col gap-4 font-dm-sans text-[15px] lg:text-[16px] text-[#262626]/80 tracking-[-0.05em] leading-[1.4]">
                     <p>Noise is everywhere, but we rarely know when it becomes harmful.</p>
-<p>Our research found a gap between awareness and action: while 77% of participants recognised noise as a problem, only 18% knew what levels were considered safe or harmful over the long term.</p>
-<p>Decicon was developed as a connected system that makes noise visible, understandable and actionable through a physical Noise Shield, mobile application and dashboard.</p>
+                    <p>Our research found a gap between awareness and action: while 77% of participants recognised noise as a problem, only 18% knew what levels were considered safe or harmful over the long term.</p>
+                    <p>Decicon was developed as a connected system that makes noise visible, understandable and actionable through a physical Noise Shield, mobile application and dashboard.</p>
                   </div>
                 </div>
                 <div className="overview-anim opacity-0">
                   <h2 className="font-momo text-[24px] lg:text-[28px] font-bold text-[#262626] tracking-[-0.02em] mb-3">My role</h2>
                   <ul className="list-disc pl-5 flex flex-col gap-1.5 font-dm-sans text-[15px] lg:text-[16px] text-[#262626]/80 tracking-[-0.05em] leading-[1.4]">
-                    <li>Led the concept development and physical product direction, exploring how the window could become an intervention point for reducing incoming noise.
- Worked on the physical product, mechanism development and prototyping, taking the Noise Shield from early product exploration toward a high-fidelity prototype.
- Contributed to the UI and connected experience, helping translate the physical product into a cohesive interaction between the Noise Shield, mobile app and dashboard.</li>
+                    <li>Led the concept development and physical product direction, exploring how the window could become an intervention point for reducing incoming noise.</li>
+                    <li>Worked on the physical product, mechanism development and prototyping, taking the Noise Shield from early product exploration toward a high-fidelity prototype.</li>
+                    <li>Contributed to the UI and connected experience, helping translate the physical product into a cohesive interaction between the Noise Shield, mobile app and dashboard.</li>
                   </ul>
                 </div>
               </div>
@@ -210,10 +170,78 @@ export default function BubbleshareCaseStudy() {
             </div>
           </div>
 
+          <hr className="concept-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
+
+          {/* =========================================
+              SECTION 2: CONCEPT (Text + 1 Image)
+          ========================================= */}
+          <section id="concept" className="w-full">
+            <div className="flex flex-col md:flex-row justify-between gap-8 lg:gap-12 items-stretch">
+              
+              {/* LEFT SIDE: Text Analysis block */}
+              <div className="flex flex-col justify-between w-full md:w-[48%] lg:w-[55%] py-2">
+                <div className="flex flex-col gap-6">
+                  <h2 className="concept-anim font-momo text-[22px] lg:text-[38px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] opacity-0 max-w-[580px]">
+                    File sharing is not necessary<br/> to feel technical
+                  </h2>
+                  <p className="concept-anim font-dm-sans text-[13px] lg:text-[18px] text-[#262626]/80 tracking-[-0.05em] leading-[1.6] opacity-0 max-w-[460px]">
+                   .
+                  </p>
+                  <p className="concept-anim font-dm-sans text-[13px] lg:text-[18px] text-[#262626]/80 tracking-[-0.05em] leading-[1.6] opacity-0 max-w-[460px]">
+                    Bubbleshare started with a simple question:
+                  </p>
+                </div>
+                <h2 className="concept-anim font-momo text-[22px] lg:text-[32px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.25] mt-16 md:mt-auto opacity-0 max-w-[600px]">
+                  What if sharing a digital file was as easy as handing over a physical object?
+                </h2>
+              </div>
+
+              {/* RIGHT SIDE: 1 Static Image */}
+              <div className="flex flex-col items-end justify-start w-full md:w-[48%] lg:w-[50%] concept-anim opacity-0">
+                <div className="relative w-full h-[280px] sm:h-[350px] lg:h-[400px] rounded-[8px] overflow-hidden  group cursor-pointer">
+                  <img 
+                    src="/projects/bubbleshare/concept.png" 
+                    alt="Bubbleshare interaction concept" 
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                </div>
+              </div>
+
+            </div>
+          </section>
+
+          <hr className="video-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
+
+          {/* =========================================
+              SECTION 3: VIMEO VIDEO
+          ========================================= */}
+          <section id="narrative-video" className="w-full">
+            <div className="video-anim opacity-0 flex flex-col w-full max-w-[1400px] mx-auto">
+              <h2 className="font-momo text-[22px] lg:text-[26px] font-bold text-[#262626] tracking-[-0.02em] leading-[1.1] mb-6 md:mb-8 text-left">
+                How BubbleShare file sending works
+              </h2>
+              
+              {/* Vimeo Embed Wrapper with specific aspect padding */}
+              <div className="relative w-full bg-gray-100 overflow-hidden rounded-[8px]" style={{ padding: '67.46% 0 0 0' }}>
+                <iframe 
+                  src="https://player.vimeo.com/video/1228423180?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" 
+                  frameBorder="0" 
+                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
+                  referrerPolicy="strict-origin-when-cross-origin" 
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                  title="recording 1"
+                ></iframe>
+              </div>
+            </div>
+          </section>
+
+          <hr className="overview-anim w-full border-t border-[#262626]/10 mt-16 mb-16 opacity-0" />
+
           {/* =========================================
               FULL BLEED FIGMA EXPORT (Seamless)
           ========================================= */}
-          <div className="overview-anim -mx-6 lg:-mx-12 xl:-mx-16 mt-16 lg:mt-24 opacity-0 flex flex-col">
+          <div className="overview-anim -mx-6 lg:-mx-12 xl:-mx-16 opacity-0 flex flex-col">
             <img 
               src="/projects/bubbleshare/presentation-part-1.png" 
               alt="Bubbleshare Case Study Overview" 
@@ -222,8 +250,34 @@ export default function BubbleshareCaseStudy() {
             />
           </div>
 
+          {/* =========================================
+              BACK TO TOP
+          ========================================= */}
+          <div className="footer-anim opacity-0 w-full flex flex-col items-center justify-center pt-12 pb-24 mt-8 border-t border-[#262626]/10">
+            
+            {/* Back to Top Button (Themed for Bubbleshare) */}
+            <button
+              onClick={scrollToTop}
+              className="group flex flex-col items-center gap-3"
+            >
+              <div className="w-14 h-14 rounded-full bg-[#4438B5] flex items-center justify-center text-[#ffffff] transition-transform duration-300 group-hover:-translate-y-2 shadow-lg">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 19V5M5 12l7-7 7 7"/>
+                </svg>
+              </div>
+              <span className="font-dm-sans text-[14px] font-bold tracking-[-0.02em] text-[#262626]/50 group-hover:text-[#262626] transition-colors">
+                Back to top
+              </span>
+            </button>
+
+          </div>
+
         </div>
       </div>
+
+      {/* --- Contact Footer Module (From About Page) --- */}
+      <About hideIntro={true} />
+
     </main>
   );
 }

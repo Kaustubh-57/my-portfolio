@@ -16,7 +16,7 @@ const allProjects = [
     title: 'Shoppin: Making street shopping easier to explore.',
     description: 'A digital experience designed to help people discover, locate and save street-market stalls without taking away the spontaneity of shopping offline.',
     role: 'UX Research · Product Design · UI/UX · Usability Testing',
-    image: '/projects/shoppin/mockup.png', 
+    image: '/projects/shoppin/mockup.jpg', 
     bgColor: '#4a1313', 
     accentColor: '#ffffff', 
     textColor: '#f3f3f3' 

@@ -18,7 +18,7 @@ const PROJECTS = [
   {
     id: '01',
     slug: 'shoppin',
-    title: 'SHoppin',
+    title: 'Shoppin',
     subtitle: 'Making street shopping easier to explore',
     tags: ['DIGITAL PRODUCT', 'UI/UX DESIGN'],
     category: 'UI/UX',

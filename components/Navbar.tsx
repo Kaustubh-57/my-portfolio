@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,12 +32,12 @@ export default function Navbar() {
   
   const overlayLinks = [
     { name: 'Home', href: '/' },
-    { name: 'Projects', href: '/projects' },
+    { name: 'Works', href: '/projects' },
     { name: 'About', href: '/about' },
     { name: 'Resume', href: '/resume.pdf', isExternal: true }
   ];
 
-  // Global Audio Initialization & Sync
+  // Global Audio Initialization, Sync & Autoplay Logic
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (!(window as any).__bgMusic) {
@@ -44,6 +45,37 @@ export default function Navbar() {
         audio.loop = true;
         audio.volume = 0.5;
         (window as any).__bgMusic = audio;
+
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            
+            // UPDATED: Async function to handle browser rejections on strict events like 'wheel'
+            const startAudioOnInteract = async () => {
+              const globalAudio = (window as any).__bgMusic;
+              if (globalAudio && globalAudio.paused) {
+                try {
+                  await globalAudio.play();
+                  // ONLY remove listeners if the browser successfully permitted playback
+                  window.removeEventListener('click', startAudioOnInteract);
+                  window.removeEventListener('keydown', startAudioOnInteract);
+                  window.removeEventListener('wheel', startAudioOnInteract);
+                  window.removeEventListener('touchstart', startAudioOnInteract);
+                  window.removeEventListener('pointerdown', startAudioOnInteract);
+                } catch (error) {
+                  // If browser blocks the wheel event, it silently fails here and keeps listening for a click
+                }
+              }
+            };
+
+            // Bind to physical 'wheel' instead of delayed 'scroll'
+            window.addEventListener('click', startAudioOnInteract);
+            window.addEventListener('keydown', startAudioOnInteract);
+            window.addEventListener('wheel', startAudioOnInteract, { passive: true });
+            window.addEventListener('touchstart', startAudioOnInteract, { passive: true });
+            window.addEventListener('pointerdown', startAudioOnInteract, { passive: true });
+          });
+        }
       }
 
       const globalAudio = (window as any).__bgMusic;
@@ -81,7 +113,6 @@ export default function Navbar() {
   useGSAP(() => {
     const initTl = gsap.timeline({ paused: true });
     
-    // Navbar drop down
     initTl.fromTo(
       headerRef.current,
       { yPercent: -100 },
@@ -92,14 +123,12 @@ export default function Navbar() {
       }
     );
     
-    // Navbar links fade in
     initTl.to(
       [logoRef.current, ...gsap.utils.toArray('.nav-item')],
       { opacity: 1, duration: 0.6, stagger: 0.05, ease: 'power3.out' },
       '<0.15' 
     );
 
-    // Sound Button Pop-in Animation
     initTl.fromTo(
       soundBtnRef.current,
       { scale: 0, opacity: 0 },
@@ -122,13 +151,11 @@ export default function Navbar() {
       const hasSeenPreloader = typeof window !== 'undefined' && sessionStorage.getItem('hasSeenPreloader') === 'true';
       
       if (hasSeenPreloader) {
-        // --- UPDATED: Synced to exactly 1.2s to match the Hero text animation ---
         setTimeout(() => initTl.play(), 800);
       } else {
         const checkReady = setInterval(() => {
           if (sessionStorage.getItem('hasSeenPreloader') === 'true') {
             clearInterval(checkReady);
-            // --- UPDATED: Synced to exactly 1.2s to match the Hero text animation ---
             setTimeout(() => initTl.play(), 1200);
           }
         }, 100);
@@ -172,7 +199,6 @@ export default function Navbar() {
         className="fixed top-0 left-0 w-full h-[2px] bg-[#C1001F] z-[100] origin-left scale-x-0"
       />
 
-      {/* --- GLOBAL FLOATING MUSIC BUTTON --- */}
       <button 
         ref={soundBtnRef}
         onClick={toggleMusic}
@@ -191,9 +217,9 @@ export default function Navbar() {
         ref={headerRef}
         className="fixed top-0 left-0 w-full z-[90] transition-colors transition-shadow duration-300 ease-in-out flex justify-between items-center px-8 md:px-12 py-2.5 md:py-3.5 bg-white shadow-sm"
       >
-        <a 
+        <Link 
           href="/"
-          ref={logoRef}
+          ref={logoRef as any}
           className="flex items-center gap-3 md:gap-4 cursor-pointer opacity-0 relative z-[100]"
           data-cursor="hover"
           onClick={() => setIsOpen(false)}
@@ -207,7 +233,7 @@ export default function Navbar() {
               Product Design
             </span>
           </span>
-        </a>
+        </Link>
 
         <div className="flex items-center gap-6 md:gap-10">
           <nav 
@@ -219,7 +245,7 @@ export default function Navbar() {
               const isActive = pathname.startsWith(link.href);
               
               return (
-                <a 
+                <Link 
                   key={i} 
                   href={link.href}
                   className="relative cursor-pointer group nav-item opacity-0 flex flex-col items-center"
@@ -234,13 +260,12 @@ export default function Navbar() {
                   <span className={`absolute -bottom-1.5 left-0 h-[1.5px] bg-[#C1001F] transition-all duration-300 ease-out ${
                     isActive ? 'w-full' : 'w-0 group-hover:w-full'
                   }`}></span>
-                </a>
+                </Link>
               );
             })}
           </nav>
 
           <div className="flex items-center gap-3 z-[100]">
-            {/* Hamburger */}
             <button 
               onClick={() => setIsOpen(!isOpen)}
               className="relative w-8 h-8 flex flex-col items-center justify-center gap-[5px] cursor-pointer nav-item opacity-0 outline-none"
@@ -276,20 +301,30 @@ export default function Navbar() {
       >
         <nav className="flex flex-col items-center gap-2 md:gap-1">
           {overlayLinks.map((link, i) => (
-            <a
-              key={link.name}
-              ref={(el) => { menuLinksRef.current[i] = el; }}
-              href={link.href}
-              target={link.isExternal ? "_blank" : "_self"}
-              rel={link.isExternal ? "noopener noreferrer" : undefined}
-              className="font-momo text-5xl md:text-[4vw] leading-[1.1] tracking-tight text-[#141613] font-medium hover:text-[#C1001F] transition-colors duration-400"
-              data-cursor="hover"
-              onClick={() => {
-                if (!link.isExternal) setIsOpen(false);
-              }}
-            >
-              {link.name}
-            </a>
+            link.isExternal ? (
+              <a
+                key={link.name}
+                ref={(el) => { menuLinksRef.current[i] = el; }}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-momo text-5xl md:text-[4vw] leading-[1.1] tracking-tight text-[#141613] font-medium hover:text-[#C1001F] transition-colors duration-400"
+                data-cursor="hover"
+              >
+                {link.name}
+              </a>
+            ) : (
+              <Link
+                key={link.name}
+                href={link.href}
+                ref={(el) => { menuLinksRef.current[i] = el as any; }}
+                className="font-momo text-5xl md:text-[4vw] leading-[1.1] tracking-tight text-[#141613] font-medium hover:text-[#C1001F] transition-colors duration-400"
+                data-cursor="hover"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            )
           ))}
         </nav>
 

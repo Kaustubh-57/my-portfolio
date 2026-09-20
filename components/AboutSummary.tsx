@@ -177,7 +177,7 @@ export default function AboutSummary() {
                   />
                   
                   {/* Tool name directly below the hovered icon */}
-                  <div className="absolute top-[calc(100%+12px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <span className="font-dm-sans text-[10px] md:text-[11px] font-bold tracking-[0.15em] uppercase text-[#141613]/60 whitespace-nowrap">
                       {tool.name}
                     </span>
