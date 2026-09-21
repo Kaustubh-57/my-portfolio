@@ -35,17 +35,19 @@ export default function CustomCursor() {
     const cursor = cursorRef.current;
     if (!cursor) return;
 
+    // Use absolute positioning coordinates, centered on the mouse pointer
     const moveX = gsap.quickTo(cursor, 'x', { duration: 0.15, ease: 'power3.out' });
     const moveY = gsap.quickTo(cursor, 'y', { duration: 0.15, ease: 'power3.out' });
 
     const onMouseMove = (e: MouseEvent) => {
-      if (cursor.classList.contains('is-pill')) {
-        moveX(e.clientX - 75); 
-        moveY(e.clientY - 20);
-      } else {
-        moveX(e.clientX - 6);
-        moveY(e.clientY - 6);
-      }
+      // Calculate dynamic offset based on the current bounding box of the cursor
+      // This guarantees absolute centering regardless of scale or pill state
+      const rect = cursor.getBoundingClientRect();
+      const offsetX = rect.width / 2;
+      const offsetY = rect.height / 2;
+      
+      moveX(e.clientX - offsetX);
+      moveY(e.clientY - offsetY);
     };
 
     const onMouseOver = (e: MouseEvent) => {
@@ -81,7 +83,7 @@ export default function CustomCursor() {
             scale: 3,
             backgroundColor: 'transparent',
             borderColor: '#C1001F',
-            borderWidth: '1px',
+            borderWidth: '1px', // Keep border thin to avoid clipping
             borderRadius: '9999px',
             boxShadow: 'none',
             duration: 0.25,
@@ -94,9 +96,7 @@ export default function CustomCursor() {
     const onMouseOut = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest('[data-cursor]');
       
-      // --- THE FIX IS HERE ---
-      // If we are moving to another element that is STILL INSIDE the same target container, 
-      // ignore the event and don't shrink the cursor.
+      // If moving to another element INSIDE the same target container, ignore the event
       if (target && e.relatedTarget instanceof Node && target.contains(e.relatedTarget)) {
         return; 
       }
@@ -135,7 +135,8 @@ export default function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className="fixed top-0 left-0 w-3 h-3 bg-[#141613] rounded-full pointer-events-none z-[100] flex items-center justify-center transform origin-center transition-colors"
+      // Added absolute positioning and removed origin-center to rely on math offset
+      className="fixed top-0 left-0 w-3 h-3 bg-[#141613] rounded-full pointer-events-none z-[9999] flex items-center justify-center transition-colors"
       style={{ willChange: 'transform' }}
     >
       {pillText && (

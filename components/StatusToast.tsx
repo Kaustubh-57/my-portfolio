@@ -80,8 +80,8 @@ export default function StatusToast() {
         <div className="flex items-center gap-2.5">
           {/* Pulsing Status Dot */}
           <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C7E86B] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#C7E86B]"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C1001F] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#C1001F]"></span>
           </span>
           <span className="text-[11px] font-semibold tracking-[0.1em] uppercase text-white/70">
             OPEN TO OPPORTUNITIES
@@ -111,7 +111,7 @@ export default function StatusToast() {
         href="/resume.pdf" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="text-[13px] text-[#C7E86B] hover:text-white transition-colors underline decoration-white/30 underline-offset-4 mt-2 w-fit font-medium"
+        className="text-[13px] text-[#FFFFFF] hover:text-white transition-colors underline decoration-white/30 underline-offset-4 mt-2 w-fit font-medium"
       >
         View my PDF Resume 
       </a>

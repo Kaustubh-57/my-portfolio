@@ -131,7 +131,7 @@ export default function BubbleshareCaseStudy() {
               <div className="flex flex-col gap-8 mt-1">
                 <div className="overview-anim opacity-0">
                   <h3 className="font-dm-sans text-[15px] lg:text-[16px] text-[#262626] tracking-[-0.05em] mb-1.5 font-bold">Timeframe</h3>
-                  <p className="font-dm-sans text-[14px] lg:text-[15px] text-[#262626]/60 tracking-[-0.05em]">Aug 2025 – Oct 2025</p>
+                  <p className="font-dm-sans text-[14px] lg:text-[15px] text-[#262626]/60 tracking-[-0.05em]">May 2025 (4 weeks)</p>
                 </div>
                 <div className="overview-anim opacity-0">
                   <h3 className="font-dm-sans text-[15px] lg:text-[16px] text-[#262626] tracking-[-0.05em] mb-1.5 font-bold">Done at</h3>
@@ -152,17 +152,17 @@ export default function BubbleshareCaseStudy() {
                 <div className="overview-anim opacity-0">
                   <h2 className="font-momo text-[24px] lg:text-[28px] font-bold text-[#262626] tracking-[-0.02em] mb-3">Context</h2>
                   <div className="flex flex-col gap-4 font-dm-sans text-[15px] lg:text-[16px] text-[#262626]/80 tracking-[-0.05em] leading-[1.4]">
-                    <p>Noise is everywhere, but we rarely know when it becomes harmful.</p>
-                    <p>Our research found a gap between awareness and action: while 77% of participants recognised noise as a problem, only 18% knew what levels were considered safe or harmful over the long term.</p>
-                    <p>Decicon was developed as a connected system that makes noise visible, understandable and actionable through a physical Noise Shield, mobile application and dashboard.</p>
+                    <p>File transfer works, but the experience often feels invisible and uncertain.</p>
+                    <p>Moving files between devices and operating systems can involve friction, while conventional progress bars give users little sense of what is actually happening. </p>
+                    <p>BubbleShare explores a more human way to experience file transfer by giving digital files a visible, tangible presence through a physics-based bubble metaphor.</p>
                   </div>
                 </div>
                 <div className="overview-anim opacity-0">
                   <h2 className="font-momo text-[24px] lg:text-[28px] font-bold text-[#262626] tracking-[-0.02em] mb-3">My role</h2>
                   <ul className="list-disc pl-5 flex flex-col gap-1.5 font-dm-sans text-[15px] lg:text-[16px] text-[#262626]/80 tracking-[-0.05em] leading-[1.4]">
-                    <li>Led the concept development and physical product direction, exploring how the window could become an intervention point for reducing incoming noise.</li>
-                    <li>Worked on the physical product, mechanism development and prototyping, taking the Noise Shield from early product exploration toward a high-fidelity prototype.</li>
-                    <li>Contributed to the UI and connected experience, helping translate the physical product into a cohesive interaction between the Noise Shield, mobile app and dashboard.</li>
+                    <li>I contributed to the initial ideation and core product concept, helping define how BubbleShare could rethink the file transfer experience. I also worked on the UI design and final visual execution of the product.</li>
+                    <li>Concept Development · Interaction Direction · UI Design · Visual Execution</li>
+                    
                   </ul>
                 </div>
               </div>
@@ -222,16 +222,18 @@ export default function BubbleshareCaseStudy() {
                 How BubbleShare file sending works
               </h2>
               
-              {/* Vimeo Embed Wrapper with specific aspect padding */}
-              <div className="relative w-full bg-gray-100 overflow-hidden rounded-[8px]" style={{ padding: '67.46% 0 0 0' }}>
-                <iframe 
-                  src="https://player.vimeo.com/video/1228423180?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" 
-                  frameBorder="0" 
-                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
-                  referrerPolicy="strict-origin-when-cross-origin" 
-                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                  title="recording 1"
-                ></iframe>
+              <div className="w-[90%] mx-auto">
+                {/* Vimeo Embed Wrapper with updated 16:9 aspect padding */}
+                <div className="relative w-full bg-gray-100 overflow-hidden rounded-[8px]" style={{ padding: '56.25% 0 0 0' }}>
+                  <iframe 
+                    src="https://player.vimeo.com/video/1228585427?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" 
+                    frameBorder="0" 
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
+                    referrerPolicy="strict-origin-when-cross-origin" 
+                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                    title="bubbleshare"
+                  ></iframe>
+                </div>
               </div>
             </div>
           </section>
@@ -243,7 +245,7 @@ export default function BubbleshareCaseStudy() {
           ========================================= */}
           <div className="overview-anim -mx-6 lg:-mx-12 xl:-mx-16 opacity-0 flex flex-col">
             <img 
-              src="/projects/bubbleshare/presentation-part-1.png" 
+              src="/projects/bubbleshare/presentation-part-10.png" 
               alt="Bubbleshare Case Study Overview" 
               className="w-full h-auto block"
               onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}

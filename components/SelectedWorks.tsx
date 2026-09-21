@@ -54,9 +54,9 @@ const allProjects = [
     description: 'A comprehensive redesign of the digital experience to streamline appointment bookings, health checkups, and user journeys.',
     role: 'UX Research | UI/UX | Usability Testing',
     image: '/projects/lilavati/mockup.png', 
-    bgColor: '#F4F7FA', 
-    accentColor: '#00509E', 
-    textColor: '#151515'
+    bgColor: '#108CB8', 
+    accentColor: '#ffffff', 
+    textColor: '#ffffff'
   },
   {
     id: '05',
