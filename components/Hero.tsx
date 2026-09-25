@@ -339,7 +339,7 @@ Previously at Realty Sharks, Mumbai           </p>
           {/* Row 2, Col 2: Previous */}
           <div ref={addToRefs}>
            <p className="font-dm-sans text-[#141613]/60 text-[11px] md:text-[16px] tracking-[-0.01em] uppercase font-medium">
-research · product thinking · UX · visual design            </p>
+product thinking · UI/UX · visual design · research            </p>
           </div>
 
         </div>

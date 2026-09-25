@@ -59,11 +59,19 @@ const PROJECTS = [
     tags: ['INDUSTRIAL DESIGN', 'UX DESIGN'],
     category: 'Industrial Design',
     image: '/projects/chromebuds/mockup.png',
+  },
+  {
+    id: '06',
+    slug: 'vektor',
+    title: 'VEKTOR',
+    subtitle: 'A complete visual overhaul for the NMIMS School of Design Student Council.',
+    tags: ['BRANDING', 'VISUAL IDENTITY'],
+    category: 'Visual Design',
+    image: '/Capabilities/vektor.jpg', // Using the same image path you used in the Capabilities component
   }
 ];
 
 // PHOTOGRAPHY GRID DATA
-// The 'span' perfectly recreates the exact proportions of your mockup using a 12-column grid.
 const PHOTOGRAPHY_IMAGES = [
   // ROW 1
   { id: 1, src: '/photography/1.jpg', span: 'col-span-12 md:col-span-6' },
@@ -81,11 +89,8 @@ const PHOTOGRAPHY_IMAGES = [
 
 export default function ProjectsPage() {
   const [activeCategory, setActiveCategory] = useState('All');
-  
-  // UPDATED: Now stores the index of the image instead of the URL string so we can navigate
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // Simple fade-in animation for the page load
   useGSAP(() => {
     gsap.fromTo(
       '.project-element',
@@ -94,7 +99,6 @@ export default function ProjectsPage() {
     );
   }, []);
 
-  // Animate the grid when category changes
   useGSAP(() => {
     gsap.fromTo(
       '.grid-item',
@@ -103,7 +107,6 @@ export default function ProjectsPage() {
     );
   }, { dependencies: [activeCategory] });
 
-  // Navigation handlers for Lightbox
   const handleNext = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     setLightboxIndex((prev) => 
@@ -118,7 +121,6 @@ export default function ProjectsPage() {
     );
   };
 
-  // Keyboard navigation hook
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (lightboxIndex === null) return;

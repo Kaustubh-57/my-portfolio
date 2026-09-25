@@ -4,29 +4,31 @@ import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import Link from 'next/link';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const CAPABILITIES = [
   {
-    title: 'UI/UX Design',
-    desc: 'I spend time understanding what people are trying to do, where things break down, and what the product actually needs before jumping into the interface.',
-    image: '/Capabilities/uiux.jpg' 
+    title: 'Vektor',
+    desc: 'A complete visual overhaul for the NMIMS School of Design Student Council, transforming a standard committee into a premium, scalable brand named VEKTOR.',
+    image: '/Capabilities/vektor.jpg',
+    link: '/projects/vektor'
   },
   {
-    title: 'Interaction Design',
+    title: 'Twae Beauty',
     desc: 'Motion and micro-interactions breathe life into digital products. I design meaningful transitions that guide users, provide feedback, and make the overall experience feel natural and responsive.',
     image: '/Capabilities/interaction.jpg' 
   },
   {
-    title: 'Visual Design',
+    title: 'Hoopr',
     desc: 'Aesthetics matter. I create cohesive visual languages, typography systems, and color palettes that align with brand identities and elevate the perceived value of the product.',
-    image: '/Capabilities/visual.jpg' 
+    image: '/projects/shoppin/Widecover.jpg' 
   },
   {
-    title: 'Experiments',
+    title: 'Timmbr',
     desc: 'Some of my best ideas have started outside a traditional screen. I have explored physical computing, immersive experiences, data visualisation and other weird little experiments that help me understand how people interact with things.',
-    image: '/Capabilities/experiments.jpg' 
+    image: '/Capabilities/timmbr.jpg' 
   }
 ];
 
@@ -71,10 +73,9 @@ export default function Capabilities() {
             className="text-[28px] md:text-[32px] font-bold tracking-tight text-[#141613] pt-1"
             style={{ fontFamily: "'Stack Sans Headline', sans-serif" }}
           >
-            WHAT CAN I DO
+            THE VISUAL SIDE
           </h2>
           
-          {/* UPDATED: Added pt-3 md:pt-4 here to push the paragraph down slightly */}
           <p className="font-dm-sans text-[14px] md:text-[15px] text-[#141613]/80 leading-relaxed max-w-[480px] tracking-[-0.01em] pt-3 md:pt-4">
             
           </p>
@@ -117,7 +118,7 @@ export default function Capabilities() {
               return (
                 <div 
                   key={index} 
-                  className="flex flex-col border-b border-[#141613]/20 cursor-pointer"
+                  className="flex flex-col border-b border-[#141613]/20"
                 >
                   <div className="w-full py-3 md:py-4 flex items-center justify-between">
                     <h3 
@@ -136,10 +137,22 @@ export default function Capabilities() {
                     style={{ gridTemplateRows: isActive ? '1fr' : '0fr' }}
                   >
                     <div className="overflow-hidden">
-                      <div className="h-[180px] md:h-[240px] flex flex-col justify-start">
+                      <div className="h-[180px] md:h-[240px] flex flex-col justify-start pb-4">
                         <p className="font-dm-sans text-[14px] md:text-[17px] text-[#141613]/90 leading-relaxed max-w-[500px] tracking-[-0.03em]">
                           {item.desc}
                         </p>
+                        
+                        {/* Dynamic Project Link */}
+                        {item.link && (
+                          <div className="mt-6 transition-opacity duration-500 delay-100" style={{ opacity: isActive ? 1 : 0 }}>
+                            <Link 
+                              href={item.link}
+                              className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#141613]/30 text-[#141613] font-dm-sans text-[14px] font-medium tracking-[-0.02em] hover:bg-[#141613] hover:text-[#ffffff] transition-all duration-300 w-fit"
+                            >
+                              View Project <span className="text-[16px] leading-none mb-[1px]">→</span>
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

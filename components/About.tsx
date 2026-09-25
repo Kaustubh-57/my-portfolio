@@ -73,17 +73,7 @@ export default function About({ hideIntro = false }: AboutProps) {
         }}
       />
 
-      {/* --- TOP WHITE SECTION (Conditionally Rendered) --- */}
-      {!hideIntro && (
-        <div ref={contentRef} className="relative z-10 w-full max-w-[1440px] mx-auto px-8 md:px-12 pt-16 md:pt-8 pb-20">
-          <h2 className="font-momo text-4xl md:text-5xl lg:text-[56px] text-[#141613] leading-[1.1] tracking-[-0.03em] max-w-5xl">
-            Because good design isn’t just about visuals.{' '}
-            <span className="text-[#141613]/50">
-              It’s about listening, understanding, clarity, and helping teams move forward.
-            </span>
-          </h2>
-        </div>
-      )}
+     
 
       {/* --- BOTTOM BLACK SECTION (Dome Curve) --- */}
       <div className={`relative w-full bg-[#141613] rounded-t-[60px] md:rounded-t-[100px] pt-32 md:pt-40 pb-20 px-8 md:px-12 z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] ${hideIntro ? 'mt-12 md:mt-16' : 'mt-20 md:mt-32'}`}>
